@@ -1,0 +1,13 @@
+{
+  "name": "liwe3-webcomponents-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo for @liwe3/webcomponents packages",
+  "scripts": {
+    "build": "pnpm --filter \"@liwe3/*\" run build",
+    "build:core": "pnpm --filter \"@liwe3/webcomponents\" run build",
+    "build:svelte": "pnpm --filter \"@liwe3/webcomponents-svelte\" run package",
+    "clean": "rm -rf packages/*/dist packages/*/.svelte-kit packages/*/node_modules"
+  },
+  "packageManager": "pnpm@10.16.0"
+}
