@@ -80,6 +80,19 @@ pnpm run build:core
 pnpm run build:svelte
 ```
 
+### Building Demo App
+
+```bash
+# Build all packages first
+pnpm run build
+
+# Run the demo app
+cd packages/demo
+pnpm run dev
+```
+
+The demo app will be available at `http://localhost:5173`
+
 ### Package Structure
 
 ```
@@ -93,12 +106,19 @@ liwe3-webcomponents/
 │   │   ├── dist/            # Built files
 │   │   └── package.json
 │   │
-│   └── svelte/              # @liwe3/webcomponents-svelte
-│       ├── src/lib/
-│       │   ├── SmartSelect.svelte
-│       │   ├── AITextEditor.svelte
-│       │   └── index.ts
-│       ├── dist/            # Built files
+│   ├── svelte/              # @liwe3/webcomponents-svelte
+│   │   ├── src/lib/
+│   │   │   ├── SmartSelect.svelte
+│   │   │   ├── AITextEditor.svelte
+│   │   │   └── index.ts
+│   │   ├── dist/            # Built files
+│   │   └── package.json
+│   │
+│   └── demo/                # Demo SvelteKit app
+│       ├── src/routes/
+│       │   ├── smart-select/
+│       │   ├── ai-text-editor/
+│       │   └── +page.svelte
 │       └── package.json
 │
 ├── pnpm-workspace.yaml
