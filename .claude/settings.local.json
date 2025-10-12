@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pnpm install)",
+      "Bash(pnpm run build)",
+      "Bash(pnpm run build:svelte:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
