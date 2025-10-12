@@ -133,3 +133,9 @@ The Svelte wrappers bridge the gap between web component APIs and Svelte's react
 - Forward all relevant events from web component
 - Provide proper TypeScript types
 - Support `bind:value` for two-way binding where applicable
+
+### Additional Requirements
+
+- Every time you update `core` package, update the release version in `package.json` (eg. 1.0.0 to 1.0.1)
+- Every time you update `svelte` package, update the release version in `package.json` (eg. 1.0.0 to 1.0.1)
+
