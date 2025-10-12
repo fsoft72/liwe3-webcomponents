@@ -10,6 +10,10 @@
   - Added `getContext()` and related getter/setter methods for all web component properties
   - This fixes the error "editorInstance.getApiKey is not a function" in the demo app
 
+- Fixed `SmartSelect` text selection issue
+  - Added `user-select: none` to `.select-trigger`, `.tag`, and `.option` elements
+  - Prevents unwanted text selection when clicking or interacting with the component
+
 ## 2025-10-11
 
 ### Added

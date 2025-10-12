@@ -597,6 +597,7 @@ export class SmartSelectElement extends HTMLElement {
           min-height: 36px;
           box-sizing: border-box;
           color: #333;
+          user-select: none;
         }
 
         .select-trigger:focus {
@@ -626,6 +627,7 @@ export class SmartSelectElement extends HTMLElement {
           border-radius: var(--tag-border-radius, 12px);
           font-size: 12px;
           color: var(--tag-color, #495057);
+          user-select: none;
         }
 
         .remove-tag {
@@ -680,6 +682,7 @@ export class SmartSelectElement extends HTMLElement {
           cursor: pointer;
           color: var(--option-color, #333);
           transition: background-color 0.2s;
+          user-select: none;
         }
 
         .option:hover {
