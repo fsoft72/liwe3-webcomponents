@@ -1,6 +1,6 @@
 {
   "name": "@liwe3/webcomponents",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "A collection of reusable web components including SmartSelect and AITextEditor",
   "type": "module",
   "main": "./dist/index.js",
