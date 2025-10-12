@@ -1,5 +1,15 @@
 # CHANGES.md
 
+## 2025-10-12
+
+### Fixed
+- Fixed `AITextEditor` Svelte wrapper missing public methods
+  - Added `getApiKey()` and `setApiKey()` methods for API key management
+  - Added `getSuggestionDelay()` and `setSuggestionDelay()` methods for delay configuration
+  - Added `getText()` getter method
+  - Added `getContext()` and related getter/setter methods for all web component properties
+  - This fixes the error "editorInstance.getApiKey is not a function" in the demo app
+
 ## 2025-10-11
 
 ### Added

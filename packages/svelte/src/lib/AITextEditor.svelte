@@ -136,15 +136,70 @@
 		webComponent?.setText(text);
 	};
 
+	// Expose getText to parent components
+	export const getText = (): string => {
+		return webComponent?.getText() || '';
+	};
+
 	// Expose setContext to parent components
 	export const setContext = (context: string) => {
 		webComponent?.setContext(context);
+	};
+
+	// Expose getContext to parent components
+	export const getContext = (): string => {
+		return webComponent?.getContext() || '';
 	};
 
 	// Expose setSystemPrompt to allow changing the system prompt dynamically
 	export const setSystemPrompt = (prompt: string) => {
 		systemPrompt = prompt;
 		webComponent?.setSystemPrompt?.(prompt);
+	};
+
+	// Expose getSystemPrompt to parent components
+	export const getSystemPrompt = (): string => {
+		return webComponent?.getSystemPrompt() || systemPrompt;
+	};
+
+	// Expose setApiKey to parent components
+	export const setApiKey = (key: string) => {
+		webComponent?.setApiKey(key);
+	};
+
+	// Expose getApiKey to parent components
+	export const getApiKey = (): string => {
+		return webComponent?.getApiKey() || '';
+	};
+
+	// Expose setSuggestionDelay to parent components
+	export const setSuggestionDelay = (seconds: number) => {
+		webComponent?.setSuggestionDelay(seconds);
+	};
+
+	// Expose getSuggestionDelay to parent components
+	export const getSuggestionDelay = (): number => {
+		return webComponent?.getSuggestionDelay() || suggestionDelay;
+	};
+
+	// Expose setApiEndpoint to parent components
+	export const setApiEndpoint = (endpoint: string) => {
+		webComponent?.setApiEndpoint(endpoint);
+	};
+
+	// Expose getApiEndpoint to parent components
+	export const getApiEndpoint = (): string => {
+		return webComponent?.getApiEndpoint() || apiEndpoint;
+	};
+
+	// Expose setModelName to parent components
+	export const setModelName = (model: string) => {
+		webComponent?.setModelName(model);
+	};
+
+	// Expose getModelName to parent components
+	export const getModelName = (): string => {
+		return webComponent?.getModelName() || modelName;
 	};
 </script>
 
