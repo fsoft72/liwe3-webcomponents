@@ -10,9 +10,9 @@
     value?: string | string[];
     options?: SelectOption[];
     onchange?: (value: string | string[] | undefined) => void;
+    onsearch?: (value: string) => void;
     onopen?: (event: CustomEvent) => void;
     onclose?: (event: CustomEvent) => void;
-    onsearch?: (event: CustomEvent) => void;
   }
 
   let {
@@ -95,7 +95,9 @@
     });
 
     smartSelectElement.addEventListener("search", (event) => {
-      onsearch?.(event as CustomEvent);
+      const customEvent = event as CustomEvent;
+      const value = customEvent.detail.query;
+      onsearch?.(value);
     });
   };
 
@@ -105,13 +107,6 @@
 
     updateAttributes();
     bindEvents();
-
-    /*
-		// Watch for prop changes and update attributes
-		$effect(() => {
-			updateAttributes();
-		});
-		*/
   });
 
   /**

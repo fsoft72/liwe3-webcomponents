@@ -1,6 +1,6 @@
 {
   "name": "@liwe3/webcomponents-svelte",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Svelte 5 wrappers for @liwe3/webcomponents",
   "type": "module",
   "svelte": "./dist/index.js",

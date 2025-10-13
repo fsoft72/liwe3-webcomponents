@@ -3,10 +3,10 @@
  * A customizable select dropdown with search, multi-select, and keyboard navigation
  */
 
-export interface SelectOption {
+export type SelectOption = {
   value: string;
   label: string;
-}
+};
 
 export class SmartSelectElement extends HTMLElement {
   declare shadowRoot: ShadowRoot;
@@ -18,119 +18,119 @@ export class SmartSelectElement extends HTMLElement {
   private keyboardNavigating: boolean = false;
   private keyboardTimer?: number;
 
-  constructor() {
+  constructor () {
     super();
-    this.attachShadow({ mode: 'open' });
+    this.attachShadow( { mode: 'open' } );
 
     // Make component focusable
-    if (!this.hasAttribute('tabindex')) {
-      this.setAttribute('tabindex', '0');
+    if ( !this.hasAttribute( 'tabindex' ) ) {
+      this.setAttribute( 'tabindex', '0' );
     }
 
     this.render();
     this.bindEvents();
   }
 
-  static get observedAttributes(): string[] {
-    return ['multiple', 'searchable', 'placeholder', 'disabled', 'value', 'options'];
+  static get observedAttributes (): string[] {
+    return [ 'multiple', 'searchable', 'placeholder', 'disabled', 'value', 'options' ];
   }
 
-  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
-    if (oldValue !== newValue) {
-      if (name === 'options') {
-        this.filteredOptions = [...this.options];
+  attributeChangedCallback ( name: string, oldValue: string | null, newValue: string | null ): void {
+    if ( oldValue !== newValue ) {
+      if ( name === 'options' ) {
+        this.filteredOptions = [ ...this.options ];
       }
       this.render();
     }
   }
 
-  get multiple(): boolean {
-    return this.hasAttribute('multiple');
+  get multiple (): boolean {
+    return this.hasAttribute( 'multiple' );
   }
 
-  set multiple(value: boolean) {
-    if (value) {
-      this.setAttribute('multiple', '');
+  set multiple ( value: boolean ) {
+    if ( value ) {
+      this.setAttribute( 'multiple', '' );
     } else {
-      this.removeAttribute('multiple');
+      this.removeAttribute( 'multiple' );
     }
   }
 
-  get searchable(): boolean {
-    return this.hasAttribute('searchable');
+  get searchable (): boolean {
+    return this.hasAttribute( 'searchable' );
   }
 
-  set searchable(value: boolean) {
-    if (value) {
-      this.setAttribute('searchable', '');
+  set searchable ( value: boolean ) {
+    if ( value ) {
+      this.setAttribute( 'searchable', '' );
     } else {
-      this.removeAttribute('searchable');
+      this.removeAttribute( 'searchable' );
     }
   }
 
-  get placeholder(): string {
-    return this.getAttribute('placeholder') || 'Select an option';
+  get placeholder (): string {
+    return this.getAttribute( 'placeholder' ) || 'Select an option';
   }
 
-  set placeholder(value: string) {
-    this.setAttribute('placeholder', value);
+  set placeholder ( value: string ) {
+    this.setAttribute( 'placeholder', value );
   }
 
-  get disabled(): boolean {
-    return this.hasAttribute('disabled');
+  get disabled (): boolean {
+    return this.hasAttribute( 'disabled' );
   }
 
-  set disabled(value: boolean) {
-    if (value) {
-      this.setAttribute('disabled', '');
+  set disabled ( value: boolean ) {
+    if ( value ) {
+      this.setAttribute( 'disabled', '' );
     } else {
-      this.removeAttribute('disabled');
+      this.removeAttribute( 'disabled' );
     }
   }
 
-  get value(): string | string[] {
-    if (this.multiple) {
-      return this.selectedOptions.map(opt => opt.value);
+  get value (): string | string[] {
+    if ( this.multiple ) {
+      return this.selectedOptions.map( opt => opt.value );
     }
-    return this.selectedOptions.length > 0 ? this.selectedOptions[0].value : '';
+    return this.selectedOptions.length > 0 ? this.selectedOptions[ 0 ].value : '';
   }
 
-  set value(val: string | string[]) {
-    if (this.multiple && Array.isArray(val)) {
-      this.selectedOptions = this.options.filter(opt => val.includes(opt.value));
+  set value ( val: string | string[] ) {
+    if ( this.multiple && Array.isArray( val ) ) {
+      this.selectedOptions = this.options.filter( opt => val.includes( opt.value ) );
     } else {
-      const option = this.options.find(opt => opt.value === val);
-      this.selectedOptions = option ? [option] : [];
+      const option = this.options.find( opt => opt.value === val );
+      this.selectedOptions = option ? [ option ] : [];
     }
     this.render();
   }
 
-  get options(): SelectOption[] {
-    const optionsAttr = this.getAttribute('options');
-    if (optionsAttr) {
+  get options (): SelectOption[] {
+    const optionsAttr = this.getAttribute( 'options' );
+    if ( optionsAttr ) {
       try {
-        return JSON.parse(optionsAttr);
-      } catch (e) {
-        console.error('Invalid options format:', e);
+        return JSON.parse( optionsAttr );
+      } catch ( e ) {
+        console.error( 'Invalid options format:', e );
         return [];
       }
     }
     return [];
   }
 
-  set options(opts: SelectOption[]) {
-    this.setAttribute('options', JSON.stringify(opts));
+  set options ( opts: SelectOption[] ) {
+    this.setAttribute( 'options', JSON.stringify( opts ) );
   }
 
   /**
    * Opens the dropdown
    */
-  open(): void {
-    if (this.disabled) return;
+  open (): void {
+    if ( this.disabled ) return;
     this.isOpen = true;
     this.focusedIndex = -1;
-    if (this.options.length > 0) {
-      this.filteredOptions = [...this.options];
+    if ( this.options.length > 0 ) {
+      this.filteredOptions = [ ...this.options ];
     }
     this.render();
 
@@ -138,34 +138,34 @@ export class SmartSelectElement extends HTMLElement {
     this._updateDropdownPosition();
 
     // Focus search input if searchable
-    if (this.searchable) {
-      requestAnimationFrame(() => {
-        const searchInput = this.shadowRoot.querySelector('.search-input') as HTMLInputElement;
-        if (searchInput) {
+    if ( this.searchable ) {
+      requestAnimationFrame( () => {
+        const searchInput = this.shadowRoot.querySelector( '.search-input' ) as HTMLInputElement;
+        if ( searchInput ) {
           searchInput.focus();
         }
-      });
+      } );
     }
 
-    this.dispatchEvent(new CustomEvent('open'));
+    this.dispatchEvent( new CustomEvent( 'open' ) );
   }
 
   /**
    * Closes the dropdown
    */
-  close(): void {
+  close (): void {
     this.isOpen = false;
     this.focusedIndex = -1;
     this.searchValue = '';
 
     // Reset filtered options when closing
-    if (this.searchable && this.options.length > 0) {
-      this.filteredOptions = [...this.options];
+    if ( this.searchable && this.options.length > 0 ) {
+      this.filteredOptions = [ ...this.options ];
     }
 
     // Clear any inline positioning styles
-    const dropdown = this.shadowRoot.querySelector('.dropdown') as HTMLElement;
-    if (dropdown) {
+    const dropdown = this.shadowRoot.querySelector( '.dropdown' ) as HTMLElement;
+    if ( dropdown ) {
       dropdown.style.top = '';
       dropdown.style.left = '';
       dropdown.style.width = '';
@@ -173,14 +173,14 @@ export class SmartSelectElement extends HTMLElement {
     }
 
     this.render();
-    this.dispatchEvent(new CustomEvent('close'));
+    this.dispatchEvent( new CustomEvent( 'close' ) );
   }
 
   /**
    * Toggles the dropdown open/closed state
    */
-  toggle(): void {
-    if (this.isOpen) {
+  toggle (): void {
+    if ( this.isOpen ) {
       this.close();
     } else {
       this.open();
@@ -190,45 +190,45 @@ export class SmartSelectElement extends HTMLElement {
   /**
    * Selects an option by its value
    */
-  selectOption(value: string): void {
-    const option = this.options.find(opt => opt.value === value);
-    if (!option) return;
+  selectOption ( value: string ): void {
+    const option = this.options.find( opt => opt.value === value );
+    if ( !option ) return;
 
-    if (this.multiple) {
-      if (!this.selectedOptions.find(opt => opt.value === value)) {
-        this.selectedOptions.push(option);
+    if ( this.multiple ) {
+      if ( !this.selectedOptions.find( opt => opt.value === value ) ) {
+        this.selectedOptions.push( option );
       }
     } else {
-      this.selectedOptions = [option];
+      this.selectedOptions = [ option ];
       this.close();
     }
 
     this.render();
-    this.dispatchEvent(new CustomEvent('change', { detail: { value: this.value } }));
+    this.dispatchEvent( new CustomEvent( 'change', { detail: { value: this.value } } ) );
   }
 
   /**
    * Deselects an option by its value
    */
-  deselectOption(value: string): void {
-    this.selectedOptions = this.selectedOptions.filter(opt => opt.value !== value);
+  deselectOption ( value: string ): void {
+    this.selectedOptions = this.selectedOptions.filter( opt => opt.value !== value );
     this.render();
-    this.dispatchEvent(new CustomEvent('change', { detail: { value: this.value } }));
+    this.dispatchEvent( new CustomEvent( 'change', { detail: { value: this.value } } ) );
   }
 
   /**
    * Returns an array of currently selected options
    */
-  getSelectedOptions(): SelectOption[] {
-    return [...this.selectedOptions];
+  getSelectedOptions (): SelectOption[] {
+    return [ ...this.selectedOptions ];
   }
 
   /**
    * Sets the options for the select component
    */
-  setOptions(options: SelectOption[]): void {
+  setOptions ( options: SelectOption[] ): void {
     this.options = options;
-    this.filteredOptions = [...options];
+    this.filteredOptions = [ ...options ];
     this.selectedOptions = [];
     this.render();
   }
@@ -236,28 +236,28 @@ export class SmartSelectElement extends HTMLElement {
   /**
    * Handles search functionality
    */
-  private handleSearch(query: string): void {
+  private handleSearch ( query: string ): void {
     this.searchValue = query;
-    this.filteredOptions = this.options.filter(option =>
-      option.label.toLowerCase().includes(query.toLowerCase())
+    this.filteredOptions = this.options.filter( option =>
+      option.label.toLowerCase().includes( query.toLowerCase() )
     );
     this.focusedIndex = -1;
     this.render();
-    this.dispatchEvent(new CustomEvent('search', { detail: { query } }));
+    this.dispatchEvent( new CustomEvent( 'search', { detail: { query } } ) );
   }
 
   /**
    * Updates the visual focus state without full re-render
    */
-  private updateFocusedOption(): void {
-    const options = this.shadowRoot.querySelectorAll('.option');
+  private updateFocusedOption (): void {
+    const options = this.shadowRoot.querySelectorAll( '.option' );
 
     // Remove focused class from all options
-    options.forEach(option => option.classList.remove('focused'));
+    options.forEach( option => option.classList.remove( 'focused' ) );
 
     // Add focused class to current option
-    if (this.focusedIndex >= 0 && this.focusedIndex < options.length) {
-      options[this.focusedIndex].classList.add('focused');
+    if ( this.focusedIndex >= 0 && this.focusedIndex < options.length ) {
+      options[ this.focusedIndex ].classList.add( 'focused' );
     }
 
     this.scrollToFocusedOption();
@@ -266,35 +266,35 @@ export class SmartSelectElement extends HTMLElement {
   /**
    * Scrolls the focused option into view
    */
-  private scrollToFocusedOption(): void {
-    if (this.focusedIndex < 0) return;
+  private scrollToFocusedOption (): void {
+    if ( this.focusedIndex < 0 ) return;
 
-    requestAnimationFrame(() => {
-      const dropdown = this.shadowRoot.querySelector('.dropdown') as HTMLElement;
-      const focusedOption = this.shadowRoot.querySelector('.option.focused') as HTMLElement;
+    requestAnimationFrame( () => {
+      const dropdown = this.shadowRoot.querySelector( '.dropdown' ) as HTMLElement;
+      const focusedOption = this.shadowRoot.querySelector( '.option.focused' ) as HTMLElement;
 
-      if (dropdown && focusedOption) {
+      if ( dropdown && focusedOption ) {
         const dropdownRect = dropdown.getBoundingClientRect();
         const optionRect = focusedOption.getBoundingClientRect();
 
         // Check if option is above visible area
-        if (optionRect.top < dropdownRect.top) {
-          dropdown.scrollTop -= (dropdownRect.top - optionRect.top);
+        if ( optionRect.top < dropdownRect.top ) {
+          dropdown.scrollTop -= ( dropdownRect.top - optionRect.top );
         }
         // Check if option is below visible area
-        else if (optionRect.bottom > dropdownRect.bottom) {
-          dropdown.scrollTop += (optionRect.bottom - dropdownRect.bottom);
+        else if ( optionRect.bottom > dropdownRect.bottom ) {
+          dropdown.scrollTop += ( optionRect.bottom - dropdownRect.bottom );
         }
       }
-    });
+    } );
   }
 
   /**
    * Calculates the optimal dropdown position based on viewport constraints
    */
-  private _calculateDropdownPosition(): { top: number; left: number; width: number; maxHeight: number } | null {
-    const trigger = this.shadowRoot.querySelector('.select-trigger') as HTMLElement;
-    if (!trigger) return null;
+  private _calculateDropdownPosition (): { top: number; left: number; width: number; maxHeight: number; } | null {
+    const trigger = this.shadowRoot.querySelector( '.select-trigger' ) as HTMLElement;
+    if ( !trigger ) return null;
 
     const triggerRect = trigger.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
@@ -312,73 +312,73 @@ export class SmartSelectElement extends HTMLElement {
 
     // Calculate dimensions
     const width = triggerRect.width;
-    const left = Math.max(0, Math.min(triggerRect.left, viewportWidth - width));
+    const left = Math.max( 0, Math.min( triggerRect.left, viewportWidth - width ) );
 
     let top: number;
     let maxHeight: number;
 
-    if (shouldOpenUpward) {
+    if ( shouldOpenUpward ) {
       // Position above the trigger
-      maxHeight = Math.min(dropdownMaxHeight, spaceAbove - dropdownPadding);
+      maxHeight = Math.min( dropdownMaxHeight, spaceAbove - dropdownPadding );
       top = triggerRect.top - maxHeight - margin;
     } else {
       // Position below the trigger
-      maxHeight = Math.min(dropdownMaxHeight, spaceBelow - dropdownPadding);
+      maxHeight = Math.min( dropdownMaxHeight, spaceBelow - dropdownPadding );
       top = triggerRect.bottom + margin;
     }
 
     return {
-      top: Math.max(0, top),
+      top: Math.max( 0, top ),
       left,
       width,
-      maxHeight: Math.max(100, maxHeight) // Ensure minimum height
+      maxHeight: Math.max( 100, maxHeight ) // Ensure minimum height
     };
   }
 
   /**
    * Updates dropdown position using fixed positioning relative to viewport
    */
-  private _updateDropdownPosition(): void {
-    requestAnimationFrame(() => {
-      const dropdown = this.shadowRoot.querySelector('.dropdown') as HTMLElement;
-      if (!dropdown) return;
+  private _updateDropdownPosition (): void {
+    requestAnimationFrame( () => {
+      const dropdown = this.shadowRoot.querySelector( '.dropdown' ) as HTMLElement;
+      if ( !dropdown ) return;
 
       const position = this._calculateDropdownPosition();
-      if (!position) return;
+      if ( !position ) return;
 
       // Apply calculated position as inline styles
-      dropdown.style.top = `${position.top}px`;
-      dropdown.style.left = `${position.left}px`;
-      dropdown.style.width = `${position.width}px`;
-      dropdown.style.maxHeight = `${position.maxHeight}px`;
-    });
+      dropdown.style.top = `${ position.top }px`;
+      dropdown.style.left = `${ position.left }px`;
+      dropdown.style.width = `${ position.width }px`;
+      dropdown.style.maxHeight = `${ position.maxHeight }px`;
+    } );
   }
 
   /**
    * Handles keyboard navigation
    */
-  private handleKeydown(event: KeyboardEvent): void {
-    if (this.disabled) return;
+  private handleKeydown ( event: KeyboardEvent ): void {
+    if ( this.disabled ) return;
 
     // Prevent double execution if event has already been handled
-    if ((event as any)._smartSelectHandled) return;
-    (event as any)._smartSelectHandled = true;
+    if ( ( event as any )._smartSelectHandled ) return;
+    ( event as any )._smartSelectHandled = true;
 
-    switch (event.key) {
+    switch ( event.key ) {
       case 'ArrowDown':
         event.preventDefault();
         this.keyboardNavigating = true;
-        clearTimeout(this.keyboardTimer);
-        this.keyboardTimer = window.setTimeout(() => { this.keyboardNavigating = false; }, 100);
+        clearTimeout( this.keyboardTimer );
+        this.keyboardTimer = window.setTimeout( () => { this.keyboardNavigating = false; }, 100 );
 
-        if (!this.isOpen) {
+        if ( !this.isOpen ) {
           this.open();
         } else {
           // If searchable and search input is focused, move to first option
-          const searchInput = this.shadowRoot.querySelector('.search-input') as HTMLInputElement;
+          const searchInput = this.shadowRoot.querySelector( '.search-input' ) as HTMLInputElement;
           const isSearchFocused = this.searchable && searchInput === this.shadowRoot.activeElement;
 
-          if (isSearchFocused) {
+          if ( isSearchFocused ) {
             this.focusedIndex = 0;
             searchInput.blur(); // Blur search input to allow normal navigation
             // Focus the component to ensure it receives keyboard events
@@ -387,7 +387,7 @@ export class SmartSelectElement extends HTMLElement {
             return;
           }
           // Navigate through options
-          const newIndex = Math.min(this.focusedIndex + 1, this.filteredOptions.length - 1);
+          const newIndex = Math.min( this.focusedIndex + 1, this.filteredOptions.length - 1 );
           this.focusedIndex = newIndex;
           this.updateFocusedOption();
         }
@@ -396,32 +396,32 @@ export class SmartSelectElement extends HTMLElement {
       case 'ArrowUp':
         event.preventDefault();
         this.keyboardNavigating = true;
-        clearTimeout(this.keyboardTimer);
-        this.keyboardTimer = window.setTimeout(() => { this.keyboardNavigating = false; }, 100);
+        clearTimeout( this.keyboardTimer );
+        this.keyboardTimer = window.setTimeout( () => { this.keyboardNavigating = false; }, 100 );
 
-        if (this.isOpen) {
+        if ( this.isOpen ) {
           // If at first option and searchable, focus search input
-          if (this.focusedIndex === 0 && this.searchable) {
+          if ( this.focusedIndex === 0 && this.searchable ) {
             this.focusedIndex = -1;
             this.updateFocusedOption();
-            requestAnimationFrame(() => {
-              const searchInput = this.shadowRoot.querySelector('.search-input') as HTMLInputElement;
-              if (searchInput) {
+            requestAnimationFrame( () => {
+              const searchInput = this.shadowRoot.querySelector( '.search-input' ) as HTMLInputElement;
+              if ( searchInput ) {
                 searchInput.focus();
-                searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+                searchInput.setSelectionRange( searchInput.value.length, searchInput.value.length );
               }
-            });
+            } );
             return;
           }
           // If searchable and search input is focused, do nothing
-          const searchInput = this.shadowRoot.querySelector('.search-input') as HTMLInputElement;
+          const searchInput = this.shadowRoot.querySelector( '.search-input' ) as HTMLInputElement;
           const isSearchFocused = this.searchable && searchInput === this.shadowRoot.activeElement;
 
-          if (isSearchFocused) {
+          if ( isSearchFocused ) {
             return;
           }
           // Navigate through options
-          const newIndex = Math.max(this.focusedIndex - 1, -1);
+          const newIndex = Math.max( this.focusedIndex - 1, -1 );
           this.focusedIndex = newIndex;
           this.updateFocusedOption();
         }
@@ -429,9 +429,9 @@ export class SmartSelectElement extends HTMLElement {
 
       case 'Enter':
         event.preventDefault();
-        if (this.isOpen && this.focusedIndex >= 0 && this.focusedIndex < this.filteredOptions.length) {
-          this.selectOption(this.filteredOptions[this.focusedIndex].value);
-        } else if (!this.isOpen) {
+        if ( this.isOpen && this.focusedIndex >= 0 && this.focusedIndex < this.filteredOptions.length ) {
+          this.selectOption( this.filteredOptions[ this.focusedIndex ].value );
+        } else if ( !this.isOpen ) {
           this.open();
         }
         break;
@@ -450,114 +450,114 @@ export class SmartSelectElement extends HTMLElement {
   /**
    * Binds all event listeners
    */
-  private bindEvents(): void {
+  private bindEvents (): void {
     // Listen for keydown events on both the component and shadow root
-    const keydownHandler = this.handleKeydown.bind(this);
-    this.addEventListener('keydown', keydownHandler);
-    this.shadowRoot.addEventListener('keydown', keydownHandler as EventListener);
+    const keydownHandler = this.handleKeydown.bind( this );
+    this.addEventListener( 'keydown', keydownHandler );
+    this.shadowRoot.addEventListener( 'keydown', keydownHandler as EventListener );
 
     // Use event delegation on the shadow root
-    this.shadowRoot.addEventListener('click', (e) => {
+    this.shadowRoot.addEventListener( 'click', ( e ) => {
       e.stopPropagation();
       const target = e.target as HTMLElement;
 
-      if (target.closest('.remove-tag')) {
-        const value = (target.closest('.remove-tag') as HTMLElement).dataset.value;
-        if (value) this.deselectOption(value);
-      } else if (target.closest('.option')) {
-        const value = (target.closest('.option') as HTMLElement).dataset.value;
-        if (value) this.selectOption(value);
-      } else if (target.closest('.select-trigger')) {
+      if ( target.closest( '.remove-tag' ) ) {
+        const value = ( target.closest( '.remove-tag' ) as HTMLElement ).dataset.value;
+        if ( value ) this.deselectOption( value );
+      } else if ( target.closest( '.option' ) ) {
+        const value = ( target.closest( '.option' ) as HTMLElement ).dataset.value;
+        if ( value ) this.selectOption( value );
+      } else if ( target.closest( '.select-trigger' ) ) {
         this.toggle();
       }
-    });
+    } );
 
     // Handle mouse hover on options to update focused index
-    this.shadowRoot.addEventListener('mouseover', (e) => {
+    this.shadowRoot.addEventListener( 'mouseover', ( e ) => {
       // Don't interfere with keyboard navigation
-      if (this.keyboardNavigating) return;
+      if ( this.keyboardNavigating ) return;
 
       const target = e.target as HTMLElement;
-      if (target.closest('.option')) {
-        const option = target.closest('.option') as HTMLElement;
-        const options = Array.from(this.shadowRoot.querySelectorAll('.option'));
-        const newFocusedIndex = options.indexOf(option);
+      if ( target.closest( '.option' ) ) {
+        const option = target.closest( '.option' ) as HTMLElement;
+        const options = Array.from( this.shadowRoot.querySelectorAll( '.option' ) );
+        const newFocusedIndex = options.indexOf( option );
 
         // Only update if the focused index actually changed
-        if (this.focusedIndex !== newFocusedIndex) {
+        if ( this.focusedIndex !== newFocusedIndex ) {
           // Remove focused class from current option
-          const currentFocused = this.shadowRoot.querySelector('.option.focused');
-          if (currentFocused) {
-            currentFocused.classList.remove('focused');
+          const currentFocused = this.shadowRoot.querySelector( '.option.focused' );
+          if ( currentFocused ) {
+            currentFocused.classList.remove( 'focused' );
           }
 
           // Add focused class to new option
-          option.classList.add('focused');
+          option.classList.add( 'focused' );
           this.focusedIndex = newFocusedIndex;
         }
       }
-    });
+    } );
 
     // Handle mouse leaving dropdown to clear focus
-    this.shadowRoot.addEventListener('mouseleave', (e) => {
+    this.shadowRoot.addEventListener( 'mouseleave', ( e ) => {
       // Don't interfere with keyboard navigation
-      if (this.keyboardNavigating) return;
+      if ( this.keyboardNavigating ) return;
 
       const target = e.target as HTMLElement;
-      if (target.closest('.dropdown')) {
-        const currentFocused = this.shadowRoot.querySelector('.option.focused');
-        if (currentFocused) {
-          currentFocused.classList.remove('focused');
+      if ( target.closest( '.dropdown' ) ) {
+        const currentFocused = this.shadowRoot.querySelector( '.option.focused' );
+        if ( currentFocused ) {
+          currentFocused.classList.remove( 'focused' );
         }
         this.focusedIndex = -1;
       }
-    });
+    } );
 
     // Handle search input
-    this.shadowRoot.addEventListener('input', (e) => {
+    this.shadowRoot.addEventListener( 'input', ( e ) => {
       const target = e.target as HTMLInputElement;
-      if (target.classList.contains('search-input')) {
-        this.handleSearch(target.value);
+      if ( target.classList.contains( 'search-input' ) ) {
+        this.handleSearch( target.value );
       }
-    });
+    } );
 
     // Close dropdown when clicking outside
-    document.addEventListener('click', (e) => {
-      if (!this.contains(e.target as Node)) {
+    document.addEventListener( 'click', ( e ) => {
+      if ( !this.contains( e.target as Node ) ) {
         this.close();
       }
-    });
+    } );
 
     // Update dropdown position on window resize or scroll
-    window.addEventListener('resize', () => {
-      if (this.isOpen) {
+    window.addEventListener( 'resize', () => {
+      if ( this.isOpen ) {
         this._updateDropdownPosition();
       }
-    });
+    } );
 
-    window.addEventListener('scroll', () => {
-      if (this.isOpen) {
+    window.addEventListener( 'scroll', () => {
+      if ( this.isOpen ) {
         this._updateDropdownPosition();
       }
-    }, true); // Use capture to catch all scroll events
+    }, true ); // Use capture to catch all scroll events
   }
 
   /**
    * Renders the component
    */
-  private render(): void {
+  private render (): void {
     // Initialize filteredOptions if not set
-    if (this.filteredOptions.length === 0 && this.options.length > 0) {
-      this.filteredOptions = [...this.options];
+    if ( this.filteredOptions.length === 0 && this.options.length > 0 ) {
+      this.filteredOptions = [ ...this.options ];
     }
 
     // Remember if search input was focused before render
-    const wasSearchFocused = this.shadowRoot.querySelector('.search-input') === this.shadowRoot.activeElement;
+    const wasSearchFocused = this.shadowRoot.querySelector( '.search-input' ) === this.shadowRoot.activeElement;
 
     const displayText = this.selectedOptions.length > 0
-      ? (this.multiple
-        ? `${this.selectedOptions.length} selected`
-        : this.selectedOptions[0].label)
+      ? ( this.multiple
+        ? `${ this.selectedOptions.length } selected`
+        : this.selectedOptions[ 0 ].label )
       : this.placeholder;
 
     this.shadowRoot.innerHTML = `
@@ -709,56 +709,56 @@ export class SmartSelectElement extends HTMLElement {
       <div class="select-container">
         <div class="select-trigger" tabindex="-1">
           <div class="selected-content">
-            ${this.multiple && this.selectedOptions.length > 0
-              ? this.selectedOptions.map(option => `
+            ${ this.multiple && this.selectedOptions.length > 0
+        ? this.selectedOptions.map( option => `
                   <span class="tag">
-                    ${option.label}
-                    <span class="remove-tag" data-value="${option.value}">×</span>
+                    ${ option.label }
+                    <span class="remove-tag" data-value="${ option.value }">×</span>
                   </span>
-                `).join('')
-              : `<span>${displayText}</span>`
-            }
+                `).join( '' )
+        : `<span>${ displayText }</span>`
+      }
           </div>
-          <div class="arrow ${this.isOpen ? 'open' : ''}"></div>
+          <div class="arrow ${ this.isOpen ? 'open' : '' }"></div>
         </div>
 
-        ${this.isOpen ? `
+        ${ this.isOpen ? `
           <div class="dropdown">
-            ${this.searchable ? `
+            ${ this.searchable ? `
               <input
                 type="text"
                 class="search-input"
                 placeholder="Search options..."
-                value="${this.searchValue}"
+                value="${ this.searchValue }"
               >
-            ` : ''}
+            ` : '' }
 
-            ${this.filteredOptions.length > 0
-              ? this.filteredOptions.map((option, index) => `
+            ${ this.filteredOptions.length > 0
+          ? this.filteredOptions.map( ( option, index ) => `
                   <div
-                    class="option ${this.selectedOptions.find(selected => selected.value === option.value) ? 'selected' : ''} ${index === this.focusedIndex ? 'focused' : ''}"
-                    data-value="${option.value}"
+                    class="option ${ this.selectedOptions.find( selected => selected.value === option.value ) ? 'selected' : '' } ${ index === this.focusedIndex ? 'focused' : '' }"
+                    data-value="${ option.value }"
                   >
-                    ${option.label}
+                    ${ option.label }
                   </div>
-                `).join('')
-              : '<div class="no-options">No options available</div>'
-            }
+                `).join( '' )
+          : '<div class="no-options">No options available</div>'
+        }
           </div>
-        ` : ''}
+        ` : '' }
       </div>
     `;
 
     // Re-focus search input if it was previously focused
-    if (wasSearchFocused && this.searchable && this.isOpen) {
-      requestAnimationFrame(() => {
-        const searchInput = this.shadowRoot.querySelector('.search-input') as HTMLInputElement;
-        if (searchInput) {
+    if ( wasSearchFocused && this.searchable && this.isOpen ) {
+      requestAnimationFrame( () => {
+        const searchInput = this.shadowRoot.querySelector( '.search-input' ) as HTMLInputElement;
+        if ( searchInput ) {
           searchInput.focus();
           // Restore cursor position to the end
-          searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+          searchInput.setSelectionRange( searchInput.value.length, searchInput.value.length );
         }
-      });
+      } );
     }
   }
 }
@@ -766,9 +766,9 @@ export class SmartSelectElement extends HTMLElement {
 /**
  * Conditionally defines the custom element if in a browser environment.
  */
-const defineSmartSelect = (tagName: string = 'liwe3-select'): void => {
-  if (typeof window !== 'undefined' && !window.customElements.get(tagName)) {
-    customElements.define(tagName, SmartSelectElement);
+const defineSmartSelect = ( tagName: string = 'liwe3-select' ): void => {
+  if ( typeof window !== 'undefined' && !window.customElements.get( tagName ) ) {
+    customElements.define( tagName, SmartSelectElement );
   }
 };
 
