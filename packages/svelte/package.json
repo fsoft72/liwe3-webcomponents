@@ -3,6 +3,8 @@
   "version": "1.0.3",
   "description": "Svelte 5 wrappers for @liwe3/webcomponents",
   "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "svelte": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
