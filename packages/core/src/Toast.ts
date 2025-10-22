@@ -194,11 +194,31 @@ export class ToastElement extends HTMLElement {
       // Listen for animation end event for smoother transition
       const handleAnimationEnd = () => {
         container.removeEventListener( 'animationend', handleAnimationEnd );
-        this.dispatchEvent( new CustomEvent( 'close' ) );
-        if ( this.config.onClose ) {
-          this.config.onClose();
-        }
-        this.remove();
+
+        // Animate the host element collapsing (height and margin to 0)
+        const hostElement = this as unknown as HTMLElement;
+        const currentHeight = hostElement.offsetHeight;
+
+        // Set explicit height for animation
+        hostElement.style.height = `${ currentHeight }px`;
+        hostElement.style.marginBottom = '12px';
+
+        // Force reflow
+        void hostElement.offsetHeight;
+
+        // Animate to 0
+        hostElement.style.height = '0px';
+        hostElement.style.marginBottom = '0px';
+        hostElement.style.opacity = '0';
+
+        // Wait for transition to complete, then remove
+        setTimeout( () => {
+          this.dispatchEvent( new CustomEvent( 'close' ) );
+          if ( this.config.onClose ) {
+            this.config.onClose();
+          }
+          this.remove();
+        }, 300 );
       };
 
       container.addEventListener( 'animationend', handleAnimationEnd );
@@ -680,7 +700,6 @@ const getToastContainer = (): HTMLElement => {
     container.style.zIndex = '99999';
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
-    container.style.gap = '12px';
     container.style.maxWidth = '400px';
     container.style.pointerEvents = 'none';
 
@@ -688,9 +707,13 @@ const getToastContainer = (): HTMLElement => {
     const style = document.createElement( 'style' );
     style.textContent = `
       #${DEFAULT_CONTAINER_ID} > * {
-        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                    margin 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-bottom: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+      }
+
+      #${DEFAULT_CONTAINER_ID} > *:last-child {
+        margin-bottom: 0;
       }
 
       @media (max-width: 768px) {

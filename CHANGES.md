@@ -36,6 +36,14 @@
   - 300ms transition duration for transform, opacity, and margin
   - Updated core package version to 1.0.11
 
+- Fixed toast slide-up animation to be truly smooth
+  - Replaced flexbox gap with margin-bottom for animatable spacing
+  - Toast element now animates height and margin to 0 during close
+  - Collapsing animation triggers after fade-out completes
+  - Remaining toasts smoothly slide up to fill the space
+  - Total close animation: 350ms fade + 300ms collapse = 650ms
+  - Updated core package version to 1.0.12
+
 ## 2025-10-22 (Earlier)
 
 ### Added
