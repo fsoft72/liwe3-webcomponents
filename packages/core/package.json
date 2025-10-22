@@ -1,6 +1,6 @@
 {
   "name": "@liwe3/webcomponents",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A collection of reusable web components including SmartSelect and AITextEditor",
   "type": "module",
   "main": "./dist/index.js",
@@ -26,6 +26,11 @@
       "types": "./dist/Toast.d.ts",
       "import": "./dist/Toast.js",
       "default": "./dist/Toast.js"
+    },
+    "./popover-menu": {
+      "types": "./dist/PopoverMenu.d.ts",
+      "import": "./dist/PopoverMenu.js",
+      "default": "./dist/PopoverMenu.js"
     }
   },
   "files": [
