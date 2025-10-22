@@ -4,7 +4,7 @@
  */
 
 // Re-export types from the core package
-export type { SelectOption, AITextEditorConfig, ToastType, ToastButton, ToastConfig } from '@liwe3/webcomponents';
+export type { SelectOption, AITextEditorConfig, ToastType, ToastButton, ToastConfig, ToastElement } from '@liwe3/webcomponents';
 
 // Export Svelte components
 export { default as SmartSelect } from './SmartSelect.svelte';

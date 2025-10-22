@@ -38,6 +38,16 @@
 			</p>
 			<span class="card-link">View Demo →</span>
 		</a>
+
+		<a href="/toast" class="component-card">
+			<div class="card-icon">🍞</div>
+			<h2>Toast</h2>
+			<p>
+				Beautiful toast notifications with multiple types, custom icons, action buttons,
+				and smooth animations. Perfect for user feedback.
+			</p>
+			<span class="card-link">View Demo →</span>
+		</a>
 	</section>
 
 	<section class="features">
