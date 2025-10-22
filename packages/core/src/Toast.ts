@@ -33,6 +33,7 @@ export class ToastElement extends HTMLElement {
   private autoCloseTimer?: number;
   private remainingTime: number = 0;
   private pauseTime: number = 0;
+  private progressBar?: HTMLElement;
 
   constructor () {
     super();
@@ -219,6 +220,9 @@ export class ToastElement extends HTMLElement {
       this.autoCloseTimer = window.setTimeout( () => {
         this.close();
       }, this.duration );
+
+      // Start progress bar animation
+      this.startProgressBarAnimation();
     }
   }
 
@@ -230,6 +234,9 @@ export class ToastElement extends HTMLElement {
       clearTimeout( this.autoCloseTimer );
       this.autoCloseTimer = undefined;
       this.remainingTime -= Date.now() - this.pauseTime;
+
+      // Pause progress bar animation
+      this.pauseProgressBarAnimation();
     }
   }
 
@@ -242,6 +249,9 @@ export class ToastElement extends HTMLElement {
       this.autoCloseTimer = window.setTimeout( () => {
         this.close();
       }, this.remainingTime );
+
+      // Resume progress bar animation
+      this.resumeProgressBarAnimation();
     }
   }
 
@@ -253,6 +263,42 @@ export class ToastElement extends HTMLElement {
       clearTimeout( this.autoCloseTimer );
       this.autoCloseTimer = undefined;
     }
+  }
+
+  /**
+   * Starts the progress bar animation
+   */
+  private startProgressBarAnimation (): void {
+    if ( !this.progressBar || this.duration <= 0 ) return;
+
+    // Reset and start the animation
+    this.progressBar.style.animation = 'none';
+    // Force a reflow to reset the animation
+    void this.progressBar.offsetWidth;
+    this.progressBar.style.animation = `shrinkProgress ${ this.duration }ms linear forwards`;
+  }
+
+  /**
+   * Pauses the progress bar animation
+   */
+  private pauseProgressBarAnimation (): void {
+    if ( !this.progressBar ) return;
+
+    // Get the current computed width and set it as the actual width
+    const computedStyle = window.getComputedStyle( this.progressBar );
+    const currentWidth = computedStyle.width;
+    this.progressBar.style.width = currentWidth;
+    this.progressBar.style.animation = 'none';
+  }
+
+  /**
+   * Resumes the progress bar animation
+   */
+  private resumeProgressBarAnimation (): void {
+    if ( !this.progressBar || this.remainingTime <= 0 ) return;
+
+    // Resume with the remaining time
+    this.progressBar.style.animation = `shrinkProgress ${ this.remainingTime }ms linear forwards`;
   }
 
   /**
@@ -501,6 +547,27 @@ export class ToastElement extends HTMLElement {
         .toast-button:active {
           background-color: var(--toast-button-active-background, #e9ecef);
         }
+
+        .toast-progress-bar {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          height: 4px;
+          width: 100%;
+          background: var(--toast-progress-bar-color, rgba(0, 0, 0, 0.3));
+          border-bottom-left-radius: var(--toast-border-radius, 8px);
+          border-bottom-right-radius: var(--toast-border-radius, 8px);
+          transform-origin: left;
+        }
+
+        @keyframes shrinkProgress {
+          from {
+            width: 100%;
+          }
+          to {
+            width: 0%;
+          }
+        }
       </style>
 
       <div class="toast-container">
@@ -525,8 +592,13 @@ export class ToastElement extends HTMLElement {
             `).join( '' ) }
           </div>
         ` : '' }
+
+        ${ this.duration > 0 ? '<div class="toast-progress-bar"></div>' : '' }
       </div>
     `;
+
+    // Store reference to progress bar
+    this.progressBar = this.shadowRoot.querySelector( '.toast-progress-bar' ) as HTMLElement;
 
     this.bindEvents();
   }

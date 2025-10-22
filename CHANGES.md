@@ -3,6 +3,19 @@
 ## 2025-10-22
 
 ### Added
+- Added reverse progress bar to Toast notifications
+  - Progress bar appears at the bottom of toasts with `duration > 0`
+  - Animates from 100% to 0% width as timeout progresses
+  - Automatically pauses when mouse hovers over toast
+  - Resumes animation when mouse leaves
+  - Customizable via `--toast-progress-bar-color` CSS variable
+  - Default height: 4px
+  - Syncs perfectly with auto-dismiss timer
+  - Updated core package version to 1.0.8
+
+## 2025-10-22 (Earlier)
+
+### Added
 - Implemented Turborepo for monorepo task orchestration and caching
   - Installed turbo ^2.5.8 as workspace dev dependency
   - Created `turbo.json` configuration with task pipelines for:
