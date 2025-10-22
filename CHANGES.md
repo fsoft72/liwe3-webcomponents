@@ -1,5 +1,32 @@
 # CHANGES.md
 
+## 2025-10-22
+
+### Added
+- Implemented Turborepo for monorepo task orchestration and caching
+  - Installed turbo ^2.5.8 as workspace dev dependency
+  - Created `turbo.json` configuration with task pipelines for:
+    - `build` - builds all packages with dependency-aware execution
+    - `package` - packages Svelte library
+    - `dev` - runs development mode (persistent, no cache)
+    - `check` - runs type checking
+    - `check:watch` - runs type checking in watch mode
+    - `clean` - cleans build artifacts
+  - Updated root `package.json` scripts to use Turbo:
+    - `pnpm run build` - builds all packages with caching
+    - `pnpm run build:core` - builds only core package
+    - `pnpm run build:svelte` - builds only Svelte package
+    - `pnpm run dev` - runs dev mode for all packages
+    - `pnpm run dev:core` - runs dev mode for core only
+    - `pnpm run dev:svelte` - runs dev mode for Svelte only
+    - `pnpm run check` - runs type checking
+  - Added `.turbo` directory to `.gitignore` for local cache
+  - Turborepo provides:
+    - Intelligent task scheduling based on package dependencies
+    - Fast incremental builds with content-based caching
+    - Parallel execution of independent tasks
+    - Build times reduced from ~3.7s to ~38ms on cache hits
+
 ## 2025-10-12
 
 ### Fixed

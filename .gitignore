@@ -6,3 +6,6 @@ dist/
 PUBLISHING.md
 .svelte-kit/
 *.tgz
+
+# Turborepo
+.turbo
