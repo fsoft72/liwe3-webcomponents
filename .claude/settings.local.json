@@ -3,7 +3,9 @@
     "allow": [
       "Bash(pnpm install)",
       "Bash(pnpm run build)",
-      "Bash(pnpm run build:svelte:*)"
+      "Bash(pnpm run build:svelte:*)",
+      "Bash(pnpm run build:core:*)",
+      "Bash(pnpm exec tsc:*)"
     ],
     "deny": [],
     "ask": []
