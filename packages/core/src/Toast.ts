@@ -17,7 +17,7 @@ export type ToastConfig = {
   icon?: string; // URL to icon/image
   buttons?: ToastButton[];
   closable?: boolean; // Show close X button
-  duration?: number; // Auto-dismiss after x milliseconds (0 = no auto-dismiss)
+  duration?: number; // Auto-dismiss after x milliseconds (0 = no auto-dismiss, default: 5000ms)
   onClose?: () => void;
 };
 
@@ -28,7 +28,7 @@ export class ToastElement extends HTMLElement {
     text: '',
     type: 'info',
     closable: true,
-    duration: 0
+    duration: 5000
   };
   private autoCloseTimer?: number;
 
@@ -119,7 +119,7 @@ export class ToastElement extends HTMLElement {
     if ( attr ) {
       return parseInt( attr, 10 );
     }
-    return this.config.duration || 0;
+    return this.config.duration ?? 5000;
   }
 
   set duration ( value: number ) {
