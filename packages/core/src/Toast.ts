@@ -31,6 +31,8 @@ export class ToastElement extends HTMLElement {
     duration: 5000
   };
   private autoCloseTimer?: number;
+  private remainingTime: number = 0;
+  private pauseTime: number = 0;
 
   constructor () {
     super();
@@ -212,9 +214,34 @@ export class ToastElement extends HTMLElement {
     this.clearAutoCloseTimer();
 
     if ( this.duration > 0 ) {
+      this.remainingTime = this.duration;
+      this.pauseTime = Date.now();
       this.autoCloseTimer = window.setTimeout( () => {
         this.close();
       }, this.duration );
+    }
+  }
+
+  /**
+   * Pauses the auto-close timer
+   */
+  private pauseAutoCloseTimer (): void {
+    if ( this.autoCloseTimer && this.duration > 0 ) {
+      clearTimeout( this.autoCloseTimer );
+      this.autoCloseTimer = undefined;
+      this.remainingTime -= Date.now() - this.pauseTime;
+    }
+  }
+
+  /**
+   * Resumes the auto-close timer
+   */
+  private resumeAutoCloseTimer (): void {
+    if ( !this.autoCloseTimer && this.remainingTime > 0 ) {
+      this.pauseTime = Date.now();
+      this.autoCloseTimer = window.setTimeout( () => {
+        this.close();
+      }, this.remainingTime );
     }
   }
 
@@ -286,7 +313,7 @@ export class ToastElement extends HTMLElement {
    * Binds all event listeners
    */
   private bindEvents (): void {
-    // Handle close button click
+    // Handle close button click and button clicks
     this.shadowRoot.addEventListener( 'click', ( e ) => {
       const target = e.target as HTMLElement;
 
@@ -302,6 +329,18 @@ export class ToastElement extends HTMLElement {
         }
       }
     } );
+
+    // Handle mouse enter/leave to pause/resume timer
+    const container = this.shadowRoot.querySelector( '.toast-container' );
+    if ( container ) {
+      container.addEventListener( 'mouseenter', () => {
+        this.pauseAutoCloseTimer();
+      } );
+
+      container.addEventListener( 'mouseleave', () => {
+        this.resumeAutoCloseTimer();
+      } );
+    }
   }
 
   /**
