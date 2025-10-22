@@ -284,11 +284,15 @@ export class ToastElement extends HTMLElement {
   private pauseProgressBarAnimation (): void {
     if ( !this.progressBar ) return;
 
-    // Get the current computed width and set it as the actual width
+    // Get the current computed width as a percentage of the container
     const computedStyle = window.getComputedStyle( this.progressBar );
     const currentWidth = computedStyle.width;
-    this.progressBar.style.width = currentWidth;
+    const containerWidth = this.progressBar.parentElement?.offsetWidth || 1;
+    const widthPercent = ( parseFloat( currentWidth ) / containerWidth ) * 100;
+
+    // Stop the animation and set the width directly
     this.progressBar.style.animation = 'none';
+    this.progressBar.style.width = `${ widthPercent }%`;
   }
 
   /**
@@ -297,8 +301,37 @@ export class ToastElement extends HTMLElement {
   private resumeProgressBarAnimation (): void {
     if ( !this.progressBar || this.remainingTime <= 0 ) return;
 
-    // Resume with the remaining time
-    this.progressBar.style.animation = `shrinkProgress ${ this.remainingTime }ms linear forwards`;
+    // Get current width as starting point
+    const computedStyle = window.getComputedStyle( this.progressBar );
+    const currentWidth = computedStyle.width;
+    const containerWidth = this.progressBar.parentElement?.offsetWidth || 1;
+    const currentPercent = ( parseFloat( currentWidth ) / containerWidth ) * 100;
+
+    // Calculate the duration based on the remaining percentage and remaining time
+    // The animation should take exactly remainingTime to go from currentPercent to 0
+    const adjustedDuration = this.remainingTime;
+
+    // Create a new keyframe animation from current position to 0
+    const animationName = `shrinkProgress-${ Date.now() }`;
+    const styleSheet = this.shadowRoot.styleSheets[ 0 ];
+    const keyframes = `
+      @keyframes ${ animationName } {
+        from {
+          width: ${ currentPercent }%;
+        }
+        to {
+          width: 0%;
+        }
+      }
+    `;
+
+    // Add the new keyframe rule
+    if ( styleSheet ) {
+      styleSheet.insertRule( keyframes, styleSheet.cssRules.length );
+    }
+
+    // Apply the animation
+    this.progressBar.style.animation = `${ animationName } ${ adjustedDuration }ms linear forwards`;
   }
 
   /**

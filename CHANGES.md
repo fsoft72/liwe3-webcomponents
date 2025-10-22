@@ -13,6 +13,13 @@
   - Syncs perfectly with auto-dismiss timer
   - Updated core package version to 1.0.8
 
+### Fixed
+- Fixed Toast progress bar resuming from beginning instead of paused position
+  - Progress bar now correctly calculates current width percentage when paused
+  - Creates dynamic keyframe animation from paused position to 0%
+  - Animation duration matches remaining time for accurate progress tracking
+  - Updated core package version to 1.0.9
+
 ## 2025-10-22 (Earlier)
 
 ### Added
