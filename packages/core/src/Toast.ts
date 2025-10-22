@@ -154,13 +154,23 @@ export class ToastElement extends HTMLElement {
   show ( config: ToastConfig ): void {
     this.config = { ...this.config, ...config };
 
+    // If buttons are present, force duration to 0 (user must interact to close)
+    if ( config.buttons && config.buttons.length > 0 ) {
+      this.config.duration = 0;
+    }
+
     // Sync config to attributes
     this.title = config.title;
     this.text = config.text;
     if ( config.type ) this.type = config.type;
     if ( config.icon !== undefined ) this.icon = config.icon;
     if ( config.closable !== undefined ) this.closable = config.closable;
-    if ( config.duration !== undefined ) this.duration = config.duration;
+    if ( config.buttons && config.buttons.length > 0 ) {
+      // Force duration to 0 when buttons are present
+      this.duration = 0;
+    } else if ( config.duration !== undefined ) {
+      this.duration = config.duration;
+    }
     if ( config.buttons ) this.buttons = config.buttons;
 
     this.render();

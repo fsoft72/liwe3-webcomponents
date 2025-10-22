@@ -20,6 +20,14 @@
   - Animation duration matches remaining time for accurate progress tracking
   - Updated core package version to 1.0.9
 
+### Changed
+- Toasts with buttons now automatically disable auto-dismiss
+  - When buttons are present, duration is forced to 0
+  - Progress bar is not displayed when buttons are present
+  - User must interact with buttons or close button to dismiss toast
+  - Ensures user has time to read and respond to actionable toasts
+  - Updated core package version to 1.0.10
+
 ## 2025-10-22 (Earlier)
 
 ### Added
