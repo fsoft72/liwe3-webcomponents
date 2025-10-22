@@ -9,4 +9,6 @@ export type { SelectOption, AITextEditorConfig, ToastType, ToastButton, ToastCon
 // Export Svelte components
 export { default as SmartSelect } from './SmartSelect.svelte';
 export { default as AITextEditor } from './AITextEditor.svelte';
-export { default as Toast } from './Toast.svelte';
+
+// Export Toasts component and toastAdd function
+export { default as Toasts, toastAdd } from './Toasts.svelte';

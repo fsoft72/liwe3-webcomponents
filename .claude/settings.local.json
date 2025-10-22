@@ -5,7 +5,9 @@
       "Bash(pnpm run build)",
       "Bash(pnpm run build:svelte:*)",
       "Bash(pnpm run build:core:*)",
-      "Bash(pnpm exec tsc:*)"
+      "Bash(pnpm exec tsc:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []

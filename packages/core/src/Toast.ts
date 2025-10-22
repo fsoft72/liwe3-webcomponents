@@ -505,4 +505,82 @@ const defineToast = ( tagName: string = 'liwe3-toast' ): void => {
 // Auto-register with default tag name
 defineToast();
 
-export { defineToast };
+/**
+ * Default container ID for toast notifications
+ */
+const DEFAULT_CONTAINER_ID = 'liwe3-toast-container';
+
+/**
+ * Creates or gets the toast container element
+ */
+const getToastContainer = (): HTMLElement => {
+  let container = document.getElementById( DEFAULT_CONTAINER_ID );
+
+  if ( !container ) {
+    container = document.createElement( 'div' );
+    container.id = DEFAULT_CONTAINER_ID;
+    container.style.position = 'fixed';
+    container.style.top = '20px';
+    container.style.right = '20px';
+    container.style.zIndex = '99999';
+    container.style.display = 'flex';
+    container.style.flexDirection = 'column';
+    container.style.gap = '12px';
+    container.style.maxWidth = '400px';
+    container.style.pointerEvents = 'none';
+
+    // Add media query styles for mobile
+    const style = document.createElement( 'style' );
+    style.textContent = `
+      @media (max-width: 768px) {
+        #${DEFAULT_CONTAINER_ID} {
+          left: 20px !important;
+          right: 20px !important;
+          max-width: none !important;
+        }
+      }
+    `;
+    document.head.appendChild( style );
+
+    document.body.appendChild( container );
+  }
+
+  return container;
+};
+
+/**
+ * Shows a toast notification with the given configuration.
+ * This is the recommended way to display toasts.
+ *
+ * @param config - The toast configuration
+ * @returns The toast element instance
+ *
+ * @example
+ * ```typescript
+ * import { toastAdd } from '@liwe3/webcomponents';
+ *
+ * toastAdd({
+ *   title: 'Success!',
+ *   text: 'Your changes have been saved.',
+ *   type: 'success',
+ *   duration: 5000
+ * });
+ * ```
+ */
+const toastAdd = ( config: ToastConfig ): ToastElement => {
+  const container = getToastContainer();
+  const toast = document.createElement( 'liwe3-toast' ) as ToastElement;
+
+  // Allow pointer events on individual toasts
+  toast.style.pointerEvents = 'auto';
+
+  // Show the toast with the provided config
+  toast.show( config );
+
+  // Add to container
+  container.appendChild( toast );
+
+  return toast;
+};
+
+export { defineToast, toastAdd };

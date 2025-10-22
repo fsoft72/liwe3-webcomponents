@@ -21,6 +21,7 @@ export {
 export {
   ToastElement,
   defineToast,
+  toastAdd,
   type ToastType,
   type ToastButton,
   type ToastConfig

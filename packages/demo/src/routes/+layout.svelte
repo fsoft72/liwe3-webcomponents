@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import { Toasts } from "@liwe3/webcomponents-svelte";
 
   const navItems = [
     { href: "/", label: "Home" },
@@ -11,6 +12,9 @@
   // Derived value for active page
   $: currentPath = $page.url.pathname;
 </script>
+
+<!-- Initialize Toast web component -->
+<Toasts />
 
 <div class="app">
   <nav class="navbar">
