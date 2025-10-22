@@ -48,6 +48,16 @@
 			</p>
 			<span class="card-link">View Demo →</span>
 		</a>
+
+		<a href="/popover-menu" class="component-card">
+			<div class="card-icon">📋</div>
+			<h2>PopoverMenu</h2>
+			<p>
+				Customizable menu bar with nested submenus, hover interactions, and smart positioning.
+				Perfect for application menus and context menus.
+			</p>
+			<span class="card-link">View Demo →</span>
+		</a>
 	</section>
 
 	<section class="features">
