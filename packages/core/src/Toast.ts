@@ -447,6 +447,7 @@ export class ToastElement extends HTMLElement {
           display: block;
           font-family: var(--font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
           font-size: var(--font-size, 14px);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .toast-container {
@@ -683,9 +684,15 @@ const getToastContainer = (): HTMLElement => {
     container.style.maxWidth = '400px';
     container.style.pointerEvents = 'none';
 
-    // Add media query styles for mobile
+    // Add media query styles for mobile and smooth transitions
     const style = document.createElement( 'style' );
     style.textContent = `
+      #${DEFAULT_CONTAINER_ID} > * {
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                    opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                    margin 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
       @media (max-width: 768px) {
         #${DEFAULT_CONTAINER_ID} {
           left: 20px !important;

@@ -28,6 +28,14 @@
   - Ensures user has time to read and respond to actionable toasts
   - Updated core package version to 1.0.10
 
+### Improved
+- Enhanced toast repositioning animation for smoother visual experience
+  - Added CSS transitions to toast elements for fluid position changes
+  - Toasts now smoothly slide up when other toasts close
+  - Uses cubic-bezier easing (0.4, 0, 0.2, 1) for natural motion
+  - 300ms transition duration for transform, opacity, and margin
+  - Updated core package version to 1.0.11
+
 ## 2025-10-22 (Earlier)
 
 ### Added
