@@ -13,12 +13,14 @@
     - `check:watch` - runs type checking in watch mode
     - `clean` - cleans build artifacts
   - Updated root `package.json` scripts to use Turbo:
-    - `pnpm run build` - builds all packages with caching
+    - `pnpm run build` - builds core and svelte packages (excludes demo)
     - `pnpm run build:core` - builds only core package
     - `pnpm run build:svelte` - builds only Svelte package
-    - `pnpm run dev` - runs dev mode for all packages
+    - `pnpm run build:demo` - builds only demo package
+    - `pnpm run dev` - runs dev mode for core and svelte (excludes demo)
     - `pnpm run dev:core` - runs dev mode for core only
     - `pnpm run dev:svelte` - runs dev mode for Svelte only
+    - `pnpm run dev:demo` - runs dev mode for demo only
     - `pnpm run check` - runs type checking
   - Added `.turbo` directory to `.gitignore` for local cache
   - Turborepo provides:

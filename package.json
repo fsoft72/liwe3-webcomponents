@@ -4,12 +4,14 @@
   "private": true,
   "description": "Monorepo for @liwe3/webcomponents packages",
   "scripts": {
-    "build": "turbo run build",
+    "build": "turbo run build --filter=\"!@liwe3/demo\"",
     "build:core": "turbo run build --filter=\"@liwe3/webcomponents\"",
     "build:svelte": "turbo run package --filter=\"@liwe3/webcomponents-svelte\"",
-    "dev": "turbo run dev",
+    "build:demo": "turbo run build --filter=\"@liwe3/demo\"",
+    "dev": "turbo run dev --filter=\"!@liwe3/demo\"",
     "dev:core": "turbo run dev --filter=\"@liwe3/webcomponents\"",
     "dev:svelte": "turbo run dev --filter=\"@liwe3/webcomponents-svelte\"",
+    "dev:demo": "turbo run dev --filter=\"@liwe3/demo\"",
     "check": "turbo run check",
     "clean": "rm -rf packages/*/dist packages/*/.svelte-kit packages/*/node_modules .turbo"
   },
