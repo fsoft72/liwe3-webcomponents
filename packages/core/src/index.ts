@@ -17,10 +17,20 @@ export {
   type AITextEditorConfig
 } from './AITextEditor';
 
+// Export Toast
+export {
+  ToastElement,
+  defineToast,
+  type ToastType,
+  type ToastButton,
+  type ToastConfig
+} from './Toast';
+
 // Convenience function to register all components at once
 export const defineAllComponents = (): void => {
   if (typeof window !== 'undefined') {
     import('./SmartSelect').then(({ defineSmartSelect }) => defineSmartSelect());
     import('./AITextEditor').then(({ defineAITextEditor }) => defineAITextEditor());
+    import('./Toast').then(({ defineToast }) => defineToast());
   }
 };

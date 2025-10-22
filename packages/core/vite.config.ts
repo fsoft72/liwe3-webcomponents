@@ -8,6 +8,7 @@ export default defineConfig({
         index: resolve(__dirname, 'src/index.ts'),
         SmartSelect: resolve(__dirname, 'src/SmartSelect.ts'),
         AITextEditor: resolve(__dirname, 'src/AITextEditor.ts'),
+        Toast: resolve(__dirname, 'src/Toast.ts'),
       },
       formats: ['es'],
       fileName: (format, entryName) => `${entryName}.js`,
