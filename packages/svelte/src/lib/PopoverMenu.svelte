@@ -12,16 +12,17 @@
   }: Props = $props();
 
   let popoverMenuElement: HTMLElement;
+  let isReady = $state(false);
 
   /**
    * Updates the web component's items based on props
    */
   const updateItems = () => {
-    if (!popoverMenuElement) return;
+    if (!popoverMenuElement || !isReady) return;
 
-    // Set items using the setItems method
-    if (items.length > 0) {
-      (popoverMenuElement as any)?.setItems(items);
+    // Check if setItems method exists
+    if (typeof (popoverMenuElement as any).setItems === 'function') {
+      (popoverMenuElement as any).setItems(items);
     }
   };
 
@@ -29,6 +30,13 @@
     // Dynamically import the web component
     await import("@liwe3/webcomponents/popover-menu");
 
+    // Wait for the custom element to be defined
+    await customElements.whenDefined('liwe3-popover-menu');
+
+    // Mark as ready
+    isReady = true;
+
+    // Initial update
     updateItems();
   });
 
@@ -36,28 +44,41 @@
    * Expose methods to parent component
    */
   export const setItems = (newItems: PopoverMenuConfig[]) => {
-    (popoverMenuElement as any)?.setItems(newItems);
+    if (typeof (popoverMenuElement as any)?.setItems === 'function') {
+      (popoverMenuElement as any).setItems(newItems);
+    }
   };
 
   export const getItems = (): PopoverMenuConfig[] => {
-    return (popoverMenuElement as any)?.getItems() || [];
+    if (typeof (popoverMenuElement as any)?.getItems === 'function') {
+      return (popoverMenuElement as any).getItems();
+    }
+    return [];
   };
 
   export const addMenuItem = (item: PopoverMenuConfig, index: number | null = null) => {
-    (popoverMenuElement as any)?.addMenuItem(item, index);
+    if (typeof (popoverMenuElement as any)?.addMenuItem === 'function') {
+      (popoverMenuElement as any).addMenuItem(item, index);
+    }
   };
 
   export const removeMenuItem = (index: number) => {
-    (popoverMenuElement as any)?.removeMenuItem(index);
+    if (typeof (popoverMenuElement as any)?.removeMenuItem === 'function') {
+      (popoverMenuElement as any).removeMenuItem(index);
+    }
   };
 
   export const updateMenuItem = (index: number, item: PopoverMenuConfig) => {
-    (popoverMenuElement as any)?.updateMenuItem(index, item);
+    if (typeof (popoverMenuElement as any)?.updateMenuItem === 'function') {
+      (popoverMenuElement as any).updateMenuItem(index, item);
+    }
   };
 
-  // Reactively update items when props change
+  // Reactively update items when props change (only after component is ready)
   $effect(() => {
-    updateItems();
+    if (isReady) {
+      updateItems();
+    }
   });
 </script>
 
