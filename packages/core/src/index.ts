@@ -35,6 +35,13 @@ export {
   type PopoverMenuConfig
 } from './PopoverMenu';
 
+// Export DateSelector
+export {
+  DateSelectorElement,
+  defineDateSelector,
+  type DateRange
+} from './DateSelector';
+
 // Convenience function to register all components at once
 export const defineAllComponents = (): void => {
   if (typeof window !== 'undefined') {
@@ -42,5 +49,6 @@ export const defineAllComponents = (): void => {
     import('./AITextEditor').then(({ defineAITextEditor }) => defineAITextEditor());
     import('./Toast').then(({ defineToast }) => defineToast());
     import('./PopoverMenu').then(({ definePopoverMenu }) => definePopoverMenu());
+    import('./DateSelector').then(({ defineDateSelector }) => defineDateSelector());
   }
 };

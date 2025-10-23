@@ -1,6 +1,6 @@
 {
   "name": "@liwe3/webcomponents",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "description": "A collection of reusable web components including SmartSelect and AITextEditor",
   "type": "module",
   "main": "./dist/index.js",
@@ -31,6 +31,11 @@
       "types": "./dist/PopoverMenu.d.ts",
       "import": "./dist/PopoverMenu.js",
       "default": "./dist/PopoverMenu.js"
+    },
+    "./date-selector": {
+      "types": "./dist/DateSelector.d.ts",
+      "import": "./dist/DateSelector.js",
+      "default": "./dist/DateSelector.js"
     }
   },
   "files": [
