@@ -164,7 +164,7 @@
 				<tr>
 					<td><code>selectedRange</code></td>
 					<td>DateRange</td>
-					<td>{ start: null, end: null }</td>
+					<td>{'{ start: null, end: null }'}</td>
 					<td>Currently selected date range</td>
 				</tr>
 			</tbody>
