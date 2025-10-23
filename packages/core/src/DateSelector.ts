@@ -13,7 +13,6 @@ export class DateSelectorElement extends HTMLElement {
   private currentDate: Date = new Date();
   private selectedDate: string | null = null;
   private selectedRange: DateRange = { start: null, end: null };
-  private isSelectingRange: boolean = false;
 
   // Month and day names for localization
   private readonly MONTH_NAMES: string[] = [
@@ -34,7 +33,7 @@ export class DateSelectorElement extends HTMLElement {
     return ['range-mode', 'selected-date', 'selected-range'];
   }
 
-  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
+  attributeChangedCallback(name: string): void {
     if (name === 'range-mode') {
       this.selectedDate = null;
       this.selectedRange = { start: null, end: null };
@@ -437,7 +436,6 @@ export class DateSelectorElement extends HTMLElement {
     if (!this.selectedRange.start || (this.selectedRange.start && this.selectedRange.end)) {
       // Start new selection
       this.selectedRange = { start: dateStr, end: null };
-      this.isSelectingRange = true;
     } else {
       // Complete the range
       const startDate = new Date(this.selectedRange.start);
@@ -449,8 +447,6 @@ export class DateSelectorElement extends HTMLElement {
       } else {
         this.selectedRange.end = dateStr;
       }
-
-      this.isSelectingRange = false;
 
       // Dispatch custom event
       this.dispatchEvent(new CustomEvent('rangeSelected', {

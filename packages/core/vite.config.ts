@@ -10,6 +10,7 @@ export default defineConfig({
         AITextEditor: resolve(__dirname, 'src/AITextEditor.ts'),
         Toast: resolve(__dirname, 'src/Toast.ts'),
         PopoverMenu: resolve(__dirname, 'src/PopoverMenu.ts'),
+        DateSelector: resolve(__dirname, 'src/DateSelector.ts'),
       },
       formats: ['es'],
       fileName: (format, entryName) => `${entryName}.js`,
