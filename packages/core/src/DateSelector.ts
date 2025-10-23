@@ -84,6 +84,7 @@ export class DateSelectorElement extends HTMLElement {
           font-size: 18px;
           font-weight: 600;
           color: #333;
+          padding-left: 4px;
         }
 
         .nav-buttons {
