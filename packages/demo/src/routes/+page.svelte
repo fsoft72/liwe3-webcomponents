@@ -58,6 +58,16 @@
 			</p>
 			<span class="card-link">View Demo →</span>
 		</a>
+
+		<a href="/date-selector" class="component-card">
+			<div class="card-icon">📅</div>
+			<h2>DateSelector</h2>
+			<p>
+				Beautiful date picker with single date and range selection modes.
+				Features month navigation, year selection, and keyboard accessibility.
+			</p>
+			<span class="card-link">View Demo →</span>
+		</a>
 	</section>
 
 	<section class="features">

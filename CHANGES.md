@@ -1,5 +1,36 @@
 # CHANGES.md
 
+## 2025-10-23
+
+### Added
+- Created Svelte 5 wrapper for DateSelector component in `packages/svelte`
+  - Added `DateSelector.svelte` with full Svelte 5 runes support
+  - Supports single date and range selection modes via `rangeMode` prop
+  - Two-way binding with `bind:selectedDate` and `bind:selectedRange`
+  - Event handlers for `ondateselected` and `onrangeselected`
+  - Exposed public methods: `setDate()`, `setRange()`, `getSelectedDate()`, `getSelectedRange()`, `clear()`
+  - Updated Svelte package version to 1.0.6
+
+- Created comprehensive demo page for DateSelector in `packages/demo`
+  - Single date selection example with formatted output
+  - Date range selection example with range display
+  - Pre-selected date example
+  - Features list and usage examples
+  - Complete API reference with props, events, and methods tables
+  - Added DateSelector card to main demo page
+
+- Exported DateSelector types and component
+  - Added `DateRange` type export to `packages/svelte/src/lib/index.ts`
+  - Updated core package version to 1.0.14
+
+### Changed
+- Reorganized demo files into `packages/core/demos/` directory
+  - Moved `demo-date-selector.html` to `demos/` folder
+  - Moved `demo-popover-menu.html` to `demos/` folder
+  - Moved `demo-toast.html` to `demos/` folder
+  - Fixed import paths in all demo files to reference `../dist/` instead of `./dist/`
+  - Created `demos/index.html` as landing page with links to all component demos
+
 ## 2025-10-22
 
 ### Added
