@@ -60,7 +60,16 @@ export class ToastElement extends HTMLElement {
   }
 
   get title (): string {
-    return this.getAttribute( 'title' ) || this.config.title;
+    const attrTitle = this.getAttribute( 'title' );
+    const configTitle = this.config.title;
+
+    // If no title is provided or empty, use capitalized type
+    if ( ( !attrTitle || attrTitle.trim() === '' ) && ( !configTitle || configTitle.trim() === '' ) ) {
+      const type = this.type;
+      return type.charAt( 0 ).toUpperCase() + type.slice( 1 );
+    }
+
+    return attrTitle || configTitle;
   }
 
   set title ( value: string ) {
