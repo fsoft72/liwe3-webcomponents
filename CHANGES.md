@@ -1,5 +1,13 @@
 # CHANGES.md
 
+## 2025-10-28
+
+### Changed
+- Toast component now uses capitalized type as fallback title
+  - When `title` is undefined or empty, displays capitalized type ("Info", "Warning", "Error", "Success")
+  - Provides better default UX when title is not explicitly set
+  - Updated core package version to 1.0.15
+
 ## 2025-10-23
 
 ### Added
