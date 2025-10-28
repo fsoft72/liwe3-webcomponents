@@ -8,6 +8,12 @@
   - Provides better default UX when title is not explicitly set
   - Updated core package version to 1.0.15
 
+### Fixed
+- Fixed Toast title showing "undefined" when title is not provided
+  - Clear title attribute when undefined or empty in `show()` method
+  - Update title setter to remove attribute when value is empty or whitespace
+  - Ensures fallback to capitalized type works correctly in all scenarios
+
 ## 2025-10-23
 
 ### Added
