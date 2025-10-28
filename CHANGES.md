@@ -11,6 +11,7 @@
   - Centered positions (T, B) use transform to center horizontally
   - Mobile responsive: all positions adjust to full-width on small screens
   - Updated core package version to 1.0.16
+  - Added positioning examples to demo page with "Show All Positions" feature
 
 ### Changed
 - Toast component now uses capitalized type as fallback title
