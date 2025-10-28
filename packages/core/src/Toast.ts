@@ -73,8 +73,13 @@ export class ToastElement extends HTMLElement {
   }
 
   set title ( value: string ) {
-    this.setAttribute( 'title', value );
-    this.config.title = value;
+    if ( value && value.trim() !== '' ) {
+      this.setAttribute( 'title', value );
+      this.config.title = value;
+    } else {
+      this.removeAttribute( 'title' );
+      this.config.title = '';
+    }
   }
 
   get text (): string {
@@ -169,7 +174,13 @@ export class ToastElement extends HTMLElement {
     }
 
     // Sync config to attributes
-    this.title = config.title;
+    if ( config.title && config.title.trim() !== '' ) {
+      this.title = config.title;
+    } else {
+      // Clear title if not provided or empty
+      this.removeAttribute( 'title' );
+      this.config.title = '';
+    }
     this.text = config.text;
     if ( config.type ) this.type = config.type;
     if ( config.icon !== undefined ) this.icon = config.icon;
