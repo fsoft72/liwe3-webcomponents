@@ -1,5 +1,8 @@
 <script module lang="ts">
-	import type { ToastConfig, ToastElement } from '@liwe3/webcomponents';
+	import type { ToastConfig, ToastElement, ToastPosition } from '@liwe3/webcomponents';
+
+	// Re-export types for convenience
+	export type { ToastConfig, ToastElement, ToastPosition };
 
 	/**
 	 * Shows a toast notification with the given configuration.
@@ -23,7 +26,8 @@
 	 *   title: 'Success!',
 	 *   text: 'Your changes have been saved.',
 	 *   type: 'success',
-	 *   duration: 5000
+	 *   duration: 5000,
+	 *   position: 'TR' // Optional: TL, T, TR, BL, B, BR (default: TR)
 	 * });
 	 * ```
 	 */

@@ -12,6 +12,8 @@
   - Mobile responsive: all positions adjust to full-width on small screens
   - Updated core package version to 1.0.16
   - Added positioning examples to demo page with "Show All Positions" feature
+  - Updated Svelte wrapper to re-export `ToastPosition` type and document position parameter
+  - Updated Svelte package version to 1.0.15
 
 ### Changed
 - Toast component now uses capitalized type as fallback title
