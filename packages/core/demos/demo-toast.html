@@ -228,6 +228,24 @@
     </div>
 
     <div class="demo-section">
+      <h2 class="section-title">Toast Positioning</h2>
+      <p class="description">
+        Position toasts in different areas of the screen. Each position creates its own independent container.
+      </p>
+      <div class="button-grid">
+        <button class="btn-info" onclick="showPositionedToast('TL')">Top Left (TL)</button>
+        <button class="btn-info" onclick="showPositionedToast('T')">Top Center (T)</button>
+        <button class="btn-info" onclick="showPositionedToast('TR')">Top Right (TR)</button>
+        <button class="btn-success" onclick="showPositionedToast('BL')">Bottom Left (BL)</button>
+        <button class="btn-success" onclick="showPositionedToast('B')">Bottom Center (B)</button>
+        <button class="btn-success" onclick="showPositionedToast('BR')">Bottom Right (BR)</button>
+      </div>
+      <div class="button-grid" style="margin-top: 15px;">
+        <button class="btn-custom" onclick="showAllPositions()">Show All Positions</button>
+      </div>
+    </div>
+
+    <div class="demo-section">
       <h2 class="section-title">Usage Example</h2>
       <div class="code-block">
         <pre>// Import the toastAdd function
@@ -239,6 +257,7 @@ toastAdd({
   text: 'Your changes have been saved.',
   type: 'success',
   duration: 5000,
+  position: 'TR', // TL, T, TR, BL, B, BR (default: TR)
   closable: true,
   buttons: [
     {
@@ -372,6 +391,54 @@ toastAdd({
         type: 'info',
         closable: false,
         duration: 5000
+      });
+    };
+
+    // Positioned toast
+    window.showPositionedToast = (position) => {
+      const positionNames = {
+        'TL': 'Top Left',
+        'T': 'Top Center',
+        'TR': 'Top Right',
+        'BL': 'Bottom Left',
+        'B': 'Bottom Center',
+        'BR': 'Bottom Right'
+      };
+
+      toastAdd({
+        title: positionNames[position],
+        text: `This toast appears in the ${positionNames[position].toLowerCase()} position.`,
+        type: 'info',
+        position: position,
+        duration: 5000,
+        closable: true
+      });
+    };
+
+    // Show all positions
+    window.showAllPositions = () => {
+      const positions = ['TL', 'T', 'TR', 'BL', 'B', 'BR'];
+      const types = ['info', 'success', 'warning', 'error', 'info', 'success'];
+      const positionNames = {
+        'TL': 'Top Left',
+        'T': 'Top Center',
+        'TR': 'Top Right',
+        'BL': 'Bottom Left',
+        'B': 'Bottom Center',
+        'BR': 'Bottom Right'
+      };
+
+      positions.forEach((position, index) => {
+        setTimeout(() => {
+          toastAdd({
+            title: positionNames[position],
+            text: `Toast at ${positionNames[position].toLowerCase()}`,
+            type: types[index],
+            position: position,
+            duration: 7000,
+            closable: true
+          });
+        }, index * 200); // Stagger the toasts by 200ms
       });
     };
   </script>
