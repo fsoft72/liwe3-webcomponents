@@ -2,6 +2,16 @@
 
 ## 2025-10-28
 
+### Added
+- Toast component now supports customizable positioning
+  - Added `ToastPosition` type with 6 position options: 'TL', 'T', 'TR', 'BL', 'B', 'BR'
+  - 'TL' = top-left, 'T' = top-center, 'TR' = top-right (default)
+  - 'BL' = bottom-left, 'B' = bottom-center, 'BR' = bottom-right
+  - Each position creates its own independent container
+  - Centered positions (T, B) use transform to center horizontally
+  - Mobile responsive: all positions adjust to full-width on small screens
+  - Updated core package version to 1.0.16
+
 ### Changed
 - Toast component now uses capitalized type as fallback title
   - When `title` is undefined or empty, displays capitalized type ("Info", "Warning", "Error", "Success")

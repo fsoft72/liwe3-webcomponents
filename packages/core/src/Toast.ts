@@ -5,6 +5,8 @@
 
 export type ToastType = 'info' | 'warning' | 'error' | 'success';
 
+export type ToastPosition = 'TL' | 'T' | 'TR' | 'BL' | 'B' | 'BR';
+
 export type ToastButton = {
   label: string;
   onClick: () => void;
@@ -18,6 +20,7 @@ export type ToastConfig = {
   buttons?: ToastButton[];
   closable?: boolean; // Show close X button
   duration?: number; // Auto-dismiss after x milliseconds (0 = no auto-dismiss, default: 5000ms)
+  position?: ToastPosition; // Toast container position (default: 'TR')
   onClose?: () => void;
 };
 
@@ -701,50 +704,89 @@ const defineToast = ( tagName: string = 'liwe3-toast' ): void => {
 defineToast();
 
 /**
- * Default container ID for toast notifications
+ * Base container ID prefix for toast notifications
  */
-const DEFAULT_CONTAINER_ID = 'liwe3-toast-container';
+const CONTAINER_ID_PREFIX = 'liwe3-toast-container';
 
 /**
- * Creates or gets the toast container element
+ * Gets the container positioning styles based on position
  */
-const getToastContainer = (): HTMLElement => {
-  let container = document.getElementById( DEFAULT_CONTAINER_ID );
+const getContainerStyles = ( position: ToastPosition ): { top?: string; bottom?: string; left?: string; right?: string; alignItems: string } => {
+  switch ( position ) {
+    case 'TL':
+      return { top: '20px', left: '20px', alignItems: 'flex-start' };
+    case 'T':
+      return { top: '20px', left: '50%', alignItems: 'center' };
+    case 'TR':
+      return { top: '20px', right: '20px', alignItems: 'flex-end' };
+    case 'BL':
+      return { bottom: '20px', left: '20px', alignItems: 'flex-start' };
+    case 'B':
+      return { bottom: '20px', left: '50%', alignItems: 'center' };
+    case 'BR':
+      return { bottom: '20px', right: '20px', alignItems: 'flex-end' };
+    default:
+      return { top: '20px', right: '20px', alignItems: 'flex-end' };
+  }
+};
+
+/**
+ * Creates or gets the toast container element for the specified position
+ */
+const getToastContainer = ( position: ToastPosition = 'TR' ): HTMLElement => {
+  const containerId = `${ CONTAINER_ID_PREFIX }-${ position.toLowerCase() }`;
+  let container = document.getElementById( containerId );
 
   if ( !container ) {
     container = document.createElement( 'div' );
-    container.id = DEFAULT_CONTAINER_ID;
+    container.id = containerId;
     container.style.position = 'fixed';
-    container.style.top = '20px';
-    container.style.right = '20px';
     container.style.zIndex = '99999';
     container.style.display = 'flex';
     container.style.flexDirection = 'column';
     container.style.maxWidth = '400px';
     container.style.pointerEvents = 'none';
 
+    // Apply position-specific styles
+    const styles = getContainerStyles( position );
+    if ( styles.top ) container.style.top = styles.top;
+    if ( styles.bottom ) container.style.bottom = styles.bottom;
+    if ( styles.left ) container.style.left = styles.left;
+    if ( styles.right ) container.style.right = styles.right;
+    container.style.alignItems = styles.alignItems;
+
+    // For centered positions, apply transform to center horizontally
+    if ( position === 'T' || position === 'B' ) {
+      container.style.transform = 'translateX(-50%)';
+    }
+
     // Add media query styles for mobile and smooth transitions
-    const style = document.createElement( 'style' );
-    style.textContent = `
-      #${DEFAULT_CONTAINER_ID} > * {
-        margin-bottom: 12px;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        overflow: hidden;
-      }
-
-      #${DEFAULT_CONTAINER_ID} > *:last-child {
-        margin-bottom: 0;
-      }
-
-      @media (max-width: 768px) {
-        #${DEFAULT_CONTAINER_ID} {
-          left: 20px !important;
-          right: 20px !important;
-          max-width: none !important;
+    const styleId = `${ containerId }-styles`;
+    if ( !document.getElementById( styleId ) ) {
+      const style = document.createElement( 'style' );
+      style.id = styleId;
+      style.textContent = `
+        #${ containerId } > * {
+          margin-bottom: 12px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          overflow: hidden;
         }
-      }
-    `;
-    document.head.appendChild( style );
+
+        #${ containerId } > *:last-child {
+          margin-bottom: 0;
+        }
+
+        @media (max-width: 768px) {
+          #${ containerId } {
+            left: 20px !important;
+            right: 20px !important;
+            max-width: none !important;
+            transform: none !important;
+          }
+        }
+      `;
+      document.head.appendChild( style );
+    }
 
     document.body.appendChild( container );
   }
@@ -767,12 +809,14 @@ const getToastContainer = (): HTMLElement => {
  *   title: 'Success!',
  *   text: 'Your changes have been saved.',
  *   type: 'success',
- *   duration: 5000
+ *   duration: 5000,
+ *   position: 'TR' // Optional: top-right (default)
  * });
  * ```
  */
 const toastAdd = ( config: ToastConfig ): ToastElement => {
-  const container = getToastContainer();
+  const position = config.position || 'TR';
+  const container = getToastContainer( position );
   const toast = document.createElement( 'liwe3-toast' ) as ToastElement;
 
   // Allow pointer events on individual toasts
