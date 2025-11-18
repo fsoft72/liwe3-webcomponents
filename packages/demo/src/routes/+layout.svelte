@@ -7,6 +7,7 @@
     { href: "/smart-select", label: "SmartSelect" },
     { href: "/ai-text-editor", label: "AITextEditor" },
     { href: "/toast", label: "Toast" },
+    { href: "/tree-view", label: "TreeView" },
   ];
 
   // Derived value for active page

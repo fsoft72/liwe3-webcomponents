@@ -323,7 +323,37 @@ export class TreeViewElement extends HTMLElement {
       if ( target.classList.contains( 'node-checkbox' ) ) {
         const nodeId = target.dataset.nodeId;
         if ( nodeId ) {
+          // Toggle current node selection
           this.toggleSelection( nodeId );
+
+          // If this node is a folder, cascade selection state to all descendants
+          const node = this.findNode( nodeId );
+          if ( node && node.children && node.children.length > 0 ) {
+            const checked = !!target.checked;
+
+            const applyToDescendants = ( n: TreeNode ) => {
+              if ( n.children ) n.children.forEach( applyToDescendants );
+              // Skip the root node itself because it's already handled above
+              if ( n.id !== nodeId ) {
+                if ( checked ) this.selectedIds.add( n.id );
+                else this.selectedIds.delete( n.id );
+              }
+            };
+
+            applyToDescendants( node );
+
+            // Update any rendered descendant checkboxes in the DOM
+            const rootEl = this.shadowRoot.querySelector( `.tree-node[data-node-id="${ nodeId }"]` );
+            if ( rootEl ) {
+              rootEl.querySelectorAll<HTMLInputElement>( '.node-checkbox' ).forEach( ( cb ) => {
+                cb.checked = checked;
+              } );
+            }
+
+            this.dispatchEvent( new CustomEvent( 'selectionchange', {
+              detail: { selectedIds: this.selectedNodeIds }
+            } ) );
+          }
         }
       }
     } );
@@ -331,6 +361,13 @@ export class TreeViewElement extends HTMLElement {
     // Handle double-click events
     this.shadowRoot.addEventListener( 'dblclick', ( e ) => {
       const target = e.target as HTMLElement;
+
+      // Ignore double-clicks that originate from the checkbox area
+      if ( target.closest( '.checkbox-wrapper' ) || target.classList.contains( 'node-checkbox' ) ) {
+        e.stopPropagation();
+        e.preventDefault();
+        return;
+      }
 
       // Check if clicking on a node label or content
       if ( target.closest( '.node-label' ) || target.closest( '.node-content' ) ) {
