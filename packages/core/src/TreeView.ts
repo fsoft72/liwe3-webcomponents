@@ -88,14 +88,62 @@ export class TreeViewElement extends HTMLElement {
    * Toggle node expansion
    */
   toggleExpansion ( nodeId: string ): void {
-    if ( this.expandedIds.has( nodeId ) ) {
+    const isExpanded = this.expandedIds.has( nodeId );
+
+    if ( isExpanded ) {
       this.expandedIds.delete( nodeId );
     } else {
       this.expandedIds.add( nodeId );
     }
-    this.render();
+
+    // Update DOM directly instead of full re-render
+    const nodeElement = this.shadowRoot.querySelector( `.tree-node[data-node-id="${ nodeId }"]` ) as HTMLElement;
+    if ( nodeElement ) {
+      // Toggle expand icon rotation
+      const expandIcon = nodeElement.querySelector( '.expand-icon' ) as HTMLElement;
+      if ( expandIcon ) {
+        if ( isExpanded ) {
+          expandIcon.classList.remove( 'expanded' );
+        } else {
+          expandIcon.classList.add( 'expanded' );
+        }
+      }
+
+      // Toggle children visibility
+      const childrenContainer = nodeElement.querySelector( '.node-children' ) as HTMLElement;
+      if ( childrenContainer ) {
+        if ( isExpanded ) {
+          childrenContainer.remove();
+        } else {
+          // Render children and append
+          const node = this.findNode( nodeId );
+          if ( node && node.children ) {
+            const depth = parseInt( nodeElement.dataset.depth || '0', 10 );
+            const childrenHtml = `
+              <div class="node-children">
+                ${ node.children.map( child => this.renderNode( child, depth + 1 ) ).join( '' ) }
+              </div>
+            `;
+            nodeElement.insertAdjacentHTML( 'beforeend', childrenHtml );
+          }
+        }
+      } else if ( !isExpanded ) {
+        // Children container doesn't exist, create it
+        const node = this.findNode( nodeId );
+        if ( node && node.children ) {
+          const depth = parseInt( nodeElement.dataset.depth || '0', 10 );
+          const childrenHtml = `
+            <div class="node-children">
+              ${ node.children.map( child => this.renderNode( child, depth + 1 ) ).join( '' ) }
+            </div>
+          `;
+          nodeElement.insertAdjacentHTML( 'beforeend', childrenHtml );
+        }
+      }
+    }
+
     this.dispatchEvent( new CustomEvent( 'toggle', {
-      detail: { nodeId, expanded: this.expandedIds.has( nodeId ) }
+      detail: { nodeId, expanded: !isExpanded }
     } ) );
   }
 
@@ -103,13 +151,20 @@ export class TreeViewElement extends HTMLElement {
    * Toggle node selection
    */
   toggleSelection ( nodeId: string ): void {
-    if ( this.selectedIds.has( nodeId ) ) {
+    const isSelected = this.selectedIds.has( nodeId );
+
+    if ( isSelected ) {
       this.selectedIds.delete( nodeId );
     } else {
       this.selectedIds.add( nodeId );
     }
 
-    this.render();
+    // Update checkbox state directly instead of full re-render
+    const checkbox = this.shadowRoot.querySelector( `.node-checkbox[data-node-id="${ nodeId }"]` ) as HTMLInputElement;
+    if ( checkbox ) {
+      checkbox.checked = !isSelected;
+    }
+
     this.dispatchEvent( new CustomEvent( 'selectionchange', {
       detail: { selectedIds: this.selectedNodeIds }
     } ) );

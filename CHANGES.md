@@ -3,6 +3,13 @@
 ## 2025-11-18
 
 ### Changed
+- TreeView component performance optimizations
+  - `toggleExpansion()` now updates only the specific node's DOM elements instead of re-rendering entire tree
+  - `toggleSelection()` now updates only the checkbox state instead of re-rendering entire tree
+  - Significantly improved performance for large trees with hundreds or thousands of nodes
+  - Children nodes are dynamically added/removed from DOM on expand/collapse
+  - Event delegation ensures dynamically added nodes work correctly
+
 - TreeView component interaction improvements
   - Removed single-click expand/collapse on folder labels
   - Added double-click to expand/collapse folders
