@@ -19,6 +19,7 @@ export class TreeViewElement extends HTMLElement {
   private selectedIds: Set<string> = new Set();
   private expandedIds: Set<string> = new Set();
   private indentWidth: number = 20;
+  private showBorder = true;
 
   constructor () {
     super();
@@ -28,13 +29,17 @@ export class TreeViewElement extends HTMLElement {
   }
 
   static get observedAttributes (): string[] {
-    return [ 'data', 'indent-width', 'selected-ids' ];
+    return [ 'data', 'indent-width', 'selected-ids', 'show-border' ];
   }
 
   attributeChangedCallback ( name: string, oldValue: string | null, newValue: string | null ): void {
     if ( oldValue !== newValue ) {
       if ( name === 'indent-width' ) {
         this.indentWidth = parseInt( newValue || '20', 10 );
+      }
+
+      if ( name === 'show-border' ) {
+        this.showBorder = newValue !== 'false';
       }
       this.render();
     }
@@ -65,6 +70,16 @@ export class TreeViewElement extends HTMLElement {
 
   set selectedNodeIds ( ids: string[] ) {
     this.selectedIds = new Set( ids );
+    this.render();
+  }
+
+  get showBorderEnabled (): boolean {
+    return this.showBorder;
+  }
+
+  set showBorderEnabled ( value: boolean ) {
+    this.showBorder = value;
+    this.setAttribute( 'show-border', value.toString() );
     this.render();
   }
 
@@ -271,13 +286,13 @@ export class TreeViewElement extends HTMLElement {
         <div class="node-content" style="padding-left: ${ paddingLeft }px">
           <div class="node-controls">
             ${ hasChildren
-              ? `<button class="expand-toggle" data-node-id="${ node.id }" aria-label="${ isExpanded ? 'Collapse' : 'Expand' }">
+        ? `<button class="expand-toggle" data-node-id="${ node.id }" aria-label="${ isExpanded ? 'Collapse' : 'Expand' }">
                    <svg class="expand-icon ${ isExpanded ? 'expanded' : '' }" viewBox="0 0 24 24" width="16" height="16">
                      <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
                    </svg>
                  </button>`
-              : '<span class="expand-spacer"></span>'
-            }
+        : '<span class="expand-spacer"></span>'
+      }
             <label class="checkbox-wrapper">
               <input
                 type="checkbox"
@@ -400,6 +415,8 @@ export class TreeViewElement extends HTMLElement {
    * Render the component
    */
   private render (): void {
+    const containerClass = this.showBorder ? 'tree-container bordered' : 'tree-container borderless';
+
     this.shadowRoot.innerHTML = `
       <style>
         :host {
@@ -414,6 +431,18 @@ export class TreeViewElement extends HTMLElement {
         .tree-container {
           overflow: auto;
           padding: var(--tree-padding, 8px);
+          border-radius: var(--tree-border-radius, 10px);
+          background: var(--tree-container-background, transparent);
+          border: none;
+        }
+
+        .tree-container.bordered {
+          border: var(--tree-border, 1px solid rgba(15, 23, 42, 0.12));
+          box-shadow: var(--tree-border-shadow, none);
+        }
+
+        .tree-container.borderless {
+          border: none;
         }
 
         .tree-node {
@@ -619,11 +648,11 @@ export class TreeViewElement extends HTMLElement {
         }
       </style>
 
-      <div class="tree-container">
+      <div class="${ containerClass }">
         ${ this.data.length > 0
-          ? this.data.map( node => this.renderNode( node ) ).join( '' )
-          : '<div class="tree-empty">No items to display</div>'
-        }
+        ? this.data.map( node => this.renderNode( node ) ).join( '' )
+        : '<div class="tree-empty">No items to display</div>'
+      }
       </div>
     `;
   }

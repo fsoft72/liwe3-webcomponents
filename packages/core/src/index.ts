@@ -49,6 +49,23 @@ export {
   type TreeNode
 } from './TreeView';
 
+// Export ContainerBox
+export {
+  ContainerBoxElement,
+  defineContainerBox,
+  type MenuPosition,
+  type ContainerBoxConfig
+} from './ContainerBox';
+
+// Export Drawer
+export {
+  DrawerElement,
+  defineDrawer,
+  type DrawerDirection,
+  type DrawerState,
+  type DrawerConfig
+} from './Drawer';
+
 // Convenience function to register all components at once
 export const defineAllComponents = (): void => {
   if (typeof window !== 'undefined') {
@@ -58,5 +75,7 @@ export const defineAllComponents = (): void => {
     import('./PopoverMenu').then(({ definePopoverMenu }) => definePopoverMenu());
     import('./DateSelector').then(({ defineDateSelector }) => defineDateSelector());
     import('./TreeView').then(({ defineTreeView }) => defineTreeView());
+    import('./ContainerBox').then(({ defineContainerBox }) => defineContainerBox());
+    import('./Drawer').then(({ defineDrawer }) => defineDrawer());
   }
 };
