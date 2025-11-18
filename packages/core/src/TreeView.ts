@@ -24,6 +24,7 @@ export class TreeViewElement extends HTMLElement {
     super();
     this.attachShadow( { mode: 'open' } );
     this.render();
+    this.bindEvents();
   }
 
   static get observedAttributes (): string[] {
@@ -325,16 +326,12 @@ export class TreeViewElement extends HTMLElement {
           gap: 6px;
           padding: 4px 8px;
           border-radius: var(--tree-node-border-radius, 6px);
-          transition: background-color 0.15s ease, transform 0.1s ease;
+          transition: background-color 0.15s ease;
           cursor: pointer;
         }
 
         .node-content:hover {
           background-color: var(--tree-hover-background, rgba(0, 123, 255, 0.08));
-        }
-
-        .node-content:active {
-          transform: scale(0.98);
         }
 
         .node-controls {
@@ -529,8 +526,6 @@ export class TreeViewElement extends HTMLElement {
         }
       </div>
     `;
-
-    this.bindEvents();
   }
 }
 
