@@ -12,6 +12,8 @@ export default defineConfig({
         PopoverMenu: resolve(__dirname, 'src/PopoverMenu.ts'),
         DateSelector: resolve(__dirname, 'src/DateSelector.ts'),
         TreeView: resolve(__dirname, 'src/TreeView.ts'),
+        ContainerBox: resolve(__dirname, 'src/ContainerBox.ts'),
+        Drawer: resolve(__dirname, 'src/Drawer.ts'),
       },
       formats: ['es'],
       fileName: (format, entryName) => `${entryName}.js`,

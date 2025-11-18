@@ -1,6 +1,6 @@
 {
   "name": "@liwe3/webcomponents",
-  "version": "1.0.18",
+  "version": "1.0.20",
   "description": "A collection of reusable web components including SmartSelect and AITextEditor",
   "type": "module",
   "main": "./dist/index.js",
@@ -41,6 +41,16 @@
       "types": "./dist/TreeView.d.ts",
       "import": "./dist/TreeView.js",
       "default": "./dist/TreeView.js"
+    },
+    "./container-box": {
+      "types": "./dist/ContainerBox.d.ts",
+      "import": "./dist/ContainerBox.js",
+      "default": "./dist/ContainerBox.js"
+    },
+    "./drawer": {
+      "types": "./dist/Drawer.d.ts",
+      "import": "./dist/Drawer.js",
+      "default": "./dist/Drawer.js"
     }
   },
   "files": [
