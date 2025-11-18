@@ -88,55 +88,56 @@ export class TreeViewElement extends HTMLElement {
    * Toggle node expansion
    */
   toggleExpansion ( nodeId: string ): void {
-    const isExpanded = this.expandedIds.has( nodeId );
-
-    if ( isExpanded ) {
-      this.expandedIds.delete( nodeId );
-    } else {
-      this.expandedIds.add( nodeId );
-    }
-
     // Update DOM directly instead of full re-render
     const nodeElement = this.shadowRoot.querySelector( `.tree-node[data-node-id="${ nodeId }"]` ) as HTMLElement;
-    if ( nodeElement ) {
+    if ( !nodeElement ) return;
+
+    // Find the direct child .node-children element (not nested ones)
+    const childrenContainer = Array.from( nodeElement.children ).find(
+      el => el.classList.contains( 'node-children' )
+    ) as HTMLElement | undefined;
+
+    // Determine current state from DOM, not from expandedIds
+    const hasChildrenInDom = !!childrenContainer;
+
+    if ( hasChildrenInDom ) {
+      // Currently expanded - collapse it
+      childrenContainer.remove();
+      this.expandedIds.delete( nodeId );
+
       // Toggle expand icon rotation
       const expandIcon = nodeElement.querySelector( '.expand-icon' ) as HTMLElement;
       if ( expandIcon ) {
-        if ( isExpanded ) {
-          expandIcon.classList.remove( 'expanded' );
-        } else {
+        expandIcon.classList.remove( 'expanded' );
+      }
+
+      this.dispatchEvent( new CustomEvent( 'toggle', {
+        detail: { nodeId, expanded: false }
+      } ) );
+    } else {
+      // Currently collapsed - expand it
+      const node = this.findNode( nodeId );
+      if ( node && node.children ) {
+        const depth = parseInt( nodeElement.dataset.depth || '0', 10 );
+        const childrenHtml = `
+          <div class="node-children">
+            ${ node.children.map( child => this.renderNode( child, depth + 1 ) ).join( '' ) }
+          </div>
+        `;
+        nodeElement.insertAdjacentHTML( 'beforeend', childrenHtml );
+        this.expandedIds.add( nodeId );
+
+        // Toggle expand icon rotation
+        const expandIcon = nodeElement.querySelector( '.expand-icon' ) as HTMLElement;
+        if ( expandIcon ) {
           expandIcon.classList.add( 'expanded' );
         }
-      }
 
-      // Find the direct child .node-children element (not nested ones)
-      const childrenContainer = Array.from( nodeElement.children ).find(
-        el => el.classList.contains( 'node-children' )
-      ) as HTMLElement | undefined;
-
-      if ( isExpanded ) {
-        // Collapsing: remove children container
-        if ( childrenContainer ) {
-          childrenContainer.remove();
-        }
-      } else {
-        // Expanding: add children container
-        const node = this.findNode( nodeId );
-        if ( node && node.children ) {
-          const depth = parseInt( nodeElement.dataset.depth || '0', 10 );
-          const childrenHtml = `
-            <div class="node-children">
-              ${ node.children.map( child => this.renderNode( child, depth + 1 ) ).join( '' ) }
-            </div>
-          `;
-          nodeElement.insertAdjacentHTML( 'beforeend', childrenHtml );
-        }
+        this.dispatchEvent( new CustomEvent( 'toggle', {
+          detail: { nodeId, expanded: true }
+        } ) );
       }
     }
-
-    this.dispatchEvent( new CustomEvent( 'toggle', {
-      detail: { nodeId, expanded: !isExpanded }
-    } ) );
   }
 
   /**
