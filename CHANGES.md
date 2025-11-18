@@ -2,6 +2,15 @@
 
 ## 2025-11-18
 
+### Fixed
+- TreeView critical bugs in toggle expansion
+  - Fixed node duplication when clicking expand/collapse multiple times
+  - Fixed children not being removed on collapse (first click did nothing)
+  - Changed to use `Array.from(nodeElement.children).find()` to get direct child element only
+  - Previously `querySelector('.node-children')` could incorrectly select nested children
+  - Simplified toggle logic: collapsing always removes, expanding always adds
+  - Fixed initial expanded state not rendering correctly by initializing expandedIds before first render
+
 ### Changed
 - TreeView component performance optimizations
   - `toggleExpansion()` now updates only the specific node's DOM elements instead of re-rendering entire tree
