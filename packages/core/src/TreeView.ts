@@ -109,26 +109,18 @@ export class TreeViewElement extends HTMLElement {
         }
       }
 
-      // Toggle children visibility
-      const childrenContainer = nodeElement.querySelector( '.node-children' ) as HTMLElement;
-      if ( childrenContainer ) {
-        if ( isExpanded ) {
+      // Find the direct child .node-children element (not nested ones)
+      const childrenContainer = Array.from( nodeElement.children ).find(
+        el => el.classList.contains( 'node-children' )
+      ) as HTMLElement | undefined;
+
+      if ( isExpanded ) {
+        // Collapsing: remove children container
+        if ( childrenContainer ) {
           childrenContainer.remove();
-        } else {
-          // Render children and append
-          const node = this.findNode( nodeId );
-          if ( node && node.children ) {
-            const depth = parseInt( nodeElement.dataset.depth || '0', 10 );
-            const childrenHtml = `
-              <div class="node-children">
-                ${ node.children.map( child => this.renderNode( child, depth + 1 ) ).join( '' ) }
-              </div>
-            `;
-            nodeElement.insertAdjacentHTML( 'beforeend', childrenHtml );
-          }
         }
-      } else if ( !isExpanded ) {
-        // Children container doesn't exist, create it
+      } else {
+        // Expanding: add children container
         const node = this.findNode( nodeId );
         if ( node && node.children ) {
           const depth = parseInt( nodeElement.dataset.depth || '0', 10 );
