@@ -310,6 +310,21 @@
     </div>
 
     <div class="demo-section">
+      <h2 class="section-title">Example 5: Fixed Height Container with Overflow</h2>
+      <p class="description">
+        This example shows how the TreeView behaves in a fixed-height container with overflow scrolling.
+        The container has a red border and 300px fixed height to demonstrate scrolling behavior.
+      </p>
+      <div style="border: 2px solid red; height: 300px; overflow: auto; padding: 20px; background: #f8f9fa; border-radius: 8px; margin-top: 20px;">
+        <liwe3-tree-view id="tree5"></liwe3-tree-view>
+      </div>
+      <div class="output-area">
+        <div class="output-title">Selection Info:</div>
+        <div class="output-content" id="output5">No items selected</div>
+      </div>
+    </div>
+
+    <div class="demo-section">
       <h2 class="section-title">Usage Example</h2>
       <div class="code-block">
         <pre>// Import the TreeView component
@@ -763,6 +778,88 @@ liwe3-tree-view {
     tree4.addEventListener('itemselected', (e) => {
       const { node, nodeId } = e.detail;
       log('output4', `Double-clicked item: "${node.label}" (${nodeId})`);
+    });
+
+    // Example 5: Fixed Height Container
+    const tree5 = document.getElementById('tree5');
+    tree5.data = [
+      {
+        id: 'root',
+        label: 'Root Folder',
+        expanded: true,
+        children: [
+          {
+            id: 'folder1',
+            label: 'Documents',
+            expanded: true,
+            children: [
+              { id: 'doc1', label: 'Report.pdf' },
+              { id: 'doc2', label: 'Presentation.pptx' },
+              { id: 'doc3', label: 'Spreadsheet.xlsx' },
+              { id: 'doc4', label: 'Notes.txt' },
+              { id: 'doc5', label: 'Invoice.pdf' }
+            ]
+          },
+          {
+            id: 'folder2',
+            label: 'Images',
+            expanded: true,
+            children: [
+              { id: 'img1', label: 'photo1.jpg' },
+              { id: 'img2', label: 'photo2.jpg' },
+              { id: 'img3', label: 'screenshot.png' },
+              { id: 'img4', label: 'logo.svg' },
+              { id: 'img5', label: 'banner.png' },
+              { id: 'img6', label: 'avatar.jpg' }
+            ]
+          },
+          {
+            id: 'folder3',
+            label: 'Videos',
+            expanded: true,
+            children: [
+              { id: 'vid1', label: 'tutorial.mp4' },
+              { id: 'vid2', label: 'presentation.mov' },
+              { id: 'vid3', label: 'demo.avi' },
+              { id: 'vid4', label: 'recording.mp4' }
+            ]
+          },
+          {
+            id: 'folder4',
+            label: 'Code',
+            expanded: true,
+            children: [
+              { id: 'code1', label: 'main.js' },
+              { id: 'code2', label: 'style.css' },
+              { id: 'code3', label: 'index.html' },
+              { id: 'code4', label: 'utils.js' },
+              { id: 'code5', label: 'config.json' }
+            ]
+          },
+          {
+            id: 'folder5',
+            label: 'Archives',
+            children: [
+              { id: 'arch1', label: 'backup.zip' },
+              { id: 'arch2', label: 'old-data.tar.gz' }
+            ]
+          }
+        ]
+      }
+    ];
+
+    tree5.addEventListener('selectionchange', (e) => {
+      const selectedIds = e.detail.selectedIds;
+      if (selectedIds.length === 0) {
+        log('output5', 'No items selected');
+      } else {
+        log('output5', `Selected ${selectedIds.length} item(s)`);
+      }
+    });
+
+    tree5.addEventListener('itemselected', (e) => {
+      const { node, nodeId } = e.detail;
+      log('output5', `Double-clicked: "${node.label}" (${nodeId})`);
     });
   </script>
 </body>
