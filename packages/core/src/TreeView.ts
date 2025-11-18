@@ -55,8 +55,8 @@ export class TreeViewElement extends HTMLElement {
 
   set data ( value: TreeNode[] ) {
     this.treeData = value;
-    this.setAttribute( 'data', JSON.stringify( value ) );
     this.initializeExpandedState( value );
+    this.setAttribute( 'data', JSON.stringify( value ) );
   }
 
   get selectedNodeIds (): string[] {
