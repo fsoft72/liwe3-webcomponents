@@ -237,7 +237,8 @@
       <ul class="feature-list">
         <li>Infinite depth support for nested folders</li>
         <li>Selectable folders and items using checkboxes</li>
-        <li>Expandable/collapsible folders by clicking on them</li>
+        <li>Expandable/collapsible folders via expand/collapse buttons or double-click</li>
+        <li>Double-click on items fires 'itemselected' event for easy handling</li>
         <li>Custom icons, standard icons, or no icons per node</li>
         <li>Customizable indentation width</li>
         <li>Smooth animations and modern design</li>
@@ -249,7 +250,7 @@
     <div class="demo-section">
       <h2 class="section-title">Example 1: File System Tree</h2>
       <p class="description">
-        A file system-like tree structure with folders and files. Click folders to expand/collapse, use checkboxes to select items.
+        A file system-like tree structure with folders and files. Use expand/collapse buttons or double-click folders to toggle. Double-click items to trigger selection event. Use checkboxes to select items.
       </p>
       <div class="tree-container">
         <liwe3-tree-view id="tree1"></liwe3-tree-view>
@@ -365,6 +366,11 @@ tree.addEventListener('selectionchange', (e) => {
 // Listen for expand/collapse events
 tree.addEventListener('toggle', (e) => {
   console.log(`Node ${e.detail.nodeId} ${e.detail.expanded ? 'expanded' : 'collapsed'}`);
+});
+
+// Listen for item double-click events
+tree.addEventListener('itemselected', (e) => {
+  console.log(`Item selected: ${e.detail.node.label}`, e.detail.node);
 });
 
 // Programmatically control the tree
@@ -548,6 +554,11 @@ liwe3-tree-view {
       }
     });
 
+    tree1.addEventListener('itemselected', (e) => {
+      const { node, nodeId } = e.detail;
+      log('output1', `Double-clicked item: "${node.label}" (${nodeId})`);
+    });
+
     window.tree1ExpandAll = () => tree1.expandAll();
     window.tree1CollapseAll = () => tree1.collapseAll();
     window.tree1SelectAll = () => tree1.selectAll();
@@ -635,6 +646,11 @@ liwe3-tree-view {
       }
     });
 
+    tree2.addEventListener('itemselected', (e) => {
+      const { node, nodeId } = e.detail;
+      log('output2', `Double-clicked: "${node.label}" (${nodeId})`);
+    });
+
     // Example 3: Custom Indentation
     const tree3 = document.getElementById('tree3');
     tree3.data = [
@@ -682,6 +698,11 @@ liwe3-tree-view {
       } else {
         log('output3', `Selected ${selectedIds.length} item(s) at various levels`);
       }
+    });
+
+    tree3.addEventListener('itemselected', (e) => {
+      const { node, nodeId } = e.detail;
+      log('output3', `Double-clicked item: "${node.label}" (${nodeId})`);
     });
 
     // Example 4: Mixed Icons
@@ -737,6 +758,11 @@ liwe3-tree-view {
 
     tree4.addEventListener('toggle', (e) => {
       log('output4', `Node "${e.detail.nodeId}" ${e.detail.expanded ? 'expanded' : 'collapsed'}`);
+    });
+
+    tree4.addEventListener('itemselected', (e) => {
+      const { node, nodeId } = e.detail;
+      log('output4', `Double-clicked item: "${node.label}" (${nodeId})`);
     });
   </script>
 </body>

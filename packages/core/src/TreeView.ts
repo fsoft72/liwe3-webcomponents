@@ -260,25 +260,12 @@ export class TreeViewElement extends HTMLElement {
     this.shadowRoot.addEventListener( 'click', ( e ) => {
       const target = e.target as HTMLElement;
 
-      // Handle expand/collapse toggle
+      // Handle expand/collapse toggle button
       if ( target.closest( '.expand-toggle' ) ) {
         const button = target.closest( '.expand-toggle' ) as HTMLElement;
         const nodeId = button.dataset.nodeId;
         if ( nodeId ) {
           this.toggleExpansion( nodeId );
-        }
-        return;
-      }
-
-      // Handle folder label click (also expand/collapse)
-      if ( target.closest( '.node-label' ) ) {
-        const label = target.closest( '.node-label' ) as HTMLElement;
-        const nodeId = label.dataset.nodeId;
-        if ( nodeId ) {
-          const node = this.findNode( nodeId );
-          if ( node && node.children && node.children.length > 0 ) {
-            this.toggleExpansion( nodeId );
-          }
         }
         return;
       }
@@ -291,6 +278,36 @@ export class TreeViewElement extends HTMLElement {
         const nodeId = target.dataset.nodeId;
         if ( nodeId ) {
           this.toggleSelection( nodeId );
+        }
+      }
+    } );
+
+    // Handle double-click events
+    this.shadowRoot.addEventListener( 'dblclick', ( e ) => {
+      const target = e.target as HTMLElement;
+
+      // Check if clicking on a node label or content
+      if ( target.closest( '.node-label' ) || target.closest( '.node-content' ) ) {
+        const nodeContent = target.closest( '.node-content' ) as HTMLElement;
+        if ( !nodeContent ) return;
+
+        const nodeElement = nodeContent.closest( '.tree-node' ) as HTMLElement;
+        if ( !nodeElement ) return;
+
+        const nodeId = nodeElement.dataset.nodeId;
+        if ( !nodeId ) return;
+
+        const node = this.findNode( nodeId );
+        if ( !node ) return;
+
+        // If it's a folder (has children), toggle expansion
+        if ( node.children && node.children.length > 0 ) {
+          this.toggleExpansion( nodeId );
+        } else {
+          // If it's an item (no children), fire itemselected event
+          this.dispatchEvent( new CustomEvent( 'itemselected', {
+            detail: { node, nodeId }
+          } ) );
         }
       }
     } );

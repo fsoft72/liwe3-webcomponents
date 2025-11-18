@@ -2,6 +2,15 @@
 
 ## 2025-11-18
 
+### Changed
+- TreeView component interaction improvements
+  - Removed single-click expand/collapse on folder labels
+  - Added double-click to expand/collapse folders
+  - Added double-click on items to fire `itemselected` event
+  - Removed scale animation on node click for cleaner interaction
+  - Fixed event handler duplication issue that was preventing checkbox and expand/collapse from working
+  - Event handlers now bound only once in constructor instead of on every render
+
 ### Added
 - Created new TreeView web component in `packages/core`
   - Infinite depth support for nested folder structures
