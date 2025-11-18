@@ -42,6 +42,13 @@ export {
   type DateRange
 } from './DateSelector';
 
+// Export TreeView
+export {
+  TreeViewElement,
+  defineTreeView,
+  type TreeNode
+} from './TreeView';
+
 // Convenience function to register all components at once
 export const defineAllComponents = (): void => {
   if (typeof window !== 'undefined') {
@@ -50,5 +57,6 @@ export const defineAllComponents = (): void => {
     import('./Toast').then(({ defineToast }) => defineToast());
     import('./PopoverMenu').then(({ definePopoverMenu }) => definePopoverMenu());
     import('./DateSelector').then(({ defineDateSelector }) => defineDateSelector());
+    import('./TreeView').then(({ defineTreeView }) => defineTreeView());
   }
 };

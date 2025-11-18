@@ -1,6 +1,6 @@
 {
   "name": "@liwe3/webcomponents",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "description": "A collection of reusable web components including SmartSelect and AITextEditor",
   "type": "module",
   "main": "./dist/index.js",
@@ -36,6 +36,11 @@
       "types": "./dist/DateSelector.d.ts",
       "import": "./dist/DateSelector.js",
       "default": "./dist/DateSelector.js"
+    },
+    "./tree-view": {
+      "types": "./dist/TreeView.d.ts",
+      "import": "./dist/TreeView.js",
+      "default": "./dist/TreeView.js"
     }
   },
   "files": [

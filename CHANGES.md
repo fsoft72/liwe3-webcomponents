@@ -1,5 +1,53 @@
 # CHANGES.md
 
+## 2025-11-18
+
+### Added
+- Created new TreeView web component in `packages/core`
+  - Infinite depth support for nested folder structures
+  - Checkbox selection for both folders and items
+  - Expandable/collapsible folders by clicking on them or expand/collapse buttons
+  - Flexible icon system:
+    - Custom icons via `customIcon` property
+    - Standard emoji icons via `icon` property
+    - Default folder/file icons (📁/📂 for folders, 📄 for files)
+    - Option to hide icons by setting `icon: ''`
+  - Customizable indentation width via `indent-width` attribute (default: 20px)
+  - Modern, smooth animations for expand/collapse
+  - Tree data structure using `TreeNode` type with recursive `children` support
+  - Public API methods:
+    - `toggleExpansion(nodeId)` - Toggle folder expansion
+    - `toggleSelection(nodeId)` - Toggle node selection
+    - `expandAll()` - Expand all folders
+    - `collapseAll()` - Collapse all folders
+    - `selectAll()` - Select all nodes
+    - `deselectAll()` - Deselect all nodes
+  - Custom events:
+    - `selectionchange` - Fired when selection changes
+    - `toggle` - Fired when a node is expanded/collapsed
+  - Fully customizable via CSS variables (18+ customization points)
+  - Visual guide lines connecting parent and child nodes
+  - Smooth slide-down animation for expanding folders
+  - Accessible keyboard navigation support
+  - Updated core package version to 1.0.17
+
+- Created comprehensive demo page for TreeView at `packages/core/demos/demo-tree-view.html`
+  - Example 1: File system tree with nested folders and files
+  - Example 2: Organization structure with custom emoji icons
+  - Example 3: Custom indentation (40px) for deeper nesting
+  - Example 4: Mixed icon configurations (custom, standard, none)
+  - Interactive controls for expand/collapse and select/deselect all
+  - Real-time selection feedback and event logging
+  - Complete usage examples and TypeScript type definitions
+  - CSS customization guide with all available CSS variables
+  - Icon configuration examples
+  - Updated demos index page with TreeView card
+
+- Exported TreeView from core package
+  - Added `TreeViewElement`, `defineTreeView`, and `TreeNode` type to exports
+  - Added TreeView to package.json exports field as `./tree-view`
+  - Integrated into `defineAllComponents()` convenience function
+
 ## 2025-10-28
 
 ### Added

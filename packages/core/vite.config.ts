@@ -11,6 +11,7 @@ export default defineConfig({
         Toast: resolve(__dirname, 'src/Toast.ts'),
         PopoverMenu: resolve(__dirname, 'src/PopoverMenu.ts'),
         DateSelector: resolve(__dirname, 'src/DateSelector.ts'),
+        TreeView: resolve(__dirname, 'src/TreeView.ts'),
       },
       formats: ['es'],
       fileName: (format, entryName) => `${entryName}.js`,
