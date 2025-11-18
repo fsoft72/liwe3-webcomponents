@@ -260,6 +260,12 @@ export class TreeViewElement extends HTMLElement {
       iconHtml = `<span class="node-icon">${ this.getDefaultIcon( node, isExpanded ) }</span>`;
     }
 
+    // Render children if expanded
+    let childrenHtml = '';
+    if ( hasChildren && isExpanded ) {
+      childrenHtml = `<div class="node-children">${ node.children!.map( child => this.renderNode( child, depth + 1 ) ).join( '' ) }</div>`;
+    }
+
     const nodeHtml = `
       <div class="tree-node" data-node-id="${ node.id }" data-depth="${ depth }">
         <div class="node-content" style="padding-left: ${ paddingLeft }px">
@@ -285,19 +291,11 @@ export class TreeViewElement extends HTMLElement {
           ${ iconHtml }
           <span class="node-label" data-node-id="${ node.id }">${ node.label }</span>
         </div>
+        ${ childrenHtml }
       </div>
     `;
 
-    let childrenHtml = '';
-    if ( hasChildren && isExpanded ) {
-      childrenHtml = `
-        <div class="node-children">
-          ${ node.children!.map( child => this.renderNode( child, depth + 1 ) ).join( '' ) }
-        </div>
-      `;
-    }
-
-    return nodeHtml + childrenHtml;
+    return nodeHtml;
   }
 
   /**
