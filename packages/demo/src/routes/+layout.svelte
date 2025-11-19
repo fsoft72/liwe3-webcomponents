@@ -8,6 +8,7 @@
     { href: "/ai-text-editor", label: "AITextEditor" },
     { href: "/toast", label: "Toast" },
     { href: "/tree-view", label: "TreeView" },
+    { href: "/drawer", label: "Drawer" },
   ];
 
   // Derived value for active page
