@@ -9,7 +9,9 @@ export class ImageView extends HTMLElement {
 	private _mode: ImageMode = 'cover';
 	private _position: ImagePosition = 'center';
 	private _fx: ImageFX = 'none';
+	private _fxHover: ImageFX = 'none';
 	private _alt: string = '';
+	private _isHovering: boolean = false;
 
 	private container: HTMLDivElement;
 	private img: HTMLImageElement;
@@ -125,10 +127,28 @@ export class ImageView extends HTMLElement {
 		this.container.appendChild( this.img );
 		this.shadowRoot!.appendChild( style );
 		this.shadowRoot!.appendChild( this.container );
+
+		// Add hover listeners
+		this.addEventListener( 'mouseenter', this._handleMouseEnter.bind( this ) );
+		this.addEventListener( 'mouseleave', this._handleMouseLeave.bind( this ) );
+	}
+
+	private _handleMouseEnter () {
+		if ( this._fxHover !== 'none' ) {
+			this._isHovering = true;
+			this.updateClasses();
+		}
+	}
+
+	private _handleMouseLeave () {
+		if ( this._fxHover !== 'none' ) {
+			this._isHovering = false;
+			this.updateClasses();
+		}
 	}
 
 	static get observedAttributes () {
-		return [ 'src', 'width', 'height', 'mode', 'position', 'fx', 'alt' ];
+		return [ 'src', 'width', 'height', 'mode', 'position', 'fx', 'fx-hover', 'alt' ];
 	}
 
 	attributeChangedCallback ( name: string, oldValue: string, newValue: string ) {
@@ -159,6 +179,10 @@ export class ImageView extends HTMLElement {
 				this._fx = ( newValue as ImageFX ) || 'none';
 				this.updateClasses();
 				break;
+			case 'fx-hover':
+				this._fxHover = ( newValue as ImageFX ) || 'none';
+				this.updateClasses();
+				break;
 			case 'alt':
 				this._alt = newValue || '';
 				this.render();
@@ -187,8 +211,9 @@ export class ImageView extends HTMLElement {
 		// Add position class
 		this.container.classList.add( `pos-${ this._position }` );
 
-		// Add FX class
-		this.container.classList.add( `fx-${ this._fx }` );
+		// Add FX class - use hover fx if hovering and defined, otherwise use regular fx
+		const activeFx = ( this._isHovering && this._fxHover !== 'none' ) ? this._fxHover : this._fx;
+		this.container.classList.add( `fx-${ activeFx }` );
 	}
 
 	private render () {
@@ -229,6 +254,9 @@ export class ImageView extends HTMLElement {
 
 	get fx (): ImageFX { return this._fx; }
 	set fx ( value: ImageFX ) { this.setAttribute( 'fx', value ); }
+
+	get fxHover (): ImageFX { return this._fxHover; }
+	set fxHover ( value: ImageFX ) { this.setAttribute( 'fx-hover', value ); }
 
 	get alt (): string { return this._alt; }
 	set alt ( value: string ) { this.setAttribute( 'alt', value ); }

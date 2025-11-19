@@ -293,10 +293,9 @@
       inset: 0;
     }
 
-    .thumb {
+    liwe3-image-view {
       position: absolute;
       inset: 0;
-      background: linear-gradient(135deg, #2a3348, #1a2030);
     }
 
     .meta {
@@ -480,66 +479,78 @@
           <!-- A small set of placeholder cards to resemble the gallery -->
           <div class="card">
             <liwe3-container-box class="container-thumb">
-              <div class="thumb"></div>
+              <liwe3-image-view src="https://picsum.photos/400/300?random=1" width="100%" height="100%" mode="cover"
+                fx-hover="zoom-in"></liwe3-image-view>
             </liwe3-container-box>
             <div class="meta">Nidits</div>
           </div>
           <div class="card">
             <liwe3-container-box class="container-thumb">
-              <div class="thumb" style="background:linear-gradient(135deg,#26406b,#182335)"></div>
+              <liwe3-image-view src="https://picsum.photos/400/300?random=2" width="100%" height="100%" mode="cover"
+                fx-hover="pan-left"></liwe3-image-view>
             </liwe3-container-box>
           </div>
           <div class="card">
             <liwe3-container-box class="container-thumb">
-              <div class="thumb" style="background:linear-gradient(135deg,#283a61,#24324f)"></div>
+              <liwe3-image-view src="https://picsum.photos/400/300?random=3" width="100%" height="100%" mode="cover"
+                fx-hover="pan-right"></liwe3-image-view>
             </liwe3-container-box>
             <div class="meta">Melloni</div>
           </div>
           <div class="card">
             <liwe3-container-box class="container-thumb">
-              <div class="thumb" style="background:linear-gradient(135deg,#203452,#17263b)"></div>
+              <liwe3-image-view src="https://picsum.photos/400/300?random=4" width="100%" height="100%" mode="cover"
+                fx-hover="zoom-in"></liwe3-image-view>
             </liwe3-container-box>
           </div>
           <div class="card">
             <liwe3-container-box class="container-thumb">
-              <div class="thumb" style="background:linear-gradient(135deg,#2a3348,#1a2030)"></div>
+              <liwe3-image-view src="https://picsum.photos/400/300?random=5" width="100%" height="100%" mode="cover"
+                fx-hover="bokeh"></liwe3-image-view>
               <div class="play">▶</div>
             </liwe3-container-box>
           </div>
           <div class="card">
             <liwe3-container-box class="container-thumb">
-              <div class="thumb" style="background:linear-gradient(135deg,#2e3856,#1a2134)"></div>
+              <liwe3-image-view src="https://picsum.photos/400/300?random=6" width="100%" height="100%" mode="cover"
+                fx-hover="pan-left"></liwe3-image-view>
             </liwe3-container-box>
             <div class="meta">NλN0s</div>
           </div>
           <div class="card">
             <liwe3-container-box class="container-thumb">
-              <div class="thumb" style="background:linear-gradient(135deg,#2a3348,#1a2030)"></div>
+              <liwe3-image-view src="https://picsum.photos/400/300?random=7" width="100%" height="100%" mode="cover"
+                fx-hover="zoom-in"></liwe3-image-view>
             </liwe3-container-box>
           </div>
           <div class="card">
             <liwe3-container-box class="container-thumb">
-              <div class="thumb" style="background:linear-gradient(135deg,#29344d,#192133)"></div>
+              <liwe3-image-view src="https://picsum.photos/400/300?random=8" width="100%" height="100%" mode="cover"
+                fx-hover="pan-right"></liwe3-image-view>
             </liwe3-container-box>
           </div>
           <div class="card">
             <liwe3-container-box class="container-thumb">
-              <div class="thumb" style="background:linear-gradient(135deg,#2a3348,#1a2030)"></div>
+              <liwe3-image-view src="https://picsum.photos/400/300?random=9" width="100%" height="100%" mode="cover"
+                fx-hover="zoom-in"></liwe3-image-view>
             </liwe3-container-box>
           </div>
           <div class="card">
             <liwe3-container-box class="container-thumb">
-              <div class="thumb" style="background:linear-gradient(135deg,#29344d,#1b2133)"></div>
+              <liwe3-image-view src="https://picsum.photos/400/300?random=10" width="100%" height="100%" mode="cover"
+                fx-hover="pan-left"></liwe3-image-view>
             </liwe3-container-box>
           </div>
           <div class="card">
             <liwe3-container-box class="container-thumb">
-              <div class="thumb" style="background:linear-gradient(135deg,#2a3348,#1a2030)"></div>
+              <liwe3-image-view src="https://picsum.photos/400/300?random=11" width="100%" height="100%" mode="cover"
+                fx-hover="zoom-in"></liwe3-image-view>
             </liwe3-container-box>
           </div>
           <div class="card">
             <liwe3-container-box class="container-thumb">
-              <div class="thumb" style="background:linear-gradient(135deg,#2a3348,#1a2030)"></div>
+              <liwe3-image-view src="https://picsum.photos/400/300?random=12" width="100%" height="100%" mode="cover"
+                fx-hover="pan-right"></liwe3-image-view>
             </liwe3-container-box>
           </div>
         </div>
@@ -599,6 +610,7 @@
     import '../dist/TreeView.js';
     import '../dist/SmartSelect.js';
     import '../dist/ContainerBox.js';
+    import '../dist/ImageView.js';
 
     const app = document.querySelector( '.app' );
     if ( !app ) {
