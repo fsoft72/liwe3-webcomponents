@@ -51,6 +51,11 @@
       "types": "./dist/Drawer.d.ts",
       "import": "./dist/Drawer.js",
       "default": "./dist/Drawer.js"
+    },
+    "./image-view": {
+      "types": "./dist/ImageView.d.ts",
+      "import": "./dist/ImageView.js",
+      "default": "./dist/ImageView.js"
     }
   },
   "files": [

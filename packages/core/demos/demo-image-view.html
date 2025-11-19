@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>ImageView Demo - @liwe3/webcomponents</title>
+	<style>
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+			padding: 20px;
+			background-color: #f5f5f5;
+			color: #333;
+		}
+
+		h1,
+		h2 {
+			color: #2c3e50;
+		}
+
+		.demo-section {
+			background: white;
+			padding: 20px;
+			border-radius: 8px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			margin-bottom: 30px;
+		}
+
+		.controls {
+			margin-bottom: 15px;
+			padding: 10px;
+			background: #f0f0f0;
+			border-radius: 4px;
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+			align-items: center;
+		}
+
+		.grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			gap: 20px;
+		}
+
+		.card {
+			border: 1px solid #eee;
+			border-radius: 4px;
+			overflow: hidden;
+		}
+
+		.card-header {
+			padding: 10px;
+			background: #fafafa;
+			border-bottom: 1px solid #eee;
+			font-weight: bold;
+			font-size: 0.9em;
+		}
+
+		liwe3-image-view {
+			background: #ddd;
+		}
+	</style>
+</head>
+
+<body>
+	<h1>ImageView Component</h1>
+	<p>A versatile image component with support for different sizing modes, positioning, and visual effects.</p>
+
+	<div class="demo-section">
+		<h2>Modes</h2>
+		<div class="grid">
+			<div class="card">
+				<div class="card-header">Cover (Default)</div>
+				<liwe3-image-view src="https://picsum.photos/400/300?random=1" width="100%" height="200px" mode="cover">
+				</liwe3-image-view>
+			</div>
+			<div class="card">
+				<div class="card-header">Contain</div>
+				<liwe3-image-view src="https://picsum.photos/400/300?random=2" width="100%" height="200px"
+					mode="contain">
+				</liwe3-image-view>
+			</div>
+			<div class="card">
+				<div class="card-header">Stretch</div>
+				<liwe3-image-view src="https://picsum.photos/400/300?random=3" width="100%" height="200px"
+					mode="stretch">
+				</liwe3-image-view>
+			</div>
+		</div>
+	</div>
+
+	<div class="demo-section">
+		<h2>1:1 Mode with Positioning</h2>
+		<p>In 1:1 mode, the image is displayed at its natural size (or scaled if needed) but not forced to fill.
+			Positioning controls visible area.</p>
+		<div class="controls">
+			<label>Position:
+				<select id="pos-select">
+					<option value="center">Center</option>
+					<option value="top-left">Top Left</option>
+					<option value="top-right">Top Right</option>
+					<option value="bottom-left">Bottom Left</option>
+					<option value="bottom-right">Bottom Right</option>
+				</select>
+			</label>
+		</div>
+		<div class="card">
+			<liwe3-image-view id="pos-demo" src="https://picsum.photos/800/600?random=4" width="100%" height="300px"
+				mode="1:1" position="center">
+			</liwe3-image-view>
+		</div>
+	</div>
+
+	<div class="demo-section">
+		<h2>Visual Effects (FX)</h2>
+		<div class="grid">
+			<div class="card">
+				<div class="card-header">Bokeh (Blur)</div>
+				<liwe3-image-view src="https://picsum.photos/400/300?random=5" width="100%" height="200px" mode="cover"
+					fx="bokeh">
+				</liwe3-image-view>
+			</div>
+			<div class="card">
+				<div class="card-header">Pan Left</div>
+				<liwe3-image-view src="https://picsum.photos/400/300?random=6" width="100%" height="200px" mode="cover"
+					fx="pan-left">
+				</liwe3-image-view>
+			</div>
+			<div class="card">
+				<div class="card-header">Pan Right</div>
+				<liwe3-image-view src="https://picsum.photos/400/300?random=7" width="100%" height="200px" mode="cover"
+					fx="pan-right">
+				</liwe3-image-view>
+			</div>
+			<div class="card">
+				<div class="card-header">Zoom In</div>
+				<liwe3-image-view src="https://picsum.photos/400/300?random=8" width="100%" height="200px" mode="cover"
+					fx="zoom-in">
+				</liwe3-image-view>
+			</div>
+		</div>
+	</div>
+
+	<script type="module">
+		import '../dist/ImageView.js';
+
+		const posSelect = document.getElementById( 'pos-select' );
+		const posDemo = document.getElementById( 'pos-demo' );
+
+		posSelect.addEventListener( 'change', ( e ) => {
+			posDemo.setAttribute( 'position', e.target.value );
+		} );
+	</script>
+</body>
+
+</html>

@@ -1,22 +1,23 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
-export default defineConfig({
+export default defineConfig( {
   build: {
     lib: {
       entry: {
-        index: resolve(__dirname, 'src/index.ts'),
-        SmartSelect: resolve(__dirname, 'src/SmartSelect.ts'),
-        AITextEditor: resolve(__dirname, 'src/AITextEditor.ts'),
-        Toast: resolve(__dirname, 'src/Toast.ts'),
-        PopoverMenu: resolve(__dirname, 'src/PopoverMenu.ts'),
-        DateSelector: resolve(__dirname, 'src/DateSelector.ts'),
-        TreeView: resolve(__dirname, 'src/TreeView.ts'),
-        ContainerBox: resolve(__dirname, 'src/ContainerBox.ts'),
-        Drawer: resolve(__dirname, 'src/Drawer.ts'),
+        index: resolve( __dirname, 'src/index.ts' ),
+        SmartSelect: resolve( __dirname, 'src/SmartSelect.ts' ),
+        AITextEditor: resolve( __dirname, 'src/AITextEditor.ts' ),
+        Toast: resolve( __dirname, 'src/Toast.ts' ),
+        PopoverMenu: resolve( __dirname, 'src/PopoverMenu.ts' ),
+        DateSelector: resolve( __dirname, 'src/DateSelector.ts' ),
+        TreeView: resolve( __dirname, 'src/TreeView.ts' ),
+        ContainerBox: resolve( __dirname, 'src/ContainerBox.ts' ),
+        Drawer: resolve( __dirname, 'src/Drawer.ts' ),
+        ImageView: resolve( __dirname, 'src/ImageView.ts' ),
       },
-      formats: ['es'],
-      fileName: (format, entryName) => `${entryName}.js`,
+      formats: [ 'es' ],
+      fileName: ( format, entryName ) => `${ entryName }.js`,
     },
     rollupOptions: {
       external: [],
@@ -31,6 +32,6 @@ export default defineConfig({
     minify: 'esbuild',
   },
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: [ '.ts', '.js' ],
   },
-});
+} );

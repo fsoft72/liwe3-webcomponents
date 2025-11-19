@@ -66,16 +66,19 @@ export {
   type DrawerConfig
 } from './Drawer';
 
+// Export ImageView
+export * from './ImageView';
+
 // Convenience function to register all components at once
 export const defineAllComponents = (): void => {
-  if (typeof window !== 'undefined') {
-    import('./SmartSelect').then(({ defineSmartSelect }) => defineSmartSelect());
-    import('./AITextEditor').then(({ defineAITextEditor }) => defineAITextEditor());
-    import('./Toast').then(({ defineToast }) => defineToast());
-    import('./PopoverMenu').then(({ definePopoverMenu }) => definePopoverMenu());
-    import('./DateSelector').then(({ defineDateSelector }) => defineDateSelector());
-    import('./TreeView').then(({ defineTreeView }) => defineTreeView());
-    import('./ContainerBox').then(({ defineContainerBox }) => defineContainerBox());
-    import('./Drawer').then(({ defineDrawer }) => defineDrawer());
+  if ( typeof window !== 'undefined' ) {
+    import( './SmartSelect' ).then( ( { defineSmartSelect } ) => defineSmartSelect() );
+    import( './AITextEditor' ).then( ( { defineAITextEditor } ) => defineAITextEditor() );
+    import( './Toast' ).then( ( { defineToast } ) => defineToast() );
+    import( './PopoverMenu' ).then( ( { definePopoverMenu } ) => definePopoverMenu() );
+    import( './DateSelector' ).then( ( { defineDateSelector } ) => defineDateSelector() );
+    import( './TreeView' ).then( ( { defineTreeView } ) => defineTreeView() );
+    import( './ContainerBox' ).then( ( { defineContainerBox } ) => defineContainerBox() );
+    import( './Drawer' ).then( ( { defineDrawer } ) => defineDrawer() );
   }
 };
