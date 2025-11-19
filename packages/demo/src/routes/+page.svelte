@@ -80,6 +80,16 @@
       </p>
       <span class="card-link">View Demo →</span>
     </a>
+
+    <a href="/container-box" class="component-card">
+      <div class="card-icon">📦</div>
+      <h2>ContainerBox</h2>
+      <p>
+        A container that wraps elements and shows a menu on hover. Perfect for
+        contextual actions on items.
+      </p>
+      <span class="card-link">View Demo →</span>
+    </a>
   </section>
 
   <section class="features">

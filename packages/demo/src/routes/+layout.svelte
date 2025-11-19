@@ -9,6 +9,7 @@
     { href: "/toast", label: "Toast" },
     { href: "/tree-view", label: "TreeView" },
     { href: "/drawer", label: "Drawer" },
+    { href: "/container-box", label: "ContainerBox" },
   ];
 
   // Derived value for active page
