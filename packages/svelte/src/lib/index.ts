@@ -12,6 +12,7 @@ export { default as AITextEditor } from './AITextEditor.svelte';
 export { default as PopoverMenu } from './PopoverMenu.svelte';
 export { default as DateSelector } from './DateSelector.svelte';
 export { default as TreeView } from './TreeView.svelte';
+export { default as Drawer } from './Drawer.svelte';
 
 // Export Toasts component and toastAdd function
 export { default as Toasts, toastAdd } from './Toasts.svelte';
