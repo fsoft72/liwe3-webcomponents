@@ -13,10 +13,6 @@
       // For local dev, wrangler will create a local R2 simulation
       "preview_bucket_name": "uploads-bucket-test",
     },
-    {
-      "bucket_name": "r2-upload-test",
-      "binding": "r2_upload_test",
-    },
   ],
   // Development settings
   "dev": {

@@ -2,22 +2,25 @@
  * Cloudflare Worker for R2 Multipart Upload
  *
  * Endpoints:
- *   POST /initiate       → Start multipart upload
- *                          Body: {fileName: string, fileType: string}
- *                          Returns: {uploadId: string, key: string}
+ *   POST /api/upload/initiate       → Start multipart upload
+ *                                      Body: {fileName: string, fileType: string}
+ *                                      Returns: {uploadId: string, key: string}
  *
- *   POST /upload-part    → Upload individual part (raw binary data)
- *                          Headers: X-Upload-Id, X-Key, X-Part-Number
- *                          Body: Raw binary data (ArrayBuffer)
- *                          Returns: {partNumber: number, etag: string}
+ *   POST /api/upload/part           → Upload individual part (raw binary data)
+ *                                      Headers: X-Upload-Id, X-Key, X-Part-Number
+ *                                      Body: Raw binary data (ArrayBuffer)
+ *                                      Returns: {partNumber: number, etag: string}
  *
- *   POST /complete       → Complete multipart upload
- *                          Body: {uploadId: string, key: string, parts: [{partNumber, etag}]}
- *                          Returns: {success: true, key: string, size: number, etag: string}
+ *   POST /api/upload/complete       → Complete multipart upload
+ *                                      Body: {uploadId: string, key: string, parts: [{partNumber, etag}]}
+ *                                      Returns: {success: true, key: string, size: number, etag: string}
  *
- *   POST /abort          → Abort multipart upload and cleanup parts
- *                          Body: {uploadId: string, key: string}
- *                          Returns: {success: true}
+ *   POST /api/upload/abort          → Abort multipart upload and cleanup parts
+ *                                      Body: {uploadId: string, key: string}
+ *                                      Returns: {success: true}
+ *
+ *   GET  /api/upload/list           → List uploaded files
+ *                                      Returns: {objects: [{key, size, uploaded}], count: number, truncated: boolean}
  *
  * Requires R2 bucket binding named "MY_BUCKET"
  *
@@ -40,19 +43,19 @@ export default {
       }
 
       const url = new URL(request.url);
-      if (url.pathname === "/initiate" && request.method === "POST") {
+      if (url.pathname === "/api/upload/initiate" && request.method === "POST") {
         return await handleInitiate(request, env);
       }
-      if (url.pathname === "/upload-part" && request.method === "POST") {
+      if (url.pathname === "/api/upload/part" && request.method === "POST") {
         return await handleUploadPart(request, env);
       }
-      if (url.pathname === "/complete" && request.method === "POST") {
+      if (url.pathname === "/api/upload/complete" && request.method === "POST") {
         return await handleComplete(request, env);
       }
-      if (url.pathname === "/abort" && request.method === "POST") {
+      if (url.pathname === "/api/upload/abort" && request.method === "POST") {
         return await handleAbort(request, env);
       }
-      if (url.pathname === "/list" && request.method === "GET") {
+      if (url.pathname === "/api/upload/list" && request.method === "GET") {
         return await handleList(request, env);
       }
       return new Response("Not Found", { status: 404 });
