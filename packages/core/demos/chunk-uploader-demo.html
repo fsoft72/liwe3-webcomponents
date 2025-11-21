@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChunkUploader Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .config-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .config-section h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: 2px solid #4CAF50;
+            border-color: transparent;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .btn {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .btn:hover {
+            background: #45a049;
+        }
+
+        .btn-secondary {
+            background: #757575;
+        }
+
+        .btn-secondary:hover {
+            background: #616161;
+        }
+
+        .uploader-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .log-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .log-container h2 {
+            font-size: 18px;
+            margin-bottom: 16px;
+        }
+
+        #eventLog {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 16px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .log-entry {
+            margin-bottom: 8px;
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+            border-left: 3px solid #4CAF50;
+        }
+
+        .log-entry.error {
+            border-left-color: #ef4444;
+        }
+
+        .log-time {
+            color: #666;
+            font-size: 11px;
+            margin-right: 8px;
+        }
+
+        liwe3-chunk-uploader {
+            --color-primary: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <h1>ChunkUploader Demo</h1>
+    <p class="subtitle">Upload files with drag & drop and chunked upload support</p>
+
+    <div class="config-section">
+        <h2>Configuration</h2>
+
+        <div class="form-group">
+            <label for="serverUrl">Server URL:</label>
+            <input type="text" id="serverUrl" placeholder="https://your-worker.workers.dev" value="">
+            <div class="button-group">
+                <button class="btn" onclick="setLocalUrl()">Use Localhost</button>
+                <button class="btn btn-secondary" onclick="clearUrl()">Clear</button>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="chunkSize">Chunk Size (MB):</label>
+            <input type="number" id="chunkSize" value="1" min="0.5" max="100" step="0.5">
+        </div>
+
+        <div class="form-group">
+            <label for="authToken">Auth Token (optional):</label>
+            <input type="text" id="authToken" placeholder="your-jwt-token">
+        </div>
+
+        <div class="form-group">
+            <label for="validFiletypes">Valid File Types (optional, comma-separated):</label>
+            <input type="text" id="validFiletypes" placeholder="jpg,png,pdf">
+        </div>
+
+        <div class="form-group">
+            <label for="maxFileSize">Max File Size (MB):</label>
+            <input type="number" id="maxFileSize" value="5120" min="1" max="10240">
+        </div>
+
+        <button class="btn" onclick="applyConfig()">Apply Configuration</button>
+    </div>
+
+    <div class="uploader-container">
+        <h2 style="margin-bottom: 16px;">File Uploader</h2>
+        <liwe3-chunk-uploader
+            id="uploader"
+            server-url=""
+            chunk-size="1"
+            max-file-size="5120">
+        </liwe3-chunk-uploader>
+    </div>
+
+    <div class="log-container">
+        <h2>Event Log</h2>
+        <div id="eventLog">
+            <div class="log-entry">
+                <span class="log-time">[Ready]</span>
+                <span>Waiting for files...</span>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import the component (in production, use the npm package)
+        import { defineChunkUploader } from '../dist/ChunkUploader.js';
+
+        const uploader = document.getElementById('uploader');
+        const eventLog = document.getElementById('eventLog');
+
+        // Load saved configuration
+        const savedUrl = localStorage.getItem('uploaderServerUrl');
+        if (savedUrl) {
+            document.getElementById('serverUrl').value = savedUrl;
+            uploader.serverURL = savedUrl;
+        }
+
+        // Set up callbacks
+        uploader.onfilecomplete = (file) => {
+            logEvent(`File completed: ${file.file.name} (${formatBytes(file.file.size)})`, false);
+        };
+
+        uploader.onuploadcomplete = (files) => {
+            logEvent(`All uploads complete! Total files: ${files.length}`, false);
+        };
+
+        // Listen to custom events
+        uploader.addEventListener('filecomplete', (e) => {
+            console.log('File complete event:', e.detail);
+        });
+
+        uploader.addEventListener('uploadcomplete', (e) => {
+            console.log('Upload complete event:', e.detail);
+        });
+
+        // Helper functions
+        window.applyConfig = () => {
+            const serverUrl = document.getElementById('serverUrl').value;
+            const chunkSize = parseFloat(document.getElementById('chunkSize').value);
+            const authToken = document.getElementById('authToken').value;
+            const validFiletypes = document.getElementById('validFiletypes').value;
+            const maxFileSize = parseFloat(document.getElementById('maxFileSize').value);
+
+            if (serverUrl) {
+                uploader.serverURL = serverUrl;
+                localStorage.setItem('uploaderServerUrl', serverUrl);
+            }
+
+            uploader.chunkSize = chunkSize;
+            uploader.maxFileSize = maxFileSize;
+
+            if (authToken) {
+                uploader.authToken = authToken;
+            }
+
+            if (validFiletypes) {
+                uploader.validFiletypes = validFiletypes.split(',').map(t => t.trim());
+            }
+
+            logEvent(`Configuration applied: Chunk Size=${chunkSize}MB, Max Size=${maxFileSize}MB`, false);
+        };
+
+        window.setLocalUrl = () => {
+            document.getElementById('serverUrl').value = 'http://localhost:8787';
+            applyConfig();
+        };
+
+        window.clearUrl = () => {
+            document.getElementById('serverUrl').value = '';
+            uploader.serverURL = '';
+            localStorage.removeItem('uploaderServerUrl');
+            logEvent('Server URL cleared', false);
+        };
+
+        function logEvent(message, isError = false) {
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${isError ? 'error' : ''}`;
+
+            const time = new Date().toLocaleTimeString();
+            entry.innerHTML = `
+                <span class="log-time">[${time}]</span>
+                <span>${message}</span>
+            `;
+
+            eventLog.appendChild(entry);
+            eventLog.scrollTop = eventLog.scrollHeight;
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return Math.round((bytes / Math.pow(k, i)) * 100) / 100 + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html>

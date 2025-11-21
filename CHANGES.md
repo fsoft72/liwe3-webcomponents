@@ -1,5 +1,67 @@
 # CHANGES.md
 
+## 2025-11-21 - ChunkUploader Component
+
+### Added
+- **ChunkUploader Web Component** (`packages/core/src/ChunkUploader.ts`)
+  - Drag & drop file upload area with browse button
+  - File cards display with previews for image files
+  - Progress tracking per file with visual progress bars
+  - Configurable chunk size (default 1MB)
+  - Optional file type validation via `validFiletypes` attribute
+  - Optional max file size limit (default 5GB)
+  - JWT authentication token support via `authToken` attribute
+  - Callbacks: `onfilecomplete` and `onuploadcomplete`
+  - Remove files from queue before upload starts
+  - Multipart chunked upload protocol compatible with cloud storage APIs
+
+### Component API
+```typescript
+interface ChunkUploaderConfig {
+  serverURL: string;           // Required: Upload endpoint URL
+  chunkSize: number;           // Chunk size in MB (default: 1)
+  authToken?: string;          // Optional JWT token
+  validFiletypes?: string[];   // Optional array of extensions ['jpg', 'png', 'pdf']
+  maxFileSize?: number;        // Max size in MB (default: 5120 = 5GB)
+  onfilecomplete?: (file: UploadedFile) => void;
+  onuploadcomplete?: (files: UploadedFile[]) => void;
+}
+```
+
+### Usage
+```html
+<liwe3-chunk-uploader
+  server-url="https://api.example.com"
+  chunk-size="5"
+  max-file-size="1024"
+  valid-filetypes="jpg,png,pdf">
+</liwe3-chunk-uploader>
+```
+
+Or via JavaScript:
+```javascript
+import { ChunkUploaderElement } from '@liwe3/webcomponents';
+
+const uploader = document.querySelector('liwe3-chunk-uploader');
+uploader.serverURL = 'https://api.example.com';
+uploader.chunkSize = 5; // 5MB chunks
+uploader.onfilecomplete = (file) => console.log('File uploaded:', file);
+```
+
+### Files Modified
+- `packages/core/src/ChunkUploader.ts` - New component implementation
+- `packages/core/src/index.ts` - Added ChunkUploader exports
+- `packages/core/package.json` - Added export entry, bumped version to 1.0.21
+- `packages/core/demos/chunk-uploader-demo.html` - Demo page for the component
+
+### Protocol
+The component expects the server to implement three endpoints:
+1. `POST /initiate` - Initiates multipart upload, returns `{uploadId, key}`
+2. `POST /upload-part` - Uploads a chunk, returns `{etag}`
+3. `POST /complete` - Completes the upload with all parts
+
+Compatible with Cloudflare R2, AWS S3, and other multipart upload APIs.
+
 ## 2025-11-18
 
 ### Fixed
