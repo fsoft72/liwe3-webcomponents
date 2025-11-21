@@ -23,7 +23,7 @@ export interface ChunkUploaderConfig {
   onuploadcomplete?: ( files: UploadedFile[] ) => void;
 }
 
-const DEFAULT_CHUNK_SIZE = 1; // 1MB
+const DEFAULT_CHUNK_SIZE = 5; // 5MB - R2/S3 minimum part size (except last part)
 const DEFAULT_MAX_FILE_SIZE = 5120; // 5GB in MB
 
 export class ChunkUploaderElement extends HTMLElement {
@@ -229,21 +229,6 @@ export class ChunkUploaderElement extends HTMLElement {
   }
 
   /**
-   * Converts blob to base64
-   */
-  private blobToBase64 ( blob: Blob ): Promise<string> {
-    return new Promise( ( resolve, reject ) => {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const base64 = ( reader.result as string ).split( ',' )[ 1 ];
-        resolve( base64 );
-      };
-      reader.onerror = reject;
-      reader.readAsDataURL( blob );
-    } );
-  }
-
-  /**
    * Uploads a single file with chunking
    */
   private async uploadFile ( uploadedFile: UploadedFile ): Promise<void> {
@@ -291,15 +276,22 @@ export class ChunkUploaderElement extends HTMLElement {
         const end = Math.min( start + chunkSizeBytes, file.size );
         const chunk = file.slice( start, end );
 
+        // Create headers for this part upload
+        const partHeaders: HeadersInit = {
+          'Content-Type': 'application/octet-stream',
+          'X-Upload-Id': uploadId,
+          'X-Key': key,
+          'X-Part-Number': partNumber.toString()
+        };
+
+        if ( this.config.authToken ) {
+          partHeaders[ 'Authorization' ] = `Bearer ${ this.config.authToken }`;
+        }
+
         const partResponse = await fetch( `${ this.config.serverURL }/upload-part`, {
           method: 'POST',
-          headers,
-          body: JSON.stringify( {
-            uploadId,
-            key,
-            partNumber,
-            data: await this.blobToBase64( chunk )
-          } )
+          headers: partHeaders,
+          body: chunk
         } );
 
         if ( ! partResponse.ok ) {

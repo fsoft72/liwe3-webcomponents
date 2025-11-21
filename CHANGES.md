@@ -56,9 +56,26 @@ uploader.onfilecomplete = (file) => console.log('File uploaded:', file);
 
 ### Protocol
 The component expects the server to implement three endpoints:
-1. `POST /initiate` - Initiates multipart upload, returns `{uploadId, key}`
-2. `POST /upload-part` - Uploads a chunk, returns `{etag}`
-3. `POST /complete` - Completes the upload with all parts
+
+1. **POST /initiate** - Initiates multipart upload
+   - Request body: `{fileName: string, fileType: string}`
+   - Response: `{uploadId: string, key: string}`
+
+2. **POST /upload-part** - Uploads a binary chunk
+   - Headers:
+     - `Content-Type: application/octet-stream`
+     - `X-Upload-Id: <uploadId>`
+     - `X-Key: <key>`
+     - `X-Part-Number: <partNumber>`
+     - `Authorization: Bearer <token>` (optional)
+   - Body: Raw binary data (Blob)
+   - Response: `{etag: string}`
+
+3. **POST /complete** - Completes the upload with all parts
+   - Request body: `{uploadId: string, key: string, parts: [{partNumber: number, etag: string}]}`
+   - Response: Upload complete confirmation
+
+**Important:** R2/S3 requires minimum 5MB per part (except the last part). Default chunk size is 5MB.
 
 Compatible with Cloudflare R2, AWS S3, and other multipart upload APIs.
 
