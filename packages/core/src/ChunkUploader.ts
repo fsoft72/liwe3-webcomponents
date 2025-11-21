@@ -254,7 +254,7 @@ export class ChunkUploaderElement extends HTMLElement {
       }
 
       // Step 1: Initiate multipart upload
-      const initResponse = await fetch( `${ this.config.serverURL }/initiate`, {
+      const initResponse = await fetch( `${ this.config.serverURL }/api/upload/initiate`, {
         method: 'POST',
         headers,
         body: JSON.stringify( {
@@ -300,7 +300,7 @@ export class ChunkUploaderElement extends HTMLElement {
           partHeaders[ 'Authorization' ] = `Bearer ${ this.config.authToken }`;
         }
 
-        const partResponse = await fetch( `${ this.config.serverURL }/upload-part`, {
+        const partResponse = await fetch( `${ this.config.serverURL }/api/upload/part`, {
           method: 'POST',
           headers: partHeaders,
           body: chunk,
@@ -321,7 +321,7 @@ export class ChunkUploaderElement extends HTMLElement {
       }
 
       // Step 3: Complete multipart upload
-      const completeResponse = await fetch( `${ this.config.serverURL }/complete`, {
+      const completeResponse = await fetch( `${ this.config.serverURL }/api/upload/complete`, {
         method: 'POST',
         headers,
         body: JSON.stringify( {
@@ -455,7 +455,7 @@ export class ChunkUploaderElement extends HTMLElement {
       // If upload was initiated, abort it on the server
       if ( file.uploadId && file.key ) {
         try {
-          await fetch( `${ this.config.serverURL }/abort`, {
+          await fetch( `${ this.config.serverURL }/api/upload/abort`, {
             method: 'POST',
             headers,
             body: JSON.stringify( {
