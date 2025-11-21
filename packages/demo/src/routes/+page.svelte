@@ -90,6 +90,17 @@
       </p>
       <span class="card-link">View Demo →</span>
     </a>
+
+    <a href="/chunk-uploader" class="component-card">
+      <div class="card-icon">☁️</div>
+      <h2>ChunkUploader</h2>
+      <p>
+        Drag & drop uploader with multipart support for the Cloudflare Worker
+        demo in <code>servers/upload-demo</code>. Handles large files with abort
+        & resume helpers.
+      </p>
+      <span class="card-link">View Demo →</span>
+    </a>
   </section>
 
   <section class="features">
