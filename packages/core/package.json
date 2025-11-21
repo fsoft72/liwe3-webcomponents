@@ -1,6 +1,6 @@
 {
   "name": "@liwe3/webcomponents",
-  "version": "1.0.20",
+  "version": "1.0.21",
   "description": "A collection of reusable web components including SmartSelect and AITextEditor",
   "type": "module",
   "main": "./dist/index.js",
@@ -56,6 +56,11 @@
       "types": "./dist/ImageView.d.ts",
       "import": "./dist/ImageView.js",
       "default": "./dist/ImageView.js"
+    },
+    "./chunk-uploader": {
+      "types": "./dist/ChunkUploader.d.ts",
+      "import": "./dist/ChunkUploader.js",
+      "default": "./dist/ChunkUploader.js"
     }
   },
   "files": [
