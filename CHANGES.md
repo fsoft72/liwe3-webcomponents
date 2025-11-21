@@ -79,6 +79,18 @@ The component expects the server to implement three endpoints:
 
 Compatible with Cloudflare R2, AWS S3, and other multipart upload APIs.
 
+### Upload Demo Server
+- Added `servers/upload-demo/` - Cloudflare Worker implementation for R2 uploads
+- Implements all required endpoints for ChunkUploader component
+- Includes `/list` endpoint for listing uploaded files
+- Error handling for aborted requests (status 499)
+- CORS support for cross-origin requests
+- Cleanup scripts in package.json:
+  - `pnpm run clean:blobs` - Remove local blob artifacts
+  - `pnpm run clean:all` - Remove entire .wrangler directory
+- Comprehensive README with setup and API documentation
+- R2 lifecycle rule recommendations for automatic cleanup
+
 ## 2025-11-18
 
 ### Fixed
