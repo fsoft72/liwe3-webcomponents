@@ -597,6 +597,7 @@ export class ChunkUploaderElement extends HTMLElement {
           cursor: pointer;
           margin-top: 16px;
           transition: background 0.3s ease;
+          pointer-events: auto;
         }
 
         .browse-btn:hover {
