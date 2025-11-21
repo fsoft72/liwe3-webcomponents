@@ -6,11 +6,13 @@
 export interface UploadedFile {
   id: string;
   file: File;
-  status: 'pending' | 'uploading' | 'completed' | 'error';
+  status: 'pending' | 'uploading' | 'completed' | 'error' | 'aborted';
   progress: number;
   uploadedBytes: number;
   preview?: string;
   error?: string;
+  uploadId?: string; // R2 upload ID for aborting
+  key?: string; // R2 key for aborting
 }
 
 export interface ChunkUploaderConfig {
@@ -266,6 +268,10 @@ export class ChunkUploaderElement extends HTMLElement {
 
       const { uploadId, key } = await initResponse.json();
 
+      // Store upload metadata for potential abort
+      uploadedFile.uploadId = uploadId;
+      uploadedFile.key = key;
+
       // Step 2: Upload chunks
       const chunkSizeBytes = this.config.chunkSize * 1024 * 1024;
       const totalParts = Math.ceil( file.size / chunkSizeBytes );
@@ -357,9 +363,15 @@ export class ChunkUploaderElement extends HTMLElement {
 
     this.isUploading = true;
     const uploadBtn = this.shadowRoot.querySelector( '#uploadBtn' ) as HTMLButtonElement;
+    const abortBtn = this.shadowRoot.querySelector( '#abortBtn' ) as HTMLButtonElement;
+
     if ( uploadBtn ) {
       uploadBtn.disabled = true;
       uploadBtn.textContent = 'Uploading...';
+    }
+
+    if ( abortBtn ) {
+      abortBtn.style.display = 'inline-block';
     }
 
     try {
@@ -387,6 +399,72 @@ export class ChunkUploaderElement extends HTMLElement {
         uploadBtn.disabled = false;
         uploadBtn.textContent = 'Upload Files';
       }
+      if ( abortBtn ) {
+        abortBtn.style.display = 'none';
+      }
+    }
+  }
+
+  /**
+   * Aborts all pending and uploading files
+   */
+  private async abortAllUploads (): Promise<void> {
+    const filesToAbort = Array.from( this.files.values() ).filter(
+      f => f.status === 'pending' || f.status === 'uploading'
+    );
+
+    if ( filesToAbort.length === 0 ) return;
+
+    const headers: HeadersInit = {
+      'Content-Type': 'application/json'
+    };
+
+    if ( this.config.authToken ) {
+      headers[ 'Authorization' ] = `Bearer ${ this.config.authToken }`;
+    }
+
+    for ( const file of filesToAbort ) {
+      // If upload was initiated, abort it on the server
+      if ( file.uploadId && file.key ) {
+        try {
+          await fetch( `${ this.config.serverURL }/abort`, {
+            method: 'POST',
+            headers,
+            body: JSON.stringify( {
+              uploadId: file.uploadId,
+              key: file.key
+            } )
+          } );
+        } catch ( error ) {
+          console.error( `Failed to abort upload for ${ file.file.name }:`, error );
+        }
+      }
+
+      // Update file status
+      file.status = 'aborted';
+      file.error = 'Upload aborted by user';
+      this.updateFileCard( file.id );
+    }
+
+    // Dispatch abort event
+    this.dispatchEvent( new CustomEvent( 'uploadaborted', {
+      detail: filesToAbort,
+      bubbles: true,
+      composed: true
+    } ) );
+
+    // Reset upload state
+    this.isUploading = false;
+    const uploadBtn = this.shadowRoot.querySelector( '#uploadBtn' ) as HTMLButtonElement;
+    const abortBtn = this.shadowRoot.querySelector( '#abortBtn' ) as HTMLButtonElement;
+
+    if ( uploadBtn ) {
+      uploadBtn.disabled = false;
+      uploadBtn.textContent = 'Upload Files';
+    }
+
+    if ( abortBtn ) {
+      abortBtn.style.display = 'none';
     }
   }
 
@@ -412,6 +490,8 @@ export class ChunkUploaderElement extends HTMLElement {
         progressBar.style.backgroundColor = '#22c55e'; // green
       } else if ( file.status === 'error' ) {
         progressBar.style.backgroundColor = '#ef4444'; // red
+      } else if ( file.status === 'aborted' ) {
+        progressBar.style.backgroundColor = '#f59e0b'; // orange
       } else {
         progressBar.style.backgroundColor = 'var(--color-primary)';
       }
@@ -483,6 +563,7 @@ export class ChunkUploaderElement extends HTMLElement {
     const fileInput = this.shadowRoot.querySelector( '#fileInput' ) as HTMLInputElement;
     const browseBtn = this.shadowRoot.querySelector( '#browseBtn' ) as HTMLButtonElement;
     const uploadBtn = this.shadowRoot.querySelector( '#uploadBtn' ) as HTMLButtonElement;
+    const abortBtn = this.shadowRoot.querySelector( '#abortBtn' ) as HTMLButtonElement;
 
     // Click to browse
     browseBtn?.addEventListener( 'click', () => fileInput?.click() );
@@ -517,6 +598,9 @@ export class ChunkUploaderElement extends HTMLElement {
 
     // Upload button
     uploadBtn?.addEventListener( 'click', () => this.startUpload() );
+
+    // Abort button
+    abortBtn?.addEventListener( 'click', () => this.abortAllUploads() );
   }
 
   /**
@@ -746,6 +830,30 @@ export class ChunkUploaderElement extends HTMLElement {
           opacity: 0.6;
           cursor: not-allowed;
         }
+
+        .abort-btn {
+          background: #ef4444;
+          color: white;
+          border: none;
+          padding: 12px 32px;
+          border-radius: 6px;
+          font-size: 16px;
+          font-weight: 500;
+          cursor: pointer;
+          margin-top: 24px;
+          margin-left: 12px;
+          transition: background 0.3s ease;
+          display: none;
+        }
+
+        .abort-btn:hover {
+          background: #dc2626;
+        }
+
+        .buttons-container {
+          display: flex;
+          align-items: center;
+        }
       </style>
 
       <div class="container">
@@ -761,7 +869,10 @@ export class ChunkUploaderElement extends HTMLElement {
 
         <div class="file-cards-container" id="fileCardsContainer"></div>
 
-        <button class="upload-btn" id="uploadBtn">Upload Files</button>
+        <div class="buttons-container">
+          <button class="upload-btn" id="uploadBtn">Upload Files</button>
+          <button class="abort-btn" id="abortBtn">Abort Upload</button>
+        </div>
       </div>
     `;
   }
