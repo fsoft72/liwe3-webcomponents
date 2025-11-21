@@ -1,0 +1,8 @@
+# Wrangler artifacts
+.wrangler/
+node_modules/
+
+# Lock files (use root pnpm-lock.yaml)
+pnpm-lock.yaml
+package-lock.json
+yarn.lock

@@ -10,6 +10,7 @@
     { href: "/tree-view", label: "TreeView" },
     { href: "/drawer", label: "Drawer" },
     { href: "/container-box", label: "ContainerBox" },
+    { href: "/chunk-uploader", label: "ChunkUploader" },
   ];
 
   // Derived value for active page

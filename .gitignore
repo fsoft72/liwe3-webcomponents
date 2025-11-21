@@ -9,3 +9,6 @@ PUBLISHING.md
 
 # Turborepo
 .turbo
+
+# Wrangler (Cloudflare Workers)
+.wrangler/

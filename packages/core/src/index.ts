@@ -69,6 +69,14 @@ export {
 // Export ImageView
 export * from './ImageView';
 
+// Export ChunkUploader
+export {
+  ChunkUploaderElement,
+  defineChunkUploader,
+  type UploadedFile,
+  type ChunkUploaderConfig
+} from './ChunkUploader';
+
 // Convenience function to register all components at once
 export const defineAllComponents = (): void => {
   if ( typeof window !== 'undefined' ) {
@@ -80,5 +88,6 @@ export const defineAllComponents = (): void => {
     import( './TreeView' ).then( ( { defineTreeView } ) => defineTreeView() );
     import( './ContainerBox' ).then( ( { defineContainerBox } ) => defineContainerBox() );
     import( './Drawer' ).then( ( { defineDrawer } ) => defineDrawer() );
+    import( './ChunkUploader' ).then( ( { defineChunkUploader } ) => defineChunkUploader() );
   }
 };

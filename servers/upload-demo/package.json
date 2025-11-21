@@ -1,0 +1,16 @@
+{
+  "name": "r2-uploader",
+  "version": "1.0.0",
+  "description": "Large file uploader to Cloudflare R2 using multipart upload",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "tail": "wrangler tail",
+    "test": "node test-upload.js",
+    "clean:blobs": "rm -rf .wrangler/state/v3/r2/*/blobs/*",
+    "clean:all": "rm -rf .wrangler"
+  },
+  "keywords": ["cloudflare", "r2", "upload", "multipart"],
+  "author": "",
+  "license": "MIT"
+}
