@@ -37,6 +37,7 @@ export class ChunkUploaderElement extends HTMLElement {
     maxFileSize: DEFAULT_MAX_FILE_SIZE
   };
   private isUploading = false;
+  private abortController: AbortController | null = null;
 
   constructor () {
     super();
@@ -278,6 +279,11 @@ export class ChunkUploaderElement extends HTMLElement {
       const parts: Array<{ partNumber: number; etag: string }> = [];
 
       for ( let partNumber = 1; partNumber <= totalParts; partNumber++ ) {
+        // Check if upload was aborted
+        if ( this.abortController?.signal.aborted ) {
+          throw new Error( 'Upload aborted by user' );
+        }
+
         const start = ( partNumber - 1 ) * chunkSizeBytes;
         const end = Math.min( start + chunkSizeBytes, file.size );
         const chunk = file.slice( start, end );
@@ -297,7 +303,8 @@ export class ChunkUploaderElement extends HTMLElement {
         const partResponse = await fetch( `${ this.config.serverURL }/upload-part`, {
           method: 'POST',
           headers: partHeaders,
-          body: chunk
+          body: chunk,
+          signal: this.abortController?.signal
         } );
 
         if ( ! partResponse.ok ) {
@@ -345,9 +352,16 @@ export class ChunkUploaderElement extends HTMLElement {
       }
 
     } catch ( error ) {
-      uploadedFile.status = 'error';
-      uploadedFile.error = error instanceof Error ? error.message : 'Unknown error';
-      this.updateFileCard( uploadedFile.id );
+      // Check if this is an abort error (from AbortController)
+      const isAbortError = error instanceof Error &&
+        ( error.name === 'AbortError' || error.message === 'Upload aborted by user' );
+
+      // Only set error status if not aborted
+      if ( ! isAbortError ) {
+        uploadedFile.status = 'error';
+        uploadedFile.error = error instanceof Error ? error.message : 'Unknown error';
+        this.updateFileCard( uploadedFile.id );
+      }
       throw error;
     }
   }
@@ -362,6 +376,8 @@ export class ChunkUploaderElement extends HTMLElement {
     if ( pendingFiles.length === 0 ) return;
 
     this.isUploading = true;
+    this.abortController = new AbortController();
+
     const uploadBtn = this.shadowRoot.querySelector( '#uploadBtn' ) as HTMLButtonElement;
     const abortBtn = this.shadowRoot.querySelector( '#abortBtn' ) as HTMLButtonElement;
 
@@ -376,6 +392,10 @@ export class ChunkUploaderElement extends HTMLElement {
 
     try {
       for ( const file of pendingFiles ) {
+        // Check if upload was aborted
+        if ( this.abortController.signal.aborted ) {
+          break;
+        }
         await this.uploadFile( file );
       }
 
@@ -392,7 +412,10 @@ export class ChunkUploaderElement extends HTMLElement {
       }
 
     } catch ( error ) {
-      console.error( 'Upload error:', error );
+      // Only log non-abort errors
+      if ( error instanceof Error && error.message !== 'Upload aborted by user' ) {
+        console.error( 'Upload error:', error );
+      }
     } finally {
       this.isUploading = false;
       if ( uploadBtn ) {
@@ -409,6 +432,11 @@ export class ChunkUploaderElement extends HTMLElement {
    * Aborts all pending and uploading files
    */
   private async abortAllUploads (): Promise<void> {
+    // Trigger abort signal to stop ongoing fetch requests
+    if ( this.abortController ) {
+      this.abortController.abort();
+    }
+
     const filesToAbort = Array.from( this.files.values() ).filter(
       f => f.status === 'pending' || f.status === 'uploading'
     );
