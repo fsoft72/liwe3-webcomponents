@@ -175,6 +175,7 @@ export class ChunkUploaderElement extends HTMLElement {
 	}
 
 	set folder ( value : string | undefined ) {
+		console.log( '[ChunkUploader] folder updated:', this.config.folder, '->', value );
 		this.config.folder = value;
 		if ( value ) {
 			this.setAttribute( 'folder', value );

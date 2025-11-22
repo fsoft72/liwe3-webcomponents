@@ -49,7 +49,7 @@ let {
 } : Props = $props();
 
 let uploaderElement : ChunkUploaderElementType;
-let isReady = false;
+let isReady = $state( false );
 let removeListeners : (() => void) | null = null;
 
 /**
@@ -91,8 +91,6 @@ const bindEvents = () => {
 
 	const handleFileComplete = ( event : Event ) => {
 		const data : ChunkFileEvent = _mapEvent( event.detail );
-
-		console.log( '=== FILE COMPLETE EVT: ', data );
 		onfilecomplete?.( data );
 	};
 

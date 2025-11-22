@@ -1,5 +1,14 @@
 # CHANGES.md
 
+## 2025-11-22 - ChunkUploader folder Reactivity Fix
+
+### Fixed
+- **ChunkUploader Svelte**: Fixed `folder` prop not updating when changed after initial mount
+  - Changed `isReady` from plain `let` to reactive `$state()`
+  - This ensures `$effect` hooks properly track and re-run when component becomes ready
+  - Previously, effects would not re-run after `isReady` changed because it wasn't reactive
+  - Removed debug console.log statements from both core and Svelte packages
+
 ## 2025-11-22 - ChunkUploader folder Property
 
 ### Added
