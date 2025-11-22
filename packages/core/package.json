@@ -1,7 +1,7 @@
 {
   "name": "@liwe3/webcomponents",
-  "version": "1.0.21",
-  "description": "A collection of reusable web components including SmartSelect and AITextEditor",
+  "version": "1.1.0",
+  "description": "A collection of reusable web components including SmartSelect and AITextEditor, ChunkUploader and more",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
