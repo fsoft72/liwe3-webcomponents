@@ -13,7 +13,8 @@
     "dev:svelte": "turbo run dev --filter=\"@liwe3/webcomponents-svelte\"",
     "dev:demo": "turbo run dev --filter=\"@liwe3/demo\"",
     "check": "turbo run check",
-    "clean": "rm -rf packages/*/dist packages/*/.svelte-kit packages/*/node_modules .turbo"
+    "clean": "rm -rf packages/*/dist packages/*/.svelte-kit .turbo",
+    "clean:all": "rm -rf packages/*/dist packages/*/.svelte-kit packages/*/node_modules packages/*/.vite packages/*/.turbo .turbo .vite node_modules/.cache node_modules/.vite"
   },
   "packageManager": "pnpm@10.19.0",
   "devDependencies": {
