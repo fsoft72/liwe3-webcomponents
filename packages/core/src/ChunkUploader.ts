@@ -67,7 +67,7 @@ export class ChunkUploaderElement extends HTMLElement {
 					this.config.authToken = newValue || undefined;
 					break;
 				case 'valid-filetypes':
-					this.config.validFiletypes = newValue ? newValue.split( ',' ).map( (ext) => ext.trim() ) : undefined;
+					this.config.validFiletypes = newValue ? newValue.split( ',' ).map( ( ext ) => ext.trim() ) : undefined;
 					break;
 				case 'max-file-size':
 					this.config.maxFileSize = parseFloat( newValue || String( DEFAULT_MAX_FILE_SIZE ) );
@@ -175,7 +175,6 @@ export class ChunkUploaderElement extends HTMLElement {
 	}
 
 	set folder ( value : string | undefined ) {
-		console.log( '[ChunkUploader] folder updated:', this.config.folder, '->', value );
 		this.config.folder = value;
 		if ( value ) {
 			this.setAttribute( 'folder', value );
@@ -463,7 +462,7 @@ export class ChunkUploaderElement extends HTMLElement {
 	private async startUpload () : Promise<void> {
 		if ( this.isUploading ) return;
 
-		const pendingFiles = Array.from( this.files.values() ).filter( (f) => f.status === 'pending' );
+		const pendingFiles = Array.from( this.files.values() ).filter( ( f ) => f.status === 'pending' );
 		if ( pendingFiles.length === 0 ) return;
 
 		this.isUploading = true;
@@ -530,7 +529,7 @@ export class ChunkUploaderElement extends HTMLElement {
 		}
 
 		const filesToAbort = Array.from( this.files.values() ).filter(
-			(f) => f.status === 'pending' || f.status === 'uploading',
+			( f ) => f.status === 'pending' || f.status === 'uploading',
 		);
 
 		if ( filesToAbort.length === 0 ) return;
@@ -641,7 +640,7 @@ export class ChunkUploaderElement extends HTMLElement {
 			return;
 		}
 
-		container.innerHTML = Array.from( this.files.values() ).map( (file) => `
+		container.innerHTML = Array.from( this.files.values() ).map( ( file ) => `
       <div class="file-card" data-file-id="${file.id}">
         <button class="remove-btn" data-file-id="${file.id}">×</button>
         ${file.preview ? `<div class="preview"><img src="${file.preview}" alt="Preview"></div>` : '<div class="preview no-preview">📄</div>'}
@@ -663,7 +662,7 @@ export class ChunkUploaderElement extends HTMLElement {
 
 		// Bind remove button events
 		const removeButtons = container.querySelectorAll( '.remove-btn' );
-		removeButtons.forEach( (btn) => {
+		removeButtons.forEach( ( btn ) => {
 			btn.addEventListener( 'click', ( e ) => {
 				e.stopPropagation();
 				const fileId = ( btn as HTMLElement ).dataset.fileId;
@@ -674,7 +673,7 @@ export class ChunkUploaderElement extends HTMLElement {
 		// Show/hide upload button
 		const uploadBtn = this.shadowRoot.querySelector( '#uploadBtn' ) as HTMLButtonElement;
 		if ( uploadBtn ) {
-			const hasPendingFiles = Array.from( this.files.values() ).some( (f) => f.status === 'pending' );
+			const hasPendingFiles = Array.from( this.files.values() ).some( ( f ) => f.status === 'pending' );
 			uploadBtn.style.display = hasPendingFiles ? 'block' : 'none';
 		}
 	}

@@ -201,6 +201,11 @@ $effect( () => {
 	if ( !isReady || !uploaderElement ) return;
 	uploaderElement.parseResponse = parseResponse;
 } );
+
+$effect( () => {
+	if ( !uploaderElement ) return;
+	uploaderElement.setAttribute( 'folder', folder! );
+} );
 </script>
 
 <liwe3-chunk-uploader bind:this={uploaderElement} {...restProps}></liwe3-chunk-uploader>
