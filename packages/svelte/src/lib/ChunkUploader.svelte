@@ -12,6 +12,8 @@
     authToken?: string;
     validFiletypes?: string[];
     maxFileSize?: number;
+    labelDropFiles?: string;
+    labelBrowse?: string;
     onfilecomplete?: (event: CustomEvent<UploadedFile>) => void;
     onuploadcomplete?: (event: CustomEvent<UploadedFile[]>) => void;
     onuploadaborted?: (event: CustomEvent<UploadedFile[]>) => void;
@@ -23,6 +25,8 @@
     authToken,
     validFiletypes,
     maxFileSize = 5120,
+    labelDropFiles,
+    labelBrowse,
     onfilecomplete,
     onuploadcomplete,
     onuploadaborted,
@@ -46,6 +50,8 @@
       ? [...validFiletypes]
       : undefined;
     uploaderElement.maxFileSize = maxFileSize;
+    uploaderElement.labelDropFiles = labelDropFiles;
+    uploaderElement.labelBrowse = labelBrowse;
   };
 
   /**
@@ -142,6 +148,16 @@
   $effect(() => {
     if (!isReady || !uploaderElement) return;
     uploaderElement.maxFileSize = maxFileSize;
+  });
+
+  $effect(() => {
+    if (!isReady || !uploaderElement) return;
+    uploaderElement.labelDropFiles = labelDropFiles;
+  });
+
+  $effect(() => {
+    if (!isReady || !uploaderElement) return;
+    uploaderElement.labelBrowse = labelBrowse;
   });
 </script>
 

@@ -1,5 +1,32 @@
 # CHANGES.md
 
+## 2025-11-22 - ChunkUploader Label Customization
+
+### Added
+- **ChunkUploader**: Customizable text labels for drop zone and browse button
+  - `labelDropFiles` property: Custom text for drop zone (default: "Drop files here")
+  - `labelBrowse` property: Custom label for browse button (default: "Browse Files")
+  - HTML attributes: `label-drop-files` and `label-browse`
+  - Labels update dynamically when properties change
+  - Updated Svelte wrapper with new props and reactive effects
+  - Updated core package version to 1.1.1
+  - Updated Svelte package version to 1.1.1
+
+### Usage
+```html
+<liwe3-chunk-uploader
+  server-url="https://api.example.com"
+  label-drop-files="Trascina i file qui"
+  label-browse="Sfoglia">
+</liwe3-chunk-uploader>
+```
+
+Or via JavaScript/Svelte:
+```javascript
+uploader.labelDropFiles = 'Trascina i file qui';
+uploader.labelBrowse = 'Sfoglia';
+```
+
 ## 2025-11-21 - ChunkUploader Component
 
 ### Added

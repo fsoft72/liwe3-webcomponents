@@ -21,6 +21,8 @@ export interface ChunkUploaderConfig {
   authToken?: string;
   validFiletypes?: string[]; // Array of extensions like ['jpg', 'png', 'pdf']
   maxFileSize?: number; // in MB
+  labelDropFiles?: string; // Custom text for drop zone (default: "Drop files here")
+  labelBrowse?: string; // Custom label for browse button (default: "Browse Files")
   onfilecomplete?: ( file: UploadedFile ) => void;
   onuploadcomplete?: ( files: UploadedFile[] ) => void;
 }
@@ -47,7 +49,7 @@ export class ChunkUploaderElement extends HTMLElement {
   }
 
   static get observedAttributes (): string[] {
-    return [ 'server-url', 'chunk-size', 'auth-token', 'valid-filetypes', 'max-file-size' ];
+    return [ 'server-url', 'chunk-size', 'auth-token', 'valid-filetypes', 'max-file-size', 'label-drop-files', 'label-browse' ];
   }
 
   attributeChangedCallback ( name: string, oldValue: string | null, newValue: string | null ): void {
@@ -67,6 +69,14 @@ export class ChunkUploaderElement extends HTMLElement {
           break;
         case 'max-file-size':
           this.config.maxFileSize = parseFloat( newValue || String( DEFAULT_MAX_FILE_SIZE ) );
+          break;
+        case 'label-drop-files':
+          this.config.labelDropFiles = newValue || undefined;
+          this.updateLabels();
+          break;
+        case 'label-browse':
+          this.config.labelBrowse = newValue || undefined;
+          this.updateLabels();
           break;
       }
     }
@@ -127,12 +137,55 @@ export class ChunkUploaderElement extends HTMLElement {
     this.setAttribute( 'max-file-size', value.toString() );
   }
 
+  get labelDropFiles (): string | undefined {
+    return this.config.labelDropFiles;
+  }
+
+  set labelDropFiles ( value: string | undefined ) {
+    this.config.labelDropFiles = value;
+    if ( value ) {
+      this.setAttribute( 'label-drop-files', value );
+    } else {
+      this.removeAttribute( 'label-drop-files' );
+    }
+    this.updateLabels();
+  }
+
+  get labelBrowse (): string | undefined {
+    return this.config.labelBrowse;
+  }
+
+  set labelBrowse ( value: string | undefined ) {
+    this.config.labelBrowse = value;
+    if ( value ) {
+      this.setAttribute( 'label-browse', value );
+    } else {
+      this.removeAttribute( 'label-browse' );
+    }
+    this.updateLabels();
+  }
+
   set onfilecomplete ( callback: ( ( file: UploadedFile ) => void ) | undefined ) {
     this.config.onfilecomplete = callback;
   }
 
   set onuploadcomplete ( callback: ( ( files: UploadedFile[] ) => void ) | undefined ) {
     this.config.onuploadcomplete = callback;
+  }
+
+  /**
+   * Updates labels in the DOM when properties change
+   */
+  private updateLabels (): void {
+    const dropText = this.shadowRoot.querySelector( '.upload-text' );
+    const browseBtn = this.shadowRoot.querySelector( '#browseBtn' );
+
+    if ( dropText ) {
+      dropText.textContent = this.config.labelDropFiles || 'Drop files here';
+    }
+    if ( browseBtn ) {
+      browseBtn.textContent = this.config.labelBrowse || 'Browse Files';
+    }
   }
 
   /**
@@ -889,9 +942,9 @@ export class ChunkUploaderElement extends HTMLElement {
           <input type="file" id="fileInput" multiple>
           <div class="upload-zone-content">
             <div class="upload-icon">📁</div>
-            <div class="upload-text">Drop files here</div>
+            <div class="upload-text">${ this.config.labelDropFiles || 'Drop files here' }</div>
             <div class="upload-hint">or</div>
-            <button class="browse-btn" id="browseBtn">Browse Files</button>
+            <button class="browse-btn" id="browseBtn">${ this.config.labelBrowse || 'Browse Files' }</button>
           </div>
         </div>
 
