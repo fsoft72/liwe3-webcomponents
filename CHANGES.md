@@ -1,5 +1,28 @@
 # CHANGES.md
 
+## 2025-11-22 - ChunkUploader folder Property
+
+### Added
+- **ChunkUploader**: New `folder` property to specify destination folder for uploads
+  - Passed to the `initiate` endpoint in the request body
+  - Supports both HTML attribute (`folder="my-folder"`) and JavaScript property
+  - Added to Svelte wrapper with prop, syncProps(), and reactive $effect
+  - Updated core package version to 1.1.3
+  - Updated Svelte package version to 1.1.3
+
+### Usage
+```html
+<liwe3-chunk-uploader
+  server-url="https://api.example.com"
+  folder="uploads/images">
+</liwe3-chunk-uploader>
+```
+
+Or in Svelte:
+```svelte
+<ChunkUploader serverURL="https://api.example.com" folder="uploads/images" />
+```
+
 ## 2025-11-22 - ChunkUploader parseResponse Callback
 
 ### Added

@@ -23,6 +23,7 @@ export interface ChunkUploaderConfig {
 	maxFileSize? : number; // in MB
 	labelDropFiles? : string; // Custom text for drop zone (default: "Drop files here")
 	labelBrowse? : string; // Custom label for browse button (default: "Browse Files")
+	folder? : string; // Destination folder name for uploads
 	onfilecomplete? : ( file : UploadedFile ) => void;
 	onuploadcomplete? : ( files : UploadedFile[] ) => void;
 	parseResponse? : ( response : any, endpoint : 'initiate' | 'part' | 'complete' ) => any; // Transform endpoint responses
@@ -50,7 +51,7 @@ export class ChunkUploaderElement extends HTMLElement {
 	}
 
 	static get observedAttributes () : string[] {
-		return [ 'server-url', 'chunk-size', 'auth-token', 'valid-filetypes', 'max-file-size', 'label-drop-files', 'label-browse' ];
+		return [ 'server-url', 'chunk-size', 'auth-token', 'valid-filetypes', 'max-file-size', 'label-drop-files', 'label-browse', 'folder' ];
 	}
 
 	attributeChangedCallback ( name : string, oldValue : string | null, newValue : string | null ) : void {
@@ -78,6 +79,9 @@ export class ChunkUploaderElement extends HTMLElement {
 				case 'label-browse':
 					this.config.labelBrowse = newValue || undefined;
 					this.updateLabels();
+					break;
+				case 'folder':
+					this.config.folder = newValue || undefined;
 					break;
 			}
 		}
@@ -164,6 +168,19 @@ export class ChunkUploaderElement extends HTMLElement {
 			this.removeAttribute( 'label-browse' );
 		}
 		this.updateLabels();
+	}
+
+	get folder () : string | undefined {
+		return this.config.folder;
+	}
+
+	set folder ( value : string | undefined ) {
+		this.config.folder = value;
+		if ( value ) {
+			this.setAttribute( 'folder', value );
+		} else {
+			this.removeAttribute( 'folder' );
+		}
 	}
 
 	set onfilecomplete ( callback : (( file : UploadedFile ) => void) | undefined ) {
@@ -318,6 +335,7 @@ export class ChunkUploaderElement extends HTMLElement {
 				body: JSON.stringify( {
 					fileName: file.name,
 					fileType: file.type,
+					folder: this.config.folder,
 				} ),
 			} );
 
