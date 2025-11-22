@@ -28,6 +28,7 @@ interface Props extends HTMLAttributes<ChunkUploaderElementType> {
 	onfilecomplete? : ( event : ChunkFileEvent ) => void;
 	onuploadcomplete? : ( events : ChunkFileEvent[] ) => void;
 	onuploadaborted? : ( events : ChunkFileEvent[] ) => void;
+	parseResponse? : ( response : any, endpoint : 'initiate' | 'part' | 'complete' ) => any;
 }
 
 let {
@@ -41,6 +42,7 @@ let {
 	onfilecomplete,
 	onuploadcomplete,
 	onuploadaborted,
+	parseResponse,
 	...restProps
 } : Props = $props();
 
@@ -63,6 +65,7 @@ const syncProps = () => {
 	uploaderElement.maxFileSize = maxFileSize;
 	uploaderElement.labelDropFiles = labelDropFiles;
 	uploaderElement.labelBrowse = labelBrowse;
+	uploaderElement.parseResponse = parseResponse;
 };
 
 const _mapEvent = ( dets : any ) : ChunkFileEvent => {
@@ -186,6 +189,11 @@ $effect( () => {
 $effect( () => {
 	if ( !isReady || !uploaderElement ) return;
 	uploaderElement.labelBrowse = labelBrowse;
+} );
+
+$effect( () => {
+	if ( !isReady || !uploaderElement ) return;
+	uploaderElement.parseResponse = parseResponse;
 } );
 </script>
 

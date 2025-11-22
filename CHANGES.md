@@ -1,5 +1,40 @@
 # CHANGES.md
 
+## 2025-11-22 - ChunkUploader parseResponse Callback
+
+### Added
+- **ChunkUploader**: Optional `parseResponse` callback for transforming endpoint responses
+  - Callback signature: `(response: any, endpoint: 'initiate' | 'part' | 'complete') => any`
+  - Called after each API response is received, before the data is processed
+  - Allows transforming server responses to match expected format (`{uploadId, key}`, `{etag}`)
+  - Useful when server returns wrapped responses or different field names
+  - Added property setter to web component
+  - Added prop and reactive effect to Svelte wrapper
+  - Updated core package version to 1.1.2
+  - Updated Svelte package version to 1.1.2
+
+### Usage
+```javascript
+uploader.parseResponse = (response, endpoint) => {
+  // Example: unwrap server's data envelope
+  if (endpoint === 'initiate') {
+    return { uploadId: response.data.id, key: response.data.fileKey };
+  }
+  if (endpoint === 'part') {
+    return { etag: response.data.tag };
+  }
+  return response.data;
+};
+```
+
+Or in Svelte:
+```svelte
+<ChunkUploader
+  serverURL="https://api.example.com"
+  parseResponse={(response, endpoint) => response.data}
+/>
+```
+
 ## 2025-11-22 - ChunkUploader Label Customization
 
 ### Added
