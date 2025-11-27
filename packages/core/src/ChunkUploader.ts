@@ -273,8 +273,8 @@ export class ChunkUploaderElement extends HTMLElement {
 	 * Adds files to the upload queue
 	 */
 	private async addFiles ( fileList : FileList ) : Promise<void> {
-		for ( let i = 0; i < fileList.length; i++ ) {
-			const file = fileList[i];
+		const files = Array.from( fileList );
+		for ( const file of files ) {
 			const validation = this.validateFile( file );
 
 			const id = this.generateFileId();
