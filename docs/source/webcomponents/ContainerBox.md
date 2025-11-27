@@ -2,6 +2,36 @@
 
 A container component that wraps elements and shows a context menu on hover or via a persistent button.
 
+## Live Example
+
+<div class="example-container" style="padding: 20px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 20px; height: 300px;">
+  <liwe3-container-box id="demo-container">
+    <div style="background: #f0f0f0; padding: 20px; height: 250px; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+      Hover over this box or click the menu button
+    </div>
+  </liwe3-container-box>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('demo-container');
+    if (container) {
+      customElements.whenDefined('liwe3-container-box').then(() => {
+        container.setMenuItems([
+          { label: 'Action 1', onclick: () => alert('Action 1 clicked') },
+          { label: 'Action 2', onclick: () => alert('Action 2 clicked') },
+          { label: '---sep' },
+          { label: 'Submenu', items: [
+              { label: 'Sub Action 1', onclick: () => alert('Sub Action 1') },
+              { label: 'Sub Action 2', onclick: () => alert('Sub Action 2') }
+            ] 
+          }
+        ]);
+      });
+    }
+  });
+</script>
+
 ## Usage
 
 ```html

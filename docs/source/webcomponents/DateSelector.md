@@ -2,6 +2,40 @@
 
 A customizable date picker component supporting both single date and date range selection modes.
 
+## Live Example
+
+<div class="example-container" style="padding: 20px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 20px;">
+  <h3>Single Date Selection</h3>
+  <liwe3-date-selector id="demo-single"></liwe3-date-selector>
+  <p>Selected: <span id="demo-single-result">None</span></p>
+
+  <h3 style="margin-top: 20px;">Range Selection</h3>
+  <liwe3-date-selector range-mode id="demo-range"></liwe3-date-selector>
+  <p>Selected Range: <span id="demo-range-result">None</span></p>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const singleSelector = document.getElementById('demo-single');
+    const singleResult = document.getElementById('demo-single-result');
+    
+    if (singleSelector) {
+      singleSelector.addEventListener('dateSelected', (e) => {
+        singleResult.textContent = e.detail.date;
+      });
+    }
+
+    const rangeSelector = document.getElementById('demo-range');
+    const rangeResult = document.getElementById('demo-range-result');
+
+    if (rangeSelector) {
+      rangeSelector.addEventListener('rangeSelected', (e) => {
+        rangeResult.textContent = `${e.detail.start} to ${e.detail.end}`;
+      });
+    }
+  });
+</script>
+
 ## Usage
 
 ```html

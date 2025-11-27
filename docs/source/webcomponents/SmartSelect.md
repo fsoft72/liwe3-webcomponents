@@ -2,6 +2,51 @@
 
 A customizable select dropdown with search, multi-select, and keyboard navigation.
 
+## Live Example
+
+<div class="example-container" style="padding: 20px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 20px;">
+  <h3>Single Selection</h3>
+  <liwe3-select 
+    id="demo-select-single"
+    placeholder="Select a fruit"
+    options='[{"label":"Apple","value":"apple"},{"label":"Banana","value":"banana"},{"label":"Cherry","value":"cherry"},{"label":"Date","value":"date"},{"label":"Elderberry","value":"elderberry"}]'
+  ></liwe3-select>
+  <p>Selected: <span id="demo-select-single-result">None</span></p>
+
+  <h3 style="margin-top: 20px;">Multiple Selection with Search</h3>
+  <liwe3-select 
+    id="demo-select-multi"
+    multiple 
+    searchable
+    placeholder="Select technologies"
+    options='[{"label":"TypeScript","value":"ts"},{"label":"JavaScript","value":"js"},{"label":"Svelte","value":"svelte"},{"label":"React","value":"react"},{"label":"Vue","value":"vue"},{"label":"Angular","value":"angular"}]'
+  ></liwe3-select>
+  <p>Selected: <span id="demo-select-multi-result">None</span></p>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const singleSelect = document.getElementById('demo-select-single');
+    const singleResult = document.getElementById('demo-select-single-result');
+    
+    if (singleSelect) {
+      singleSelect.addEventListener('change', (e) => {
+        singleResult.textContent = e.detail.value || 'None';
+      });
+    }
+
+    const multiSelect = document.getElementById('demo-select-multi');
+    const multiResult = document.getElementById('demo-select-multi-result');
+
+    if (multiSelect) {
+      multiSelect.addEventListener('change', (e) => {
+        const val = e.detail.value;
+        multiResult.textContent = Array.isArray(val) && val.length ? val.join(', ') : 'None';
+      });
+    }
+  });
+</script>
+
 ## Usage
 
 ```html

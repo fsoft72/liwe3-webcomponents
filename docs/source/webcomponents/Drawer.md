@@ -2,6 +2,43 @@
 
 A collapsible side panel component that can be expanded, shrunk, or closed with smooth animations.
 
+## Live Example
+
+<div class="example-container" style="padding: 20px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 20px; height: 400px; position: relative; overflow: hidden;">
+  <liwe3-drawer
+    id="demo-drawer"
+    title="Demo Drawer"
+    direction="horizontal"
+    state="expanded"
+    style="height: 100%;"
+  >
+    <div style="padding: 10px;">
+      <p>This is the drawer content.</p>
+      <p>You can toggle the drawer using the button in the header.</p>
+      <button id="demo-drawer-shrink">Shrink Programmatically</button>
+      <button id="demo-drawer-expand">Expand Programmatically</button>
+    </div>
+  </liwe3-drawer>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const drawer = document.getElementById('demo-drawer');
+    const shrinkBtn = document.getElementById('demo-drawer-shrink');
+    const expandBtn = document.getElementById('demo-drawer-expand');
+
+    if (drawer && shrinkBtn && expandBtn) {
+      shrinkBtn.addEventListener('click', () => {
+        customElements.whenDefined('liwe3-drawer').then(() => drawer.shrink());
+      });
+      
+      expandBtn.addEventListener('click', () => {
+        customElements.whenDefined('liwe3-drawer').then(() => drawer.expand());
+      });
+    }
+  });
+</script>
+
 ## Usage
 
 ```html

@@ -8,6 +8,7 @@
     "build:core": "turbo run build --filter=\"@liwe3/webcomponents\"",
     "build:svelte": "turbo run package --filter=\"@liwe3/webcomponents-svelte\"",
     "build:demo": "turbo run build --filter=\"@liwe3/demo\"",
+    "build:docs": "pnpm run build:core && mkdir -p docs/source/javascripts && cp packages/core/dist/*.js docs/source/javascripts/",
     "dev": "turbo run dev --filter=\"!@liwe3/demo\"",
     "dev:core": "turbo run dev --filter=\"@liwe3/webcomponents\"",
     "dev:svelte": "turbo run dev --filter=\"@liwe3/webcomponents-svelte\"",

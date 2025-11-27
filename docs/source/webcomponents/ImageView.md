@@ -2,6 +2,39 @@
 
 An image viewer component with support for various display modes, positioning, and visual effects.
 
+## Live Example
+
+<div class="example-container" style="padding: 20px; border: 1px solid #eee; border-radius: 8px; margin-bottom: 20px;">
+  <div style="margin-bottom: 10px;">
+    <label>Effect: 
+      <select onchange="document.getElementById('demo-image').setAttribute('fx', this.value)">
+        <option value="none">None</option>
+        <option value="bokeh">Bokeh</option>
+        <option value="zoom-in">Zoom In</option>
+        <option value="zoom-out">Zoom Out</option>
+        <option value="pan-left">Pan Left</option>
+        <option value="pan-right">Pan Right</option>
+      </select>
+    </label>
+    <label>Hover Effect: 
+      <select onchange="document.getElementById('demo-image').setAttribute('fx-hover', this.value)">
+        <option value="none">None</option>
+        <option value="bokeh">Bokeh</option>
+        <option value="zoom-in" selected>Zoom In</option>
+      </select>
+    </label>
+  </div>
+
+  <liwe3-image-view
+    id="demo-image"
+    src="https://picsum.photos/800/400"
+    width="100%"
+    height="300px"
+    mode="cover"
+    fx-hover="zoom-in"
+  ></liwe3-image-view>
+</div>
+
 ## Usage
 
 ```html
