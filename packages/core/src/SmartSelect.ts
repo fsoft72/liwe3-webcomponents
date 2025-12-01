@@ -6,6 +6,7 @@
 export type SelectOption = {
   value: string;
   label: string;
+  image?: string;
 };
 
 export class SmartSelectElement extends HTMLElement {
@@ -699,6 +700,42 @@ export class SmartSelectElement extends HTMLElement {
           color: var(--option-selected-color, #1976d2);
         }
 
+        .option-content {
+          display: flex;
+          align-items: center;
+        }
+
+        .option-image {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          object-fit: cover;
+          margin-right: 8px;
+          flex-shrink: 0;
+        }
+
+        .tag-image {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          object-fit: cover;
+          margin-right: 4px;
+          flex-shrink: 0;
+        }
+
+        .single-value {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .single-value-image {
+          width: 20px;
+          height: 20px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+
         .no-options {
           padding: 8px 12px;
           color: var(--no-options-color, #6c757d);
@@ -712,11 +749,17 @@ export class SmartSelectElement extends HTMLElement {
             ${ this.multiple && this.selectedOptions.length > 0
         ? this.selectedOptions.map( option => `
                   <span class="tag">
+                    ${ option.image ? `<img src="${ option.image }" class="tag-image" alt="">` : '' }
                     ${ option.label }
                     <span class="remove-tag" data-value="${ option.value }">×</span>
                   </span>
                 `).join( '' )
-        : `<span>${ displayText }</span>`
+        : this.selectedOptions.length > 0
+          ? `<div class="single-value">
+               ${ this.selectedOptions[ 0 ].image ? `<img src="${ this.selectedOptions[ 0 ].image }" class="single-value-image" alt="">` : '' }
+               <span>${ this.selectedOptions[ 0 ].label }</span>
+             </div>`
+          : `<span>${ displayText }</span>`
       }
           </div>
           <div class="arrow ${ this.isOpen ? 'open' : '' }"></div>
@@ -739,7 +782,10 @@ export class SmartSelectElement extends HTMLElement {
                     class="option ${ this.selectedOptions.find( selected => selected.value === option.value ) ? 'selected' : '' } ${ index === this.focusedIndex ? 'focused' : '' }"
                     data-value="${ option.value }"
                   >
-                    ${ option.label }
+                    <div class="option-content">
+                      ${ option.image ? `<img src="${ option.image }" class="option-image" alt="">` : '' }
+                      <span>${ option.label }</span>
+                    </div>
                   </div>
                 `).join( '' )
           : '<div class="no-options">No options available</div>'

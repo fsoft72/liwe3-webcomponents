@@ -31,6 +31,14 @@
 		{ value: 'qwik', label: 'Qwik' }
 	];
 
+	const users: SelectOption[] = [
+		{ value: '1', label: 'Alice Johnson', image: 'https://i.pravatar.cc/150?u=1' },
+		{ value: '2', label: 'Bob Smith', image: 'https://i.pravatar.cc/150?u=2' },
+		{ value: '3', label: 'Charlie Brown', image: 'https://i.pravatar.cc/150?u=3' },
+		{ value: '4', label: 'Diana Prince', image: 'https://i.pravatar.cc/150?u=4' },
+		{ value: '5', label: 'Evan Wright', image: 'https://i.pravatar.cc/150?u=5' }
+	];
+
 	// Derived values for display
 	const singleSelectedLabel = $derived.by(() => {
 		if (!singleValue) return 'None';
@@ -129,6 +137,27 @@
 			<SmartSelect
 				options={programmingLanguages}
 				placeholder="Search and select multiple"
+				multiple
+				searchable
+			/>
+		</div>
+	</section>
+
+	<!-- With Images -->
+	<section class="demo-section">
+		<h2>With Images</h2>
+		<p>Options can include images, perfect for user selection or rich content.</p>
+
+		<div class="demo-box">
+			<SmartSelect
+				options={users}
+				placeholder="Select a user..."
+				searchable
+			/>
+			<div style="margin-top: 1rem;"></div>
+			<SmartSelect
+				options={users}
+				placeholder="Select team members..."
 				multiple
 				searchable
 			/>
