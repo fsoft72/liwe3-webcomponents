@@ -57,17 +57,38 @@ A text editor with AI-powered text continuation suggestions using OpenAI-compati
 
 ---
 
-### [Toast](./Toast.md)
-A notification system for displaying temporary messages with multiple styles and auto-dismiss functionality.
+### [ChunkUploader](./ChunkUploader.md)
+A file uploader component that supports chunked uploads for large files.
 
-**Tag Name:** `<liwe3-toast>`
+**Tag Name:** `<liwe3-chunk-uploader>`
 
-**Key Features:**
-- Multiple types (info, success, warning, error)
-- Custom icons and buttons
-- Auto-dismiss with progress bar
-- Pause on hover
-- Programmatic API via `toastAdd()` helper
+---
+
+### [ContainerBox](./ContainerBox.md)
+A layout container component.
+
+**Tag Name:** `<liwe3-container-box>`
+
+---
+
+### [DateSelector](./DateSelector.md)
+A date selection component.
+
+**Tag Name:** `<liwe3-date-selector>`
+
+---
+
+### [Drawer](./Drawer.md)
+A side drawer component for navigation or panels.
+
+**Tag Name:** `<liwe3-drawer>`
+
+---
+
+### [ImageView](./ImageView.md)
+An image viewer component.
+
+**Tag Name:** `<liwe3-image-view>`
 
 ---
 
@@ -82,6 +103,27 @@ A menu component with support for nested submenus and fixed positioning.
 - Fixed positioning with overflow handling
 - Enable/disable menu items
 - Separator support
+
+---
+
+### [Toast](./Toast.md)
+A notification system for displaying temporary messages with multiple styles and auto-dismiss functionality.
+
+**Tag Name:** `<liwe3-toast>`
+
+**Key Features:**
+- Multiple types (info, success, warning, error)
+- Custom icons and buttons
+- Auto-dismiss with progress bar
+- Pause on hover
+- Programmatic API via `toastAdd()` helper
+
+---
+
+### [TreeView](./TreeView.md)
+A tree view component for hierarchical data.
+
+**Tag Name:** `<liwe3-tree-view>`
 
 ---
 
