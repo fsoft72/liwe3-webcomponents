@@ -16,6 +16,7 @@ export default defineConfig( {
         Drawer: resolve( __dirname, 'src/Drawer.ts' ),
         ImageView: resolve( __dirname, 'src/ImageView.ts' ),
         ChunkUploader: resolve( __dirname, 'src/ChunkUploader.ts' ),
+        CheckList: resolve( __dirname, 'src/CheckList.ts' ),
       },
       formats: [ 'es' ],
       fileName: ( format, entryName ) => `${ entryName }.js`,

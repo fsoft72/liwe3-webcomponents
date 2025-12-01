@@ -101,6 +101,16 @@
       </p>
       <span class="card-link">View Demo →</span>
     </a>
+
+    <a href="/checklist" class="component-card">
+      <div class="card-icon">✅</div>
+      <h2>CheckList</h2>
+      <p>
+        A customizable checklist with progress bar, JSON support, and task management.
+        Fully reactive with Svelte bindings.
+      </p>
+      <span class="card-link">View Demo →</span>
+    </a>
   </section>
 
   <section class="features">

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CheckList Demo</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    
+    h1 {
+      color: #333;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 10px;
+    }
+    
+    .demo-section {
+      margin-bottom: 40px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    
+    .controls {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    
+    button {
+      padding: 8px 16px;
+      background: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    
+    button:hover {
+      background: #1565c0;
+    }
+    
+    button.secondary {
+      background: #e0e0e0;
+      color: #333;
+    }
+    
+    button.secondary:hover {
+      background: #d5d5d5;
+    }
+    
+    textarea {
+      width: 100%;
+      height: 100px;
+      margin-top: 10px;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+  </style>
+</head>
+<body>
+  <h1>CheckList Component Demo</h1>
+  
+  <div class="demo-section">
+    <h2>Basic Usage</h2>
+    <liwe3-checklist id="checklist1" title="Project Tasks"></liwe3-checklist>
+    
+    <div class="controls">
+      <button onclick="loadSampleData()">Load Sample Data</button>
+      <button onclick="clearList()" class="secondary">Clear List</button>
+      <button onclick="logPercentage()" class="secondary">Log Percentage</button>
+    </div>
+  </div>
+
+  <div class="demo-section">
+    <h2>JSON Import/Export</h2>
+    <liwe3-checklist id="checklist2" title="Shopping List"></liwe3-checklist>
+    
+    <div class="controls">
+      <div style="width: 100%">
+        <button onclick="exportJSON()">Export JSON</button>
+        <button onclick="importJSON()" class="secondary">Import JSON</button>
+        <textarea id="jsonOutput" placeholder="JSON data will appear here..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { defineCheckList } from '../dist/CheckList.js';
+    defineCheckList();
+    
+    // Initialize with some data
+    const checklist1 = document.getElementById('checklist1');
+    checklist1.items = [
+      { label: 'Implement a calendar library', checked: false },
+      { label: 'Replace event colors with Material Design colors', checked: true },
+      { label: 'Replace icons with Material Design icons', checked: false },
+      { label: 'Use date-fns', checked: false }
+    ];
+    
+    checklist1.addEventListener('change', (e) => {
+      console.log('Checklist 1 changed:', e.detail);
+    });
+    
+    const checklist2 = document.getElementById('checklist2');
+    checklist2.items = [
+      { label: 'Milk', checked: true },
+      { label: 'Bread', checked: false },
+      { label: 'Eggs', checked: false }
+    ];
+  </script>
+
+  <script>
+    function loadSampleData() {
+      const checklist = document.getElementById('checklist1');
+      checklist.items = [
+        { label: 'Research competitors', checked: true },
+        { label: 'Draft project proposal', checked: true },
+        { label: 'Review with team', checked: false },
+        { label: 'Submit for approval', checked: false },
+        { label: 'Start implementation', checked: false }
+      ];
+    }
+    
+    function clearList() {
+      const checklist = document.getElementById('checklist1');
+      checklist.items = [];
+    }
+    
+    function logPercentage() {
+      const checklist = document.getElementById('checklist1');
+      alert(`Completion: ${checklist.percentage}%`);
+    }
+    
+    function exportJSON() {
+      const checklist = document.getElementById('checklist2');
+      const textarea = document.getElementById('jsonOutput');
+      textarea.value = checklist.toJSON();
+    }
+    
+    function importJSON() {
+      const checklist = document.getElementById('checklist2');
+      const textarea = document.getElementById('jsonOutput');
+      try {
+        if (textarea.value) {
+          checklist.loadJSON(textarea.value);
+        } else {
+          alert('Please enter JSON data first');
+        }
+      } catch (e) {
+        alert('Invalid JSON');
+      }
+    }
+  </script>
+</body>
+</html>

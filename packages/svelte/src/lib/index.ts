@@ -5,7 +5,7 @@
 
 // Re-export types from the core package
 export type { SelectOption, AITextEditorConfig, ToastType, ToastButton, ToastConfig, ToastElement, PopoverMenuItem,
-  PopoverMenuConfig, DateRange, TreeNode, UploadedFile, ChunkUploaderConfig } from '@liwe3/webcomponents';
+  PopoverMenuConfig, DateRange, TreeNode, UploadedFile, ChunkUploaderConfig, CheckListItem } from '@liwe3/webcomponents';
 
 // Export Svelte components
 export { default as SmartSelect } from './SmartSelect.svelte';
@@ -19,6 +19,9 @@ export { default as ChunkUploader } from './ChunkUploader.svelte';
 
 // re-export ChunkUploader svelte types
 export type { ChunkFileEvent } from './ChunkUploader.svelte';
+
+// Export CheckList
+export { default as CheckList } from './CheckList.svelte';
 
 // Export Toasts component and toastAdd function
 export { default as Toasts, toastAdd } from './Toasts.svelte';

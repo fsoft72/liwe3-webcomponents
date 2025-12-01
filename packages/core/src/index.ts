@@ -77,6 +77,13 @@ export {
   type ChunkUploaderConfig
 } from './ChunkUploader';
 
+// Export CheckList
+export {
+  CheckListElement,
+  defineCheckList,
+  type CheckListItem
+} from './CheckList';
+
 // Convenience function to register all components at once
 export const defineAllComponents = (): void => {
   if ( typeof window !== 'undefined' ) {
@@ -89,5 +96,6 @@ export const defineAllComponents = (): void => {
     import( './ContainerBox' ).then( ( { defineContainerBox } ) => defineContainerBox() );
     import( './Drawer' ).then( ( { defineDrawer } ) => defineDrawer() );
     import( './ChunkUploader' ).then( ( { defineChunkUploader } ) => defineChunkUploader() );
+    import( './CheckList' ).then( ( { defineCheckList } ) => defineCheckList() );
   }
 };
