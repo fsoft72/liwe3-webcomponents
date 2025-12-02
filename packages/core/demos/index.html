@@ -1,247 +1,245 @@
 <!DOCTYPE html>
 <html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>@liwe3/webcomponents - Component Demos</title>
+		<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>@liwe3/webcomponents - Component Demos</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			padding: 40px 20px;
+		}
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      padding: 40px 20px;
-    }
+		.container {
+			max-width: 900px;
+			margin: 0 auto;
+		}
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-    }
+		header {
+			text-align: center;
+			color: white;
+			margin-bottom: 60px;
+		}
 
-    header {
-      text-align: center;
-      color: white;
-      margin-bottom: 60px;
-    }
+		h1 {
+			font-size: 56px;
+			font-weight: 700;
+			margin-bottom: 15px;
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+		}
 
-    h1 {
-      font-size: 56px;
-      font-weight: 700;
-      margin-bottom: 15px;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-    }
+		.subtitle {
+			font-size: 20px;
+			opacity: 0.9;
+			line-height: 1.6;
+		}
 
-    .subtitle {
-      font-size: 20px;
-      opacity: 0.9;
-      line-height: 1.6;
-    }
+		.demo-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+			gap: 25px;
+			margin-bottom: 40px;
+		}
 
-    .demo-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 25px;
-      margin-bottom: 40px;
-    }
+		.demo-card {
+			background: white;
+			border-radius: 16px;
+			padding: 30px;
+			box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+			transition: all 0.3s ease;
+			text-decoration: none;
+			color: inherit;
+			display: flex;
+			flex-direction: column;
+		}
 
-    .demo-card {
-      background: white;
-      border-radius: 16px;
-      padding: 30px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s ease;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
-    }
+		.demo-card:hover {
+			transform: translateY(-5px);
+			box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+		}
 
-    .demo-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
-    }
+		.demo-icon {
+			font-size: 48px;
+			margin-bottom: 20px;
+		}
 
-    .demo-icon {
-      font-size: 48px;
-      margin-bottom: 20px;
-    }
+		.demo-title {
+			font-size: 24px;
+			font-weight: 600;
+			margin-bottom: 10px;
+			color: #333;
+		}
 
-    .demo-title {
-      font-size: 24px;
-      font-weight: 600;
-      margin-bottom: 10px;
-      color: #333;
-    }
+		.demo-description {
+			color: #666;
+			line-height: 1.6;
+			flex-grow: 1;
+		}
 
-    .demo-description {
-      color: #666;
-      line-height: 1.6;
-      flex-grow: 1;
-    }
+		.demo-link {
+			margin-top: 20px;
+			padding: 12px 24px;
+			background: #667eea;
+			color: white;
+			border-radius: 8px;
+			text-align: center;
+			font-weight: 500;
+			transition: background 0.3s ease;
+		}
 
-    .demo-link {
-      margin-top: 20px;
-      padding: 12px 24px;
-      background: #667eea;
-      color: white;
-      border-radius: 8px;
-      text-align: center;
-      font-weight: 500;
-      transition: background 0.3s ease;
-    }
+		.demo-card:hover .demo-link {
+			background: #5568d3;
+		}
 
-    .demo-card:hover .demo-link {
-      background: #5568d3;
-    }
+		.footer {
+			text-align: center;
+			color: white;
+			margin-top: 60px;
+			padding-top: 30px;
+			border-top: 1px solid rgba(255, 255, 255, 0.2);
+		}
 
-    .footer {
-      text-align: center;
-      color: white;
-      margin-top: 60px;
-      padding-top: 30px;
-      border-top: 1px solid rgba(255, 255, 255, 0.2);
-    }
+		.footer a {
+			color: white;
+			text-decoration: underline;
+		}
 
-    .footer a {
-      color: white;
-      text-decoration: underline;
-    }
+		@media (max-width: 768px) {
+			h1 {
+				font-size: 40px;
+			}
 
-    @media (max-width: 768px) {
-      h1 {
-        font-size: 40px;
-      }
+			.demo-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+		</style>
+	</head>
 
-      .demo-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
-</head>
+	<body>
+		<div class="container">
+			<header>
+				<h1>@liwe3/webcomponents</h1>
+				<p class="subtitle">
+					Framework-agnostic web components built with vanilla TypeScript.<br>
+					Explore our interactive component demos below.
+				</p>
+			</header>
 
-<body>
-  <div class="container">
-    <header>
-      <h1>@liwe3/webcomponents</h1>
-      <p class="subtitle">
-        Framework-agnostic web components built with vanilla TypeScript.<br>
-        Explore our interactive component demos below.
-      </p>
-    </header>
+			<div class="demo-grid">
+				<a href="demo-date-selector.html" class="demo-card">
+					<div class="demo-icon">📅</div>
+					<h2 class="demo-title">DateSelector</h2>
+					<p class="demo-description">
+						A flexible date picker with single date and range selection modes. Features keyboard navigation, programmatic API, and custom events.
+					</p>
+					<div class="demo-link">View Demo</div>
+				</a>
 
-    <div class="demo-grid">
-      <a href="demo-date-selector.html" class="demo-card">
-        <div class="demo-icon">📅</div>
-        <h2 class="demo-title">DateSelector</h2>
-        <p class="demo-description">
-          A flexible date picker with single date and range selection modes.
-          Features keyboard navigation, programmatic API, and custom events.
-        </p>
-        <div class="demo-link">View Demo</div>
-      </a>
+				<a href="demo-popover-menu.html" class="demo-card">
+					<div class="demo-icon">📋</div>
+					<h2 class="demo-title">PopoverMenu</h2>
+					<p class="demo-description">
+						A customizable menu bar with nested submenus. Supports unlimited nesting levels, separators, disabled items, and dynamic menu updates.
+					</p>
+					<div class="demo-link">View Demo</div>
+				</a>
 
-      <a href="demo-popover-menu.html" class="demo-card">
-        <div class="demo-icon">📋</div>
-        <h2 class="demo-title">PopoverMenu</h2>
-        <p class="demo-description">
-          A customizable menu bar with nested submenus. Supports unlimited nesting levels,
-          separators, disabled items, and dynamic menu updates.
-        </p>
-        <div class="demo-link">View Demo</div>
-      </a>
+				<a href="demo-toast.html" class="demo-card">
+					<div class="demo-icon">🍞</div>
+					<h2 class="demo-title">Toast</h2>
+					<p class="demo-description">
+						A flexible toast notification system with multiple types, auto-dismiss, custom icons, and action buttons.
+					</p>
+					<div class="demo-link">View Demo</div>
+				</a>
 
-      <a href="demo-toast.html" class="demo-card">
-        <div class="demo-icon">🍞</div>
-        <h2 class="demo-title">Toast</h2>
-        <p class="demo-description">
-          A flexible toast notification system with multiple types, auto-dismiss,
-          custom icons, and action buttons.
-        </p>
-        <div class="demo-link">View Demo</div>
-      </a>
+				<a href="demo-tree-view.html" class="demo-card">
+					<div class="demo-icon">🌳</div>
+					<h2 class="demo-title">TreeView</h2>
+					<p class="demo-description">
+						A customizable tree view with infinite depth support, checkboxes for selection, expandable/collapsible folders, and customizable icons.
+					</p>
+					<div class="demo-link">View Demo</div>
+				</a>
 
-      <a href="demo-tree-view.html" class="demo-card">
-        <div class="demo-icon">🌳</div>
-        <h2 class="demo-title">TreeView</h2>
-        <p class="demo-description">
-          A customizable tree view with infinite depth support, checkboxes for selection,
-          expandable/collapsible folders, and customizable icons.
-        </p>
-        <div class="demo-link">View Demo</div>
-      </a>
+				<a href="demo-media-manager.html" class="demo-card">
+					<div class="demo-icon">🗂️</div>
+					<h2 class="demo-title">Media Manager Layout</h2>
+					<p class="demo-description">
+						Dark media-library UI replica using CSS3 and TreeView for the left navigation.
+					</p>
+					<div class="demo-link">View Demo</div>
+				</a>
 
-      <a href="demo-media-manager.html" class="demo-card">
-        <div class="demo-icon">🗂️</div>
-        <h2 class="demo-title">Media Manager Layout</h2>
-        <p class="demo-description">
-          Dark media-library UI replica using CSS3 and TreeView for the left navigation.
-        </p>
-        <div class="demo-link">View Demo</div>
-      </a>
+				<a href="demo-container-box.html" class="demo-card">
+					<div class="demo-icon">📦</div>
+					<h2 class="demo-title">ContainerBox</h2>
+					<p class="demo-description">
+						A container that wraps elements and shows a menu on hover in configurable positions. Integrates with PopoverMenu for rich context menus.
+					</p>
+					<div class="demo-link">View Demo</div>
+				</a>
 
-      <a href="demo-container-box.html" class="demo-card">
-        <div class="demo-icon">📦</div>
-        <h2 class="demo-title">ContainerBox</h2>
-        <p class="demo-description">
-          A container that wraps elements and shows a menu on hover in configurable positions.
-          Integrates with PopoverMenu for rich context menus.
-        </p>
-        <div class="demo-link">View Demo</div>
-      </a>
+				<a href="demo-drawer.html" class="demo-card">
+					<div class="demo-icon">🚪</div>
+					<h2 class="demo-title">Drawer</h2>
+					<p class="demo-description">
+						Expandable, shrinkable, and closable container with smooth animations. Supports horizontal and vertical directions with customizable timing.
+					</p>
+					<div class="demo-link">View Demo</div>
+				</a>
 
-      <a href="demo-drawer.html" class="demo-card">
-        <div class="demo-icon">🚪</div>
-        <h2 class="demo-title">Drawer</h2>
-        <p class="demo-description">
-          Expandable, shrinkable, and closable container with smooth animations.
-          Supports horizontal and vertical directions with customizable timing.
-        </p>
-        <div class="demo-link">View Demo</div>
-      </a>
+				<a href="demo-image-view.html" class="demo-card">
+					<div class="demo-icon">🖼️</div>
+					<h2 class="demo-title">ImageView</h2>
+					<p class="demo-description">
+						A versatile image component with support for different sizing modes (cover, contain, stretch, 1:1), positioning, and visual effects like bokeh and panning.
+					</p>
+					<div class="demo-link">View Demo</div>
+				</a>
 
-      <a href="demo-image-view.html" class="demo-card">
-        <div class="demo-icon">🖼️</div>
-        <h2 class="demo-title">ImageView</h2>
-        <p class="demo-description">
-          A versatile image component with support for different sizing modes (cover, contain, stretch, 1:1),
-          positioning, and visual effects like bokeh and panning.
-        </p>
-        <div class="demo-link">View Demo</div>
-      </a>
+				<a href="chunk-uploader-demo.html" class="demo-card">
+					<div class="demo-icon">📤</div>
+					<h2 class="demo-title">ChunkUploader</h2>
+					<p class="demo-description">
+						A file uploader with drag & drop, file previews, and chunked upload support. Features progress tracking, file validation, and multipart upload protocol.
+					</p>
+					<div class="demo-link">View Demo</div>
+				</a>
 
-      <a href="chunk-uploader-demo.html" class="demo-card">
-        <div class="demo-icon">📤</div>
-        <h2 class="demo-title">ChunkUploader</h2>
-        <p class="demo-description">
-          A file uploader with drag & drop, file previews, and chunked upload support.
-          Features progress tracking, file validation, and multipart upload protocol.
-        </p>
-        <div class="demo-link">View Demo</div>
-      </a>
+				<a href="demo-checklist.html" class="demo-card">
+					<div class="demo-icon">✅</div>
+					<h2 class="demo-title">CheckList</h2>
+					<p class="demo-description">
+						A customizable checklist with progress bar, JSON support, and task management.
+					</p>
+					<div class="demo-link">View Demo</div>
+				</a>
 
-      <a href="demo-checklist.html" class="demo-card">
-        <div class="demo-icon">✅</div>
-        <h2 class="demo-title">CheckList</h2>
-        <p class="demo-description">
-          A customizable checklist with progress bar, JSON support, and task management.
-        </p>
-        <div class="demo-link">View Demo</div>
-      </a>
-    </div>
+				<a href="demo-smart-select.html" class="demo-card">
+					<div class="demo-icon">✅</div>
+					<h2 class="demo-title">Smart-Select</h2>
+					<p class="demo-description">
+						An extremely versatile select/dropdown component with search, multi-select, and image support.
+					</p>
+					<div class="demo-link">View Demo</div>
+				</a>
+			</div>
 
-    <footer class="footer">
-      <p>
-        Made with ❤️ using <a href="https://www.npmjs.com/package/@liwe3/webcomponents"
-          target="_blank">@liwe3/webcomponents</a>
-      </p>
-    </footer>
-  </div>
-</body>
-
+			<footer class="footer">
+				<p>
+					Made with ❤️ using <a href="https://www.npmjs.com/package/@liwe3/webcomponents" target="_blank">@liwe3/webcomponents</a>
+				</p>
+			</footer>
+		</div>
+	</body>
 </html>
