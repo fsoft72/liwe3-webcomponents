@@ -57,7 +57,7 @@
 
   onMount(async () => {
     // Dynamically import and register the web component
-    const { defineAIMarkdownEditor } = await import("@liwe3/webcomponents");
+    const { defineAIMarkdownEditor } = await import("@liwe3/webcomponents/ai-markdown-editor");
     defineAIMarkdownEditor();
 
     // Wait for element to be ready (next tick)

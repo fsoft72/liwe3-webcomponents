@@ -12,6 +12,9 @@ export interface AITextEditorConfig {
   apiEndpoint?: string;
   modelName?: string;
   context?: string;
+  embedded?: boolean;
+  onStatusChange?: (hasApiKey: boolean) => void;
+  onLoadingChange?: (isLoading: boolean) => void;
 }
 
 export class AITextEditorElement extends HTMLElement {
@@ -33,6 +36,10 @@ export class AITextEditorElement extends HTMLElement {
   private apiEndpoint: string = 'https://api.openai.com/v1/chat/completions';
   private modelName: string = 'gpt-3.5-turbo';
   private context: string = '';
+  
+  private embedded: boolean = false;
+  private onStatusChangeCallback?: (hasApiKey: boolean) => void;
+  private onLoadingChangeCallback?: (isLoading: boolean) => void;
 
   constructor() {
     super();
@@ -70,6 +77,10 @@ export class AITextEditorElement extends HTMLElement {
           background: #777;
           z-index: 10;
         }
+        
+        :host([embedded]) .editor-status {
+          display: none;
+        }
 
         .editor-wrapper {
           position: relative;
@@ -97,11 +108,20 @@ export class AITextEditorElement extends HTMLElement {
           box-sizing: border-box;
           min-height: auto;
         }
+        
+        :host([embedded]) .editor {
+          border: none;
+          border-radius: 0;
+        }
 
         .editor:focus {
           outline: none;
           border-color: #4facfe;
           box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+        
+        :host([embedded]) .editor:focus {
+          box-shadow: none;
         }
 
         .editor-background {
@@ -125,10 +145,19 @@ export class AITextEditorElement extends HTMLElement {
           color: transparent;
           box-sizing: border-box;
         }
+        
+        :host([embedded]) .editor-background {
+          border: none;
+          border-radius: 0;
+        }
 
         .editor-wrapper:focus-within .editor-background {
           background: white;
           border-color: #4facfe;
+        }
+        
+        :host([embedded]) .editor-wrapper:focus-within .editor-background {
+          border-color: transparent;
         }
 
         .suggestion-text {
@@ -147,6 +176,10 @@ export class AITextEditorElement extends HTMLElement {
           right: 10px;
           z-index: 10;
           display: none;
+        }
+        
+        :host([embedded]) .loading {
+          display: none !important;
         }
 
         .loading.show {
@@ -493,6 +526,9 @@ export class AITextEditorElement extends HTMLElement {
    */
   private showLoading(): void {
     this.loading.classList.add('show');
+    if (this.onLoadingChangeCallback) {
+      this.onLoadingChangeCallback(true);
+    }
   }
 
   /**
@@ -500,6 +536,9 @@ export class AITextEditorElement extends HTMLElement {
    */
   private hideLoading(): void {
     this.loading.classList.remove('show');
+    if (this.onLoadingChangeCallback) {
+      this.onLoadingChangeCallback(false);
+    }
   }
 
   /**
@@ -557,6 +596,9 @@ export class AITextEditorElement extends HTMLElement {
     this.apiKey = key;
     this._saveApiKey();
     this.editorStatus.style.backgroundColor = this.apiKey ? '#4caf50' : '#777';
+    if (this.onStatusChangeCallback) {
+      this.onStatusChangeCallback(!!this.apiKey);
+    }
   }
 
   /**
@@ -664,6 +706,54 @@ export class AITextEditorElement extends HTMLElement {
    */
   getContext(): string {
     return this.context;
+  }
+
+  /**
+   * Configure the editor with callbacks and embedded mode
+   */
+  configure(config: Partial<AITextEditorConfig>): void {
+    if (config.embedded !== undefined) {
+      this.embedded = config.embedded;
+      if (this.embedded) {
+        this.setAttribute('embedded', '');
+      } else {
+        this.removeAttribute('embedded');
+      }
+    }
+    
+    if (config.onStatusChange) {
+      this.onStatusChangeCallback = config.onStatusChange;
+      // Immediately call with current status
+      this.onStatusChangeCallback(!!this.apiKey);
+    }
+    
+    if (config.onLoadingChange) {
+      this.onLoadingChangeCallback = config.onLoadingChange;
+    }
+    
+    if (config.apiKey !== undefined) {
+      this.setApiKey(config.apiKey);
+    }
+    
+    if (config.suggestionDelay !== undefined) {
+      this.setSuggestionDelay(config.suggestionDelay);
+    }
+    
+    if (config.systemPrompt !== undefined) {
+      this.setSystemPrompt(config.systemPrompt);
+    }
+    
+    if (config.apiEndpoint !== undefined) {
+      this.setApiEndpoint(config.apiEndpoint);
+    }
+    
+    if (config.modelName !== undefined) {
+      this.setModelName(config.modelName);
+    }
+    
+    if (config.context !== undefined) {
+      this.setContext(config.context);
+    }
   }
 
   /**

@@ -7,6 +7,8 @@ export class AIMarkdownEditorElement extends HTMLElement {
   private aiEditor!: AITextEditorElement;
   private toolbar!: ButtonToolbarElement;
   private preview!: MarkdownPreviewElement;
+  private editorStatus!: HTMLElement;
+  private loading!: HTMLElement;
   private isPreviewMode: boolean = false;
   private markdownLibUrl: string = 'https://cdn.jsdelivr.net/npm/marked@4.3.0/marked.min.js';
 
@@ -35,6 +37,51 @@ export class AIMarkdownEditorElement extends HTMLElement {
           flex: 1;
           position: relative;
           min-height: 0; /* Important for flexbox scrolling */
+          border: 2px solid #e1e5e9;
+          border-radius: 12px;
+          background: #fafbfc;
+        }
+        
+        .editor-container:focus-within {
+          border-color: #4facfe;
+          background: white;
+        }
+
+        .editor-status {
+          position: absolute;
+          top: 5px;
+          left: 5px;
+          width: 10px;
+          height: 10px;
+          border-radius: 100%;
+          background: #777;
+          z-index: 10;
+        }
+        
+        .loading {
+          position: absolute;
+          top: 5px;
+          right: 10px;
+          z-index: 10;
+          display: none;
+        }
+
+        .loading.show {
+          display: block;
+        }
+
+        .spinner {
+          width: 10px;
+          height: 10px;
+          border: 2px solid #e1e5e9;
+          border-top: 2px solid #4facfe;
+          border-radius: 50%;
+          animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
 
         liwe3-ai-text-editor {
@@ -136,6 +183,10 @@ export class AIMarkdownEditorElement extends HTMLElement {
       </style>
       <liwe3-button-toolbar id="toolbar"></liwe3-button-toolbar>
       <div class="editor-container">
+        <div class="editor-status"></div>
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+        </div>
         <liwe3-ai-text-editor id="editor"></liwe3-ai-text-editor>
         <liwe3-markdown-preview id="preview" style="display: none; width: 100%; height: 100%; overflow: auto;"></liwe3-markdown-preview>
       </div>
@@ -179,6 +230,23 @@ export class AIMarkdownEditorElement extends HTMLElement {
     this.aiEditor = this.shadowRoot.getElementById('editor') as AITextEditorElement;
     this.preview = this.shadowRoot.getElementById('preview') as MarkdownPreviewElement;
     this.toolbar = this.shadowRoot.getElementById('toolbar') as ButtonToolbarElement;
+    this.editorStatus = this.shadowRoot.querySelector('.editor-status') as HTMLElement;
+    this.loading = this.shadowRoot.getElementById('loading') as HTMLElement;
+    
+    // Configure the AITextEditor in embedded mode with callbacks
+    this.aiEditor.configure({
+      embedded: true,
+      onStatusChange: (hasApiKey: boolean) => {
+        this.editorStatus.style.backgroundColor = hasApiKey ? '#4caf50' : '#777';
+      },
+      onLoadingChange: (isLoading: boolean) => {
+        if (isLoading) {
+          this.loading.classList.add('show');
+        } else {
+          this.loading.classList.remove('show');
+        }
+      }
+    });
     
     this.setupModal();
     this.setupToolbar();
@@ -418,59 +486,73 @@ export class AIMarkdownEditorElement extends HTMLElement {
 
   // Proxy methods to AITextEditor
   setText(text: string): void {
-    this.aiEditor.setText(text);
+    if (this.aiEditor) {
+      this.aiEditor.setText(text);
+    }
   }
 
   getText(): string {
-    return this.aiEditor.getText();
+    return this.aiEditor ? this.aiEditor.getText() : '';
   }
 
   setApiKey(key: string): void {
-    this.aiEditor.setApiKey(key);
+    if (this.aiEditor) {
+      this.aiEditor.setApiKey(key);
+    }
   }
 
   getApiKey(): string {
-    return this.aiEditor.getApiKey();
+    return this.aiEditor ? this.aiEditor.getApiKey() : '';
   }
 
   setSuggestionDelay(seconds: number): void {
-    this.aiEditor.setSuggestionDelay(seconds);
+    if (this.aiEditor) {
+      this.aiEditor.setSuggestionDelay(seconds);
+    }
   }
 
   getSuggestionDelay(): number {
-    return this.aiEditor.getSuggestionDelay();
+    return this.aiEditor ? this.aiEditor.getSuggestionDelay() : 1;
   }
 
   setSystemPrompt(prompt: string): void {
-    this.aiEditor.setSystemPrompt(prompt);
+    if (this.aiEditor) {
+      this.aiEditor.setSystemPrompt(prompt);
+    }
   }
 
   getSystemPrompt(): string {
-    return this.aiEditor.getSystemPrompt();
+    return this.aiEditor ? this.aiEditor.getSystemPrompt() : '';
   }
 
   setApiEndpoint(endpoint: string): void {
-    this.aiEditor.setApiEndpoint(endpoint);
+    if (this.aiEditor) {
+      this.aiEditor.setApiEndpoint(endpoint);
+    }
   }
 
   getApiEndpoint(): string {
-    return this.aiEditor.getApiEndpoint();
+    return this.aiEditor ? this.aiEditor.getApiEndpoint() : '';
   }
 
   setModelName(modelName: string): void {
-    this.aiEditor.setModelName(modelName);
+    if (this.aiEditor) {
+      this.aiEditor.setModelName(modelName);
+    }
   }
 
   getModelName(): string {
-    return this.aiEditor.getModelName();
+    return this.aiEditor ? this.aiEditor.getModelName() : '';
   }
 
   setContext(context: string): void {
-    this.aiEditor.setContext(context);
+    if (this.aiEditor) {
+      this.aiEditor.setContext(context);
+    }
   }
 
   getContext(): string {
-    return this.aiEditor.getContext();
+    return this.aiEditor ? this.aiEditor.getContext() : '';
   }
 }
 
