@@ -55,6 +55,17 @@ pnpm run preview
 - Sample text loading
 - Keyboard shortcuts (Tab to accept, Escape to dismiss)
 
+### AIMarkdownEditor
+- Markdown editor with toolbar
+- AI-powered text continuation
+- Live preview toggle
+- Settings management
+
+### MarkdownPreview
+- Renders markdown content
+- Supports code blocks and tables
+- Dynamically loads markdown library
+
 ## Project Structure
 
 ```

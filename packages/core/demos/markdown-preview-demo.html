@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown Preview Demo</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+    }
+    h1 { margin-top: 0; }
+    .controls {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    button {
+      padding: 8px 16px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Markdown Preview Demo</h1>
+    <p>This component renders markdown using a dynamically loaded library (marked.js).</p>
+    
+    <div class="controls">
+      <label>
+        Library URL:
+        <input type="text" id="libUrlInput" value="https://cdn.jsdelivr.net/npm/marked/marked.min.js" style="width: 300px;">
+      </label>
+      <button id="updateUrlBtn">Update Lib URL</button>
+    </div>
+
+    <h3>Input Markdown:</h3>
+    <textarea id="markdownInput">
+# Hello World
+
+This is a **markdown** preview component.
+
+## Features
+- Dynamic library loading
+- Real-time updates
+- Shadow DOM encapsulation
+
+### Code Example
+```javascript
+console.log('Hello from markdown!');
+```
+
+> "The best way to predict the future is to invent it."
+    </textarea>
+
+    <h3>Preview:</h3>
+    <div style="border: 1px solid #ddd; padding: 20px; border-radius: 4px; background: #fff;">
+      <liwe3-markdown-preview id="preview"></liwe3-markdown-preview>
+    </div>
+  </div>
+
+  <script type="module">
+    import { defineMarkdownPreview } from '../dist/MarkdownPreview.js';
+    
+    // Register the component
+    defineMarkdownPreview();
+    console.log('MarkdownPreview component registered');
+
+    const preview = document.getElementById('preview');
+    const input = document.getElementById('markdownInput');
+    const libUrlInput = document.getElementById('libUrlInput');
+    const updateUrlBtn = document.getElementById('updateUrlBtn');
+
+    // Initial render
+    preview.value = input.value;
+
+    // Update on input
+    input.addEventListener('input', () => {
+      preview.value = input.value;
+    });
+
+    // Update lib URL
+    updateUrlBtn.addEventListener('click', () => {
+      preview.setAttribute('lib-url', libUrlInput.value);
+      alert('Library URL updated. If the library was already loaded, it might not reload unless the component is re-created or the logic supports it.');
+    });
+  </script>
+</body>
+</html>

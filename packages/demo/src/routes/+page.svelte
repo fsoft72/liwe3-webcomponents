@@ -41,6 +41,24 @@
       <span class="card-link">View Demo →</span>
     </a>
 
+    <a href="/ai-markdown-editor" class="component-card">
+      <div class="card-icon">📝</div>
+      <h2>AIMarkdownEditor</h2>
+      <p>
+        Markdown editor with AI-powered continuation suggestions and live preview.
+      </p>
+      <span class="card-link">View Demo →</span>
+    </a>
+
+    <a href="/markdown-preview" class="component-card">
+      <div class="card-icon">👁️</div>
+      <h2>MarkdownPreview</h2>
+      <p>
+        Renders markdown content using a dynamically loaded library.
+      </p>
+      <span class="card-link">View Demo →</span>
+    </a>
+
     <a href="/toast" class="component-card">
       <div class="card-icon">🍞</div>
       <h2>Toast</h2>

@@ -68,6 +68,34 @@ yarn add @liwe3/webcomponents @liwe3/webcomponents-svelte
 />
 ```
 
+### AIMarkdownEditor
+
+```svelte
+<script>
+  import { AIMarkdownEditor } from '@liwe3/webcomponents-svelte';
+
+  let content = $state('');
+</script>
+
+<AIMarkdownEditor
+  bind:value={content}
+  apiKey="your-api-key"
+  style="width: 100%; height: 500px;"
+/>
+```
+
+### MarkdownPreview
+
+```svelte
+<script>
+  import { MarkdownPreview } from '@liwe3/webcomponents-svelte';
+
+  let content = $state('# Hello World');
+</script>
+
+<MarkdownPreview value={content} />
+```
+
 ## Features
 
 - **Full Svelte 5 Support**: Uses Svelte 5 runes (`$state`, `$bindable`, `$effect`)
@@ -101,6 +129,24 @@ yarn add @liwe3/webcomponents @liwe3/webcomponents-svelte
 - `placeholder` (string): Placeholder text
 - `onbeforesuggestion` (function): Called before requesting suggestion
 - `onchange` (function): Change event handler
+
+### AIMarkdownEditor Props
+
+- `value` (string, bindable): Editor content
+- `apiKey` (string): API key for AI service
+- `suggestionDelay` (number): Delay before showing suggestions (ms)
+- `systemPrompt` (string, bindable): System prompt for AI
+- `apiEndpoint` (string): API endpoint URL
+- `modelName` (string): Model name to use
+- `context` (string): Additional context for AI
+- `onbeforesuggestion` (function): Called before requesting suggestion
+- `onchange` (function): Change event handler
+
+### MarkdownPreview Props
+
+- `value` (string): Markdown content to render
+- `libUrl` (string): URL to load marked library from
+- `onlibraryloaded` (function): Called when library is loaded
 
 ## License
 

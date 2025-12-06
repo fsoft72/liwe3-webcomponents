@@ -1,6 +1,6 @@
 {
   "name": "@liwe3/webcomponents",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "description": "A collection of reusable web components including SmartSelect and AITextEditor, ChunkUploader and more",
   "type": "module",
   "main": "./dist/index.js",
@@ -61,6 +61,21 @@
       "types": "./dist/ChunkUploader.d.ts",
       "import": "./dist/ChunkUploader.js",
       "default": "./dist/ChunkUploader.js"
+    },
+    "./button-toolbar": {
+      "types": "./dist/ButtonToolbar.d.ts",
+      "import": "./dist/ButtonToolbar.js",
+      "default": "./dist/ButtonToolbar.js"
+    },
+    "./ai-markdown-editor": {
+      "types": "./dist/AIMarkdownEditor.d.ts",
+      "import": "./dist/AIMarkdownEditor.js",
+      "default": "./dist/AIMarkdownEditor.js"
+    },
+    "./markdown-preview": {
+      "types": "./dist/MarkdownPreview.d.ts",
+      "import": "./dist/MarkdownPreview.js",
+      "default": "./dist/MarkdownPreview.js"
     }
   },
   "files": [

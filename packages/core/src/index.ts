@@ -84,11 +84,33 @@ export {
   type CheckListItem
 } from './CheckList';
 
+// Export ButtonToolbar
+export {
+  ButtonToolbarElement,
+  defineButtonToolbar,
+  type ButtonToolbarItem,
+  type ButtonToolbarGroup
+} from './ButtonToolbar';
+
+// Export AIMarkdownEditor
+export {
+  AIMarkdownEditorElement,
+  defineAIMarkdownEditor
+} from './AIMarkdownEditor';
+
+// Export MarkdownPreview
+export {
+  MarkdownPreviewElement,
+  defineMarkdownPreview
+} from './MarkdownPreview';
+
 // Convenience function to register all components at once
 export const defineAllComponents = (): void => {
   if ( typeof window !== 'undefined' ) {
     import( './SmartSelect' ).then( ( { defineSmartSelect } ) => defineSmartSelect() );
     import( './AITextEditor' ).then( ( { defineAITextEditor } ) => defineAITextEditor() );
+    import( './AIMarkdownEditor' ).then( ( { defineAIMarkdownEditor } ) => defineAIMarkdownEditor() );
+    import( './MarkdownPreview' ).then( ( { defineMarkdownPreview } ) => defineMarkdownPreview() );
     import( './Toast' ).then( ( { defineToast } ) => defineToast() );
     import( './PopoverMenu' ).then( ( { definePopoverMenu } ) => definePopoverMenu() );
     import( './DateSelector' ).then( ( { defineDateSelector } ) => defineDateSelector() );
@@ -97,5 +119,6 @@ export const defineAllComponents = (): void => {
     import( './Drawer' ).then( ( { defineDrawer } ) => defineDrawer() );
     import( './ChunkUploader' ).then( ( { defineChunkUploader } ) => defineChunkUploader() );
     import( './CheckList' ).then( ( { defineCheckList } ) => defineCheckList() );
+    import( './ButtonToolbar' ).then( ( { defineButtonToolbar } ) => defineButtonToolbar() );
   }
 };
