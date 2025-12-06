@@ -65,7 +65,11 @@
   });
 
   $effect(() => {
-    if (webComponent && webComponent.getText() !== value) {
+    if (
+      webComponent &&
+      typeof webComponent.getText === "function" &&
+      webComponent.getText() !== value
+    ) {
       webComponent.setText(value);
     }
   });
