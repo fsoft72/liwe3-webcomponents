@@ -11,6 +11,7 @@
     placeholder?: string;
 
     onbeforesuggestion?: (data: any) => boolean;
+    oncompletionerror?: (error: string) => void;
     onchange?: (value: string) => void;
   }
 
@@ -26,11 +27,12 @@
     placeholder = "Start writing your markdown text here...",
 
     onbeforesuggestion,
+    oncompletionerror,
     onchange,
   }: Props = $props();
 
   let elementRef: HTMLElement;
-  let webComponent: any;
+  let webComponent = $state<any>(null);
 
   /**
    * Updates the web component property and syncs with Svelte state
@@ -52,29 +54,15 @@
     }
   };
 
-  /**
-   * Syncs all props with the web component
-   */
-  const syncAllProps = () => {
-    if (!webComponent) return;
-
-    updateWebComponentProperty("apiKey", apiKey);
-    updateWebComponentProperty("suggestionDelay", suggestionDelay);
-    updateWebComponentProperty("systemPrompt", systemPrompt);
-    updateWebComponentProperty("apiEndpoint", apiEndpoint);
-    updateWebComponentProperty("modelName", modelName);
-
-    // Set initial text value
-    if (value && webComponent.getText() !== value) {
-      webComponent.setText(value);
+  $effect(() => {
+    if (webComponent) {
+      updateWebComponentProperty("apiKey", apiKey);
+      updateWebComponentProperty("suggestionDelay", suggestionDelay / 1000);
+      updateWebComponentProperty("systemPrompt", systemPrompt);
+      updateWebComponentProperty("apiEndpoint", apiEndpoint);
+      updateWebComponentProperty("modelName", modelName);
     }
-
-    // Set placeholder
-    const textarea = webComponent.shadowRoot?.getElementById("editor");
-    if (textarea && placeholder) {
-      textarea.placeholder = placeholder;
-    }
-  };
+  });
 
   $effect(() => {
     if (webComponent && webComponent.getText() !== value) {
@@ -98,9 +86,6 @@
     // Get reference to the web component
     webComponent = elementRef;
 
-    // Sync all initial props
-    syncAllProps();
-
     // Listen for changes from the web component
     const handleChange = (event: CustomEvent) => {
       const newValue = event.detail.value;
@@ -120,10 +105,18 @@
       if (cancel) event.preventDefault();
     };
 
+    const handleCompletionError = (event: CustomEvent) => {
+      oncompletionerror?.(event.detail.error);
+    };
+
     webComponent.addEventListener("change", handleChange);
     webComponent.addEventListener(
       "beforeSuggestion",
       handleBeforeSuggestion as EventListener
+    );
+    webComponent.addEventListener(
+      "oncompletionerror",
+      handleCompletionError as EventListener
     );
 
     // Cleanup
@@ -132,6 +125,10 @@
       webComponent?.removeEventListener(
         "beforeSuggestion",
         handleBeforeSuggestion as EventListener
+      );
+      webComponent?.removeEventListener(
+        "oncompletionerror",
+        handleCompletionError as EventListener
       );
     };
   });

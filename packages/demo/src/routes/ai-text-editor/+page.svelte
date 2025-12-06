@@ -19,8 +19,7 @@
 
   // Handle API key save
   const saveApiKey = () => {
-    if (editorInstance && apiKeyInput.trim()) {
-      editorInstance.setApiKey(apiKeyInput.trim());
+    if (apiKeyInput.trim()) {
       apiKey = apiKeyInput.trim();
       showApiKeySettings = false;
     }
@@ -114,7 +113,6 @@ Try it out by continuing this text...`;
             max="5"
             step="0.5"
             class="delay-input"
-            onchange={() => editorInstance?.setSuggestionDelay(suggestionDelay)}
           />
           <small class="hint">
             Time to wait after you stop typing before requesting AI suggestions.
@@ -145,7 +143,12 @@ Try it out by continuing this text...`;
     </div>
 
     <div class="editor-box">
-      <AITextEditor bind:this={editorInstance} onchange={handleEditorChange} />
+      <AITextEditor
+        bind:this={editorInstance}
+        onchange={handleEditorChange}
+        {apiKey}
+        suggestionDelay={suggestionDelay * 1000}
+      />
     </div>
 
     <div class="instructions">

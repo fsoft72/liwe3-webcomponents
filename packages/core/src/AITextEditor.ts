@@ -357,6 +357,11 @@ export class AITextEditorElement extends HTMLElement {
     } catch (error) {
       this.hideLoading();
       this.showError('Failed to get AI suggestion: ' + (error as Error).message);
+      this.dispatchEvent(new CustomEvent('oncompletionerror', {
+        detail: { error: (error as Error).message },
+        bubbles: true,
+        composed: true
+      }));
     }
   }
 
