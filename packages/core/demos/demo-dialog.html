@@ -277,6 +277,18 @@
 			</div>
 
 			<div class="demo-section">
+				<h2 class="section-title">Appearance Animations</h2>
+				<p class="description">
+					Control how the dialog appears on screen with different animation effects.
+				</p>
+				<div class="button-grid">
+					<button class="btn-primary" onclick="showNoAnimationDialog()">No Animation (default)</button>
+					<button class="btn-info" onclick="showFadeDialog()">Fade Animation</button>
+					<button class="btn-success" onclick="showSlideDialog()">Slide from Top</button>
+				</div>
+			</div>
+
+			<div class="demo-section">
 				<h2 class="section-title">Form in Dialog</h2>
 				<p class="description">
 					You can include forms and interactive elements in the dialog body.
@@ -317,6 +329,7 @@ const dialog = dialogAdd({
   modal: true, // Dim background (default: true)
   escToClose: true, // Allow Esc key to close (default: true)
   clickToClose: true, // Allow clicking outside to close (default: true)
+  fxAppear: 'fade', // Animation: 'none', 'fade', or 'slide' (default: 'none')
   onClose: () => console.log('Dialog closed')
 });</pre>
 				</div>
@@ -763,6 +776,33 @@ const dialog = dialogAdd({
 						},
 					},
 				],
+			} );
+		};
+
+		// No animation dialog
+		window.showNoAnimationDialog = () => {
+			dialogAdd( {
+				title: 'No Animation',
+				body: '<p>This dialog appears instantly without any animation effect.</p><p>This is the default behavior when <code>fxAppear</code> is set to <code>"none"</code> or not specified.</p>',
+				fxAppear: 'none',
+			} );
+		};
+
+		// Fade animation dialog
+		window.showFadeDialog = () => {
+			dialogAdd( {
+				title: 'Fade Animation',
+				body: '<p>This dialog fades in smoothly when it appears.</p><p>The <code>fxAppear</code> property is set to <code>"fade"</code>.</p>',
+				fxAppear: 'fade',
+			} );
+		};
+
+		// Slide animation dialog
+		window.showSlideDialog = () => {
+			dialogAdd( {
+				title: 'Slide Animation',
+				body: '<p>This dialog slides down from the top of the screen.</p><p>The <code>fxAppear</code> property is set to <code>"slide"</code>.</p>',
+				fxAppear: 'slide',
 			} );
 		};
 		</script>

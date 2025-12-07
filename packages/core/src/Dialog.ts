@@ -16,6 +16,8 @@ export type DialogConfig = {
 	modal? : boolean; // If true, dims background and prevents interaction outside dialog
 	escToClose? : boolean; // If true, Esc key closes dialog
 	clickToClose? : boolean; // If true, clicking outside closes dialog (like cancel)
+	fxAppear? : 'none' | 'fade' | 'slide'; // Animation effect when dialog appears (default: 'none')
+	fxSpeed? : number; // Animation duration in milliseconds (default: 1000)
 	onClose? : () => void;
 };
 
@@ -27,6 +29,8 @@ export class DialogElement extends HTMLElement {
 		modal: true,
 		escToClose: true,
 		clickToClose: true,
+		fxAppear: 'none',
+		fxSpeed: 1000,
 	};
 	private backdrop? : HTMLElement;
 	private escKeyHandler? : ( e : KeyboardEvent ) => void;
@@ -64,14 +68,16 @@ export class DialogElement extends HTMLElement {
 
 		// Add opening animation class
 		requestAnimationFrame( () => {
-			const dialog = this.shadowRoot.querySelector( '.dialog-container' ) as HTMLElement;
-			if ( dialog ) {
-				dialog.classList.add( 'show' );
-			}
-			if ( this.backdrop ) {
-				// Use inline style instead of class since backdrop is outside shadow DOM
-				this.backdrop.style.opacity = '1';
-			}
+			requestAnimationFrame( () => {
+				const dialog = this.shadowRoot.querySelector( '.dialog-container' ) as HTMLElement;
+				if ( dialog ) {
+					dialog.classList.add( 'show' );
+				}
+				if ( this.backdrop ) {
+					// Use inline style instead of class since backdrop is outside shadow DOM
+					this.backdrop.style.opacity = '1';
+				}
+			} );
 		} );
 	}
 
@@ -91,6 +97,7 @@ export class DialogElement extends HTMLElement {
 		}
 
 		// Wait for animation to complete
+		const animationDuration = this.config.fxSpeed || 1000;
 		setTimeout( () => {
 			this.removeKeyboardListeners();
 			if ( this.backdrop ) {
@@ -103,7 +110,7 @@ export class DialogElement extends HTMLElement {
 				this.config.onClose();
 			}
 			this.remove();
-		}, 300 );
+		}, animationDuration );
 	}
 
 	/**
@@ -200,6 +207,10 @@ export class DialogElement extends HTMLElement {
 	private render () : void {
 		const title = this.config.title || 'Dialog';
 		const buttons = this.config.buttons || [];
+		const animationSpeed = this.config.fxSpeed || 1000;
+		const animationDuration = `${animationSpeed}ms`;
+		const fxClass = this.config.fxAppear === 'fade' ? 'fx-fade' :
+			this.config.fxAppear === 'slide' ? 'fx-slide' : '';
 
 		// Determine button layout:
 		// - If only 1 button, put it on the right
@@ -219,7 +230,7 @@ export class DialogElement extends HTMLElement {
           position: fixed;
           top: 50%;
           left: 50%;
-          transform: translate(-50%, -50%) scale(0.9);
+          transform: translate(-50%, -50%);
           min-width: 400px;
           max-width: 600px;
           max-height: 80vh;
@@ -229,19 +240,39 @@ export class DialogElement extends HTMLElement {
           z-index: 99999;
           display: flex;
           flex-direction: column;
-          opacity: 0;
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          opacity: 1;
           font-family: var(--font-family, var(--liwe3-font-family, Ubuntu, sans-serif));
         }
 
-        .dialog-container.show {
-          opacity: 1;
-          transform: translate(-50%, -50%) scale(1);
+        /* Fade animation */
+        .dialog-container.fx-fade {
+          opacity: 0;
+          transition: opacity ${animationDuration} ease;
         }
 
-        .dialog-container.closing {
+        .dialog-container.fx-fade.show {
+          opacity: 1;
+        }
+
+        .dialog-container.fx-fade.closing {
           opacity: 0;
-          transform: translate(-50%, -50%) scale(0.9);
+        }
+
+        /* Slide animation */
+        .dialog-container.fx-slide {
+          transform: translate(-50%, -100%);
+          opacity: 0;
+          transition: transform ${animationDuration} cubic-bezier(0.16, 1, 0.3, 1), opacity ${animationDuration} ease;
+        }
+
+        .dialog-container.fx-slide.show {
+          transform: translate(-50%, -50%);
+          opacity: 1;
+        }
+
+        .dialog-container.fx-slide.closing {
+          transform: translate(-50%, -100%);
+          opacity: 0;
         }
 
         .dialog-header {
@@ -341,7 +372,7 @@ export class DialogElement extends HTMLElement {
         }
       </style>
 
-      <div class="dialog-container">
+      <div class="dialog-container ${fxClass}">
         <div class="dialog-header">
           <h2 class="dialog-title">${title}</h2>
         </div>
