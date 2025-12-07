@@ -4,210 +4,210 @@
  */
 
 export type DialogButton = {
-  label: string;
-  backgroundColor?: string;
-  onClick: () => void;
+	label : string;
+	backgroundColor? : string;
+	onClick : () => void;
 };
 
 export type DialogConfig = {
-  title?: string; // Default: "Dialog"
-  body: string; // HTML content
-  buttons?: DialogButton[];
-  modal?: boolean; // If true, dims background and prevents interaction outside dialog
-  escToClose?: boolean; // If true, Esc key closes dialog
-  clickToClose?: boolean; // If true, clicking outside closes dialog (like cancel)
-  onClose?: () => void;
+	title? : string; // Default: "Dialog"
+	body : string; // HTML content
+	buttons? : DialogButton[];
+	modal? : boolean; // If true, dims background and prevents interaction outside dialog
+	escToClose? : boolean; // If true, Esc key closes dialog
+	clickToClose? : boolean; // If true, clicking outside closes dialog (like cancel)
+	onClose? : () => void;
 };
 
 export class DialogElement extends HTMLElement {
-  declare shadowRoot: ShadowRoot;
-  private config: DialogConfig = {
-    title: 'Dialog',
-    body: '',
-    modal: true,
-    escToClose: true,
-    clickToClose: true
-  };
-  private backdrop?: HTMLElement;
-  private escKeyHandler?: ( e: KeyboardEvent ) => void;
-  private eventsBound: boolean = false;
+	declare shadowRoot : ShadowRoot;
+	private config : DialogConfig = {
+		title: 'Dialog',
+		body: '',
+		modal: true,
+		escToClose: true,
+		clickToClose: true,
+	};
+	private backdrop? : HTMLElement;
+	private escKeyHandler? : ( e : KeyboardEvent ) => void;
+	private eventsBound : boolean = false;
 
-  constructor () {
-    super();
-    this.attachShadow( { mode: 'open' } );
-  }
+	constructor () {
+		super();
+		this.attachShadow( { mode: 'open' } );
+	}
 
-  connectedCallback (): void {
-    this.render();
-    this.setupKeyboardListeners();
-  }
+	connectedCallback () : void {
+		this.render();
+		this.setupKeyboardListeners();
+	}
 
-  disconnectedCallback (): void {
-    this.removeKeyboardListeners();
-    if ( this.backdrop ) {
-      this.backdrop.remove();
-    }
-  }
+	disconnectedCallback () : void {
+		this.removeKeyboardListeners();
+		if ( this.backdrop ) {
+			this.backdrop.remove();
+		}
+	}
 
-  /**
-   * Shows the dialog with the given configuration
-   */
-  show ( config: DialogConfig ): void {
-    this.config = { ...this.config, ...config };
-    this.render();
-    this.setupKeyboardListeners();
+	/**
+	 * Shows the dialog with the given configuration
+	 */
+	show ( config : DialogConfig ) : void {
+		this.config = { ...this.config, ...config };
+		this.render();
+		this.setupKeyboardListeners();
 
-    // Create backdrop if modal is enabled
-    if ( this.config.modal ) {
-      this.createBackdrop();
-    }
+		// Create backdrop if modal is enabled
+		if ( this.config.modal ) {
+			this.createBackdrop();
+		}
 
-    // Add opening animation class
-    requestAnimationFrame( () => {
-      const dialog = this.shadowRoot.querySelector( '.dialog-container' ) as HTMLElement;
-      if ( dialog ) {
-        dialog.classList.add( 'show' );
-      }
-      if ( this.backdrop ) {
-        // Use inline style instead of class since backdrop is outside shadow DOM
-        this.backdrop.style.opacity = '1';
-      }
-    } );
-  }
+		// Add opening animation class
+		requestAnimationFrame( () => {
+			const dialog = this.shadowRoot.querySelector( '.dialog-container' ) as HTMLElement;
+			if ( dialog ) {
+				dialog.classList.add( 'show' );
+			}
+			if ( this.backdrop ) {
+				// Use inline style instead of class since backdrop is outside shadow DOM
+				this.backdrop.style.opacity = '1';
+			}
+		} );
+	}
 
-  /**
-   * Closes the dialog
-   */
-  close (): void {
-    const dialog = this.shadowRoot.querySelector( '.dialog-container' ) as HTMLElement;
+	/**
+	 * Closes the dialog
+	 */
+	close () : void {
+		const dialog = this.shadowRoot.querySelector( '.dialog-container' ) as HTMLElement;
 
-    // Add closing animation
-    if ( dialog ) {
-      dialog.classList.add( 'closing' );
-    }
-    if ( this.backdrop ) {
-      // Use inline style instead of class since backdrop is outside shadow DOM
-      this.backdrop.style.opacity = '0';
-    }
+		// Add closing animation
+		if ( dialog ) {
+			dialog.classList.add( 'closing' );
+		}
+		if ( this.backdrop ) {
+			// Use inline style instead of class since backdrop is outside shadow DOM
+			this.backdrop.style.opacity = '0';
+		}
 
-    // Wait for animation to complete
-    setTimeout( () => {
-      this.removeKeyboardListeners();
-      if ( this.backdrop ) {
-        this.backdrop.remove();
-        this.backdrop = undefined;
-      }
+		// Wait for animation to complete
+		setTimeout( () => {
+			this.removeKeyboardListeners();
+			if ( this.backdrop ) {
+				this.backdrop.remove();
+				this.backdrop = undefined;
+			}
 
-      this.dispatchEvent( new CustomEvent( 'close' ) );
-      if ( this.config.onClose ) {
-        this.config.onClose();
-      }
-      this.remove();
-    }, 300 );
-  }
+			this.dispatchEvent( new CustomEvent( 'close' ) );
+			if ( this.config.onClose ) {
+				this.config.onClose();
+			}
+			this.remove();
+		}, 300 );
+	}
 
-  /**
-   * Creates the modal backdrop
-   */
-  private createBackdrop (): void {
-    if ( this.backdrop ) return;
+	/**
+	 * Creates the modal backdrop
+	 */
+	private createBackdrop () : void {
+		if ( this.backdrop ) return;
 
-    this.backdrop = document.createElement( 'div' );
-    this.backdrop.className = 'dialog-backdrop';
-    this.backdrop.style.position = 'fixed';
-    this.backdrop.style.top = '0';
-    this.backdrop.style.left = '0';
-    this.backdrop.style.width = '100%';
-    this.backdrop.style.height = '100%';
-    this.backdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
-    this.backdrop.style.backdropFilter = 'blur(4px)';
-    ( this.backdrop.style as any ).webkitBackdropFilter = 'blur(4px)'; // Safari support
-    this.backdrop.style.zIndex = '99998';
-    this.backdrop.style.opacity = '0';
-    this.backdrop.style.transition = 'opacity 0.3s ease';
+		this.backdrop = document.createElement( 'div' );
+		this.backdrop.className = 'dialog-backdrop';
+		this.backdrop.style.position = 'fixed';
+		this.backdrop.style.top = '0';
+		this.backdrop.style.left = '0';
+		this.backdrop.style.width = '100%';
+		this.backdrop.style.height = '100%';
+		this.backdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+		this.backdrop.style.backdropFilter = 'blur(4px)';
+		( this.backdrop.style as any ).webkitBackdropFilter = 'blur(4px)'; // Safari support
+		this.backdrop.style.zIndex = '99998';
+		this.backdrop.style.opacity = '0';
+		this.backdrop.style.transition = 'opacity 0.3s ease';
 
-    // Handle click outside to close
-    if ( this.config.clickToClose ) {
-      this.backdrop.addEventListener( 'click', () => {
-        this.close();
-      } );
-    }
+		// Handle click outside to close
+		if ( this.config.clickToClose ) {
+			this.backdrop.addEventListener( 'click', () => {
+				this.close();
+			} );
+		}
 
-    document.body.appendChild( this.backdrop );
-  }
+		document.body.appendChild( this.backdrop );
+	}
 
-  /**
-   * Sets up keyboard event listeners
-   */
-  private setupKeyboardListeners (): void {
-    if ( this.config.escToClose ) {
-      this.escKeyHandler = ( e: KeyboardEvent ) => {
-        if ( e.key === 'Escape' ) {
-          this.close();
-        }
-      };
-      document.addEventListener( 'keydown', this.escKeyHandler );
-    }
-  }
+	/**
+	 * Sets up keyboard event listeners
+	 */
+	private setupKeyboardListeners () : void {
+		if ( this.config.escToClose ) {
+			this.escKeyHandler = ( e : KeyboardEvent ) => {
+				if ( e.key === 'Escape' ) {
+					this.close();
+				}
+			};
+			document.addEventListener( 'keydown', this.escKeyHandler );
+		}
+	}
 
-  /**
-   * Removes keyboard event listeners
-   */
-  private removeKeyboardListeners (): void {
-    if ( this.escKeyHandler ) {
-      document.removeEventListener( 'keydown', this.escKeyHandler );
-      this.escKeyHandler = undefined;
-    }
-  }
+	/**
+	 * Removes keyboard event listeners
+	 */
+	private removeKeyboardListeners () : void {
+		if ( this.escKeyHandler ) {
+			document.removeEventListener( 'keydown', this.escKeyHandler );
+			this.escKeyHandler = undefined;
+		}
+	}
 
-  /**
-   * Binds all event listeners
-   */
-  private bindEvents (): void {
-    // Only bind events once to prevent duplicate event listeners
-    if ( this.eventsBound ) return;
-    this.eventsBound = true;
+	/**
+	 * Binds all event listeners
+	 */
+	private bindEvents () : void {
+		// Only bind events once to prevent duplicate event listeners
+		if ( this.eventsBound ) return;
+		this.eventsBound = true;
 
-    // Handle button clicks
-    this.shadowRoot.addEventListener( 'click', ( e ) => {
-      const target = e.target as HTMLElement;
+		// Handle button clicks
+		this.shadowRoot.addEventListener( 'click', ( e ) => {
+			const target = e.target as HTMLElement;
 
-      if ( target.closest( '.close-button' ) ) {
-        this.close();
-      } else if ( target.closest( '.dialog-button' ) ) {
-        const buttonIndex = ( target.closest( '.dialog-button' ) as HTMLElement ).dataset.index;
-        if ( buttonIndex !== undefined ) {
-          const button = this.config.buttons?.[ parseInt( buttonIndex, 10 ) ];
-          if ( button && button.onClick ) {
-            button.onClick();
-          }
-        }
-      }
-    } );
+			if ( target.closest( '.close-button' ) ) {
+				this.close();
+			} else if ( target.closest( '.dialog-button' ) ) {
+				const buttonIndex = ( target.closest( '.dialog-button' ) as HTMLElement ).dataset.index;
+				if ( buttonIndex !== undefined ) {
+					const button = this.config.buttons?.[parseInt( buttonIndex, 10 )];
+					if ( button && button.onClick ) {
+						button.onClick();
+					}
+				}
+			}
+		} );
 
-    // Prevent scroll propagation to body when scrolling within dialog
-    const dialogContainer = this.shadowRoot.querySelector( '.dialog-container' ) as HTMLElement;
-    if ( dialogContainer ) {
-      dialogContainer.addEventListener( 'wheel', ( e ) => {
-        e.stopPropagation();
-      }, { passive: true } );
-    }
-  }
+		// Prevent scroll propagation to body when scrolling within dialog
+		const dialogContainer = this.shadowRoot.querySelector( '.dialog-container' ) as HTMLElement;
+		if ( dialogContainer ) {
+			dialogContainer.addEventListener( 'wheel', ( e ) => {
+				e.stopPropagation();
+			}, { passive: true } );
+		}
+	}
 
-  /**
-   * Renders the component
-   */
-  private render (): void {
-    const title = this.config.title || 'Dialog';
-    const buttons = this.config.buttons || [];
+	/**
+	 * Renders the component
+	 */
+	private render () : void {
+		const title = this.config.title || 'Dialog';
+		const buttons = this.config.buttons || [];
 
-    // Determine button layout:
-    // - If only 1 button, put it on the right
-    // - If 2+ buttons, put first on left, rest on right
-    const firstButton = buttons.length > 1 ? buttons[ 0 ] : null;
-    const rightButtons = buttons.length === 1 ? buttons : buttons.slice( 1 );
+		// Determine button layout:
+		// - If only 1 button, put it on the right
+		// - If 2+ buttons, put first on left, rest on right
+		const firstButton = buttons.length > 1 ? buttons[0] : null;
+		const rightButtons = buttons.length === 1 ? buttons : buttons.slice( 1 );
 
-    this.shadowRoot.innerHTML = `
+		this.shadowRoot.innerHTML = `
       <style>
         :host {
           display: block;
@@ -245,16 +245,22 @@ export class DialogElement extends HTMLElement {
         }
 
         .dialog-header {
-          padding: 20px 24px;
-          border-bottom: 1px solid var(--dialog-border-color, var(--liwe3-border-default, #e0e0e0));
+          padding: 0;
+          border-bottom: none;
           flex-shrink: 0;
         }
 
         .dialog-title {
           margin: 0;
+          padding: 20px 24px;
           font-size: 20px;
           font-weight: 600;
-          color: var(--dialog-title-color, var(--liwe3-text-mode1, #333));
+          color: var(--dialog-title-color, var(--liwe3-text-inverse, white));
+          background: var(--dialog-title-background, linear-gradient(135deg,
+            var(--liwe3-mode1-500, #667eea),
+            var(--liwe3-mode4-500, #9f7aea)
+          ));
+          border-bottom: 1px solid var(--dialog-border-color, var(--liwe3-border-default, #e0e0e0));
         }
 
         .dialog-body {
@@ -337,53 +343,59 @@ export class DialogElement extends HTMLElement {
 
       <div class="dialog-container">
         <div class="dialog-header">
-          <h2 class="dialog-title">${ title }</h2>
+          <h2 class="dialog-title">${title}</h2>
         </div>
 
         <div class="dialog-body">
-          ${ this.config.body }
+          ${this.config.body}
         </div>
 
         <div class="dialog-footer">
-          ${ firstButton ? `
+          ${
+			firstButton
+				? `
             <div class="footer-left">
               <button
                 class="dialog-button"
                 data-index="0"
-                style="${ firstButton.backgroundColor ? `background-color: ${ firstButton.backgroundColor }; color: white; border-color: ${ firstButton.backgroundColor };` : '' }"
+                style="${firstButton.backgroundColor ? `background-color: ${firstButton.backgroundColor}; color: white; border-color: ${firstButton.backgroundColor};` : ''}"
               >
-                ${ firstButton.label }
+                ${firstButton.label}
               </button>
             </div>
-          ` : '' }
+          `
+				: ''
+		}
 
           <div class="footer-right">
-            ${ rightButtons.map( ( button, index ) => `
+            ${
+			rightButtons.map( ( button, index ) => `
               <button
                 class="dialog-button"
-                data-index="${ firstButton ? index + 1 : index }"
-                style="${ button.backgroundColor ? `background-color: ${ button.backgroundColor }; color: white; border-color: ${ button.backgroundColor };` : '' }"
+                data-index="${firstButton ? index + 1 : index}"
+                style="${button.backgroundColor ? `background-color: ${button.backgroundColor}; color: white; border-color: ${button.backgroundColor};` : ''}"
               >
-                ${ button.label }
+                ${button.label}
               </button>
-            `).join( '' ) }
-            ${ buttons.length === 0 ? '<button class="close-button">Close</button>' : '' }
+            ` ).join( '' )
+		}
+            ${buttons.length === 0 ? '<button class="close-button">Close</button>' : ''}
           </div>
         </div>
       </div>
     `;
 
-    this.bindEvents();
-  }
+		this.bindEvents();
+	}
 }
 
 /**
  * Conditionally defines the custom element if in a browser environment.
  */
-const defineDialog = ( tagName: string = 'liwe3-dialog' ): void => {
-  if ( typeof window !== 'undefined' && !window.customElements.get( tagName ) ) {
-    customElements.define( tagName, DialogElement );
-  }
+const defineDialog = ( tagName : string = 'liwe3-dialog' ) : void => {
+	if ( typeof window !== 'undefined' && !window.customElements.get( tagName ) ) {
+		customElements.define( tagName, DialogElement );
+	}
 };
 
 // Auto-register with default tag name
@@ -397,19 +409,19 @@ const DIALOG_CONTAINER_ID = 'liwe3-dialog-container';
 /**
  * Gets or creates the dialog container element
  */
-const getDialogContainer = (): HTMLElement => {
-  let container = document.getElementById( DIALOG_CONTAINER_ID );
+const getDialogContainer = () : HTMLElement => {
+	let container = document.getElementById( DIALOG_CONTAINER_ID );
 
-  if ( !container ) {
-    container = document.createElement( 'div' );
-    container.id = DIALOG_CONTAINER_ID;
-    container.style.position = 'fixed';
-    container.style.zIndex = '99999';
-    container.style.pointerEvents = 'none';
-    document.body.appendChild( container );
-  }
+	if ( !container ) {
+		container = document.createElement( 'div' );
+		container.id = DIALOG_CONTAINER_ID;
+		container.style.position = 'fixed';
+		container.style.zIndex = '99999';
+		container.style.pointerEvents = 'none';
+		document.body.appendChild( container );
+	}
 
-  return container;
+	return container;
 };
 
 /**
@@ -447,20 +459,20 @@ const getDialogContainer = (): HTMLElement => {
  * });
  * ```
  */
-const dialogAdd = ( config: DialogConfig ): DialogElement => {
-  const container = getDialogContainer();
-  const dialog = document.createElement( 'liwe3-dialog' ) as DialogElement;
+const dialogAdd = ( config : DialogConfig ) : DialogElement => {
+	const container = getDialogContainer();
+	const dialog = document.createElement( 'liwe3-dialog' ) as DialogElement;
 
-  // Allow pointer events on individual dialogs
-  dialog.style.pointerEvents = 'auto';
+	// Allow pointer events on individual dialogs
+	dialog.style.pointerEvents = 'auto';
 
-  // Show the dialog with the provided config
-  dialog.show( config );
+	// Show the dialog with the provided config
+	dialog.show( config );
 
-  // Add to container
-  container.appendChild( dialog );
+	// Add to container
+	container.appendChild( dialog );
 
-  return dialog;
+	return dialog;
 };
 
 export { defineDialog, dialogAdd };
