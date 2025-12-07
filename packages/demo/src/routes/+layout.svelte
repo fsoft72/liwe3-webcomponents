@@ -1,12 +1,13 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import { Toasts } from "@liwe3/webcomponents-svelte";
+  import { Toasts, ConfirmationDialogs } from "@liwe3/webcomponents-svelte";
 
   const navItems = [
     { href: "/", label: "Home" },
     { href: "/smart-select", label: "SmartSelect" },
     { href: "/ai-text-editor", label: "AITextEditor" },
     { href: "/toast", label: "Toast" },
+    { href: "/confirmation-dialog", label: "ConfirmationDialog" },
     { href: "/tree-view", label: "TreeView" },
     { href: "/drawer", label: "Drawer" },
     { href: "/container-box", label: "ContainerBox" },
@@ -17,8 +18,9 @@
   $: currentPath = $page.url.pathname;
 </script>
 
-<!-- Initialize Toast web component -->
+<!-- Initialize Toast and ConfirmationDialog web components -->
 <Toasts />
+<ConfirmationDialogs />
 
 <div class="app">
   <nav class="navbar">
