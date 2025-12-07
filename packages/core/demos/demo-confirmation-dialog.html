@@ -327,7 +327,7 @@ confirmationDialogAdd({
 
     // Delete file dialog
     window.showDeleteDialog = () => {
-      confirmationDialogAdd({
+      const dialog = confirmationDialogAdd({
         title: 'Delete File',
         body: '<p>Are you sure you want to delete <strong>document.pdf</strong>?</p><p>This action cannot be undone.</p>',
         buttons: [
@@ -336,12 +336,14 @@ confirmationDialogAdd({
             backgroundColor: '#dc3545',
             onClick: () => {
               alert('File deleted!');
+              dialog.close();
             }
           },
           {
             label: 'Cancel',
             onClick: () => {
               console.log('Cancelled');
+              dialog.close();
             }
           }
         ]
@@ -350,7 +352,7 @@ confirmationDialogAdd({
 
     // Delete account dialog
     window.showDeleteAccountDialog = () => {
-      confirmationDialogAdd({
+      const dialog = confirmationDialogAdd({
         title: 'Delete Account',
         body: `
           <p><strong>Warning:</strong> This will permanently delete your account.</p>
@@ -369,6 +371,7 @@ confirmationDialogAdd({
             backgroundColor: '#dc3545',
             onClick: () => {
               alert('Account deletion initiated');
+              dialog.close();
             }
           }
         ]
@@ -377,7 +380,7 @@ confirmationDialogAdd({
 
     // Save changes dialog
     window.showSaveChangesDialog = () => {
-      confirmationDialogAdd({
+      const dialog = confirmationDialogAdd({
         title: 'Unsaved Changes',
         body: '<p>You have unsaved changes. Do you want to save them before leaving?</p>',
         buttons: [
@@ -385,12 +388,14 @@ confirmationDialogAdd({
             label: 'Don\'t Save',
             onClick: () => {
               alert('Changes discarded');
+              dialog.close();
             }
           },
           {
             label: 'Cancel',
             onClick: () => {
               console.log('Cancelled');
+              dialog.close();
             }
           },
           {
@@ -398,6 +403,7 @@ confirmationDialogAdd({
             backgroundColor: '#28a745',
             onClick: () => {
               alert('Changes saved!');
+              dialog.close();
             }
           }
         ]
@@ -423,7 +429,7 @@ confirmationDialogAdd({
 
     // Terms dialog
     window.showTermsDialog = () => {
-      confirmationDialogAdd({
+      const dialog = confirmationDialogAdd({
         title: 'Terms & Conditions',
         body: `
           <h3 style="margin-top: 0;">Terms of Service</h3>
@@ -441,6 +447,7 @@ confirmationDialogAdd({
             label: 'Decline',
             onClick: () => {
               alert('Terms declined');
+              dialog.close();
             }
           },
           {
@@ -448,6 +455,7 @@ confirmationDialogAdd({
             backgroundColor: '#28a745',
             onClick: () => {
               alert('Terms accepted!');
+              dialog.close();
             }
           }
         ]
@@ -466,7 +474,7 @@ confirmationDialogAdd({
         <p><strong>End of document</strong></p>
       `;
 
-      confirmationDialogAdd({
+      const dialog = confirmationDialogAdd({
         title: 'Scrollable Content',
         body: longContent,
         buttons: [
@@ -475,6 +483,7 @@ confirmationDialogAdd({
             backgroundColor: '#28a745',
             onClick: () => {
               alert('Thank you for reading!');
+              dialog.close();
             }
           }
         ]
@@ -547,7 +556,7 @@ confirmationDialogAdd({
 
     // One button dialog
     window.showOneButtonDialog = () => {
-      confirmationDialogAdd({
+      const dialog = confirmationDialogAdd({
         title: 'Single Action',
         body: '<p>This dialog has one custom button. It will appear on the left side.</p>',
         buttons: [
@@ -556,6 +565,7 @@ confirmationDialogAdd({
             backgroundColor: '#28a745',
             onClick: () => {
               alert('Confirmed!');
+              dialog.close();
             }
           }
         ]
@@ -564,7 +574,7 @@ confirmationDialogAdd({
 
     // Two buttons dialog
     window.showTwoButtonsDialog = () => {
-      confirmationDialogAdd({
+      const dialog = confirmationDialogAdd({
         title: 'Two Actions',
         body: '<p>This dialog has two buttons. The first appears on the left, the second on the right.</p>',
         buttons: [
@@ -572,6 +582,7 @@ confirmationDialogAdd({
             label: 'Secondary Action',
             onClick: () => {
               alert('Secondary action clicked');
+              dialog.close();
             }
           },
           {
@@ -579,6 +590,7 @@ confirmationDialogAdd({
             backgroundColor: '#667eea',
             onClick: () => {
               alert('Primary action clicked');
+              dialog.close();
             }
           }
         ]
@@ -587,7 +599,7 @@ confirmationDialogAdd({
 
     // Many buttons dialog
     window.showManyButtonsDialog = () => {
-      confirmationDialogAdd({
+      const dialog = confirmationDialogAdd({
         title: 'Multiple Actions',
         body: '<p>This dialog has multiple buttons. The first button is on the left, the rest are on the right.</p>',
         buttons: [
@@ -596,18 +608,21 @@ confirmationDialogAdd({
             backgroundColor: '#6c757d',
             onClick: () => {
               alert('Left button clicked');
+              dialog.close();
             }
           },
           {
             label: 'Action 1',
             onClick: () => {
               alert('Action 1 clicked');
+              dialog.close();
             }
           },
           {
             label: 'Action 2',
             onClick: () => {
               alert('Action 2 clicked');
+              dialog.close();
             }
           },
           {
@@ -615,6 +630,7 @@ confirmationDialogAdd({
             backgroundColor: '#28a745',
             onClick: () => {
               alert('Primary clicked');
+              dialog.close();
             }
           }
         ]
@@ -655,29 +671,41 @@ confirmationDialogAdd({
 
     // Custom buttons dialog
     window.showCustomButtonsDialog = () => {
-      confirmationDialogAdd({
+      const dialog = confirmationDialogAdd({
         title: 'Custom Button Colors',
         body: '<p>Buttons can have custom background colors to match your design system.</p>',
         buttons: [
           {
             label: 'Purple',
             backgroundColor: '#667eea',
-            onClick: () => alert('Purple clicked')
+            onClick: () => {
+              alert('Purple clicked');
+              dialog.close();
+            }
           },
           {
             label: 'Orange',
             backgroundColor: '#f59e0b',
-            onClick: () => alert('Orange clicked')
+            onClick: () => {
+              alert('Orange clicked');
+              dialog.close();
+            }
           },
           {
             label: 'Pink',
             backgroundColor: '#ec4899',
-            onClick: () => alert('Pink clicked')
+            onClick: () => {
+              alert('Pink clicked');
+              dialog.close();
+            }
           },
           {
             label: 'Green',
             backgroundColor: '#10b981',
-            onClick: () => alert('Green clicked')
+            onClick: () => {
+              alert('Green clicked');
+              dialog.close();
+            }
           }
         ]
       });
@@ -685,7 +713,7 @@ confirmationDialogAdd({
 
     // Form dialog
     window.showFormDialog = () => {
-      confirmationDialogAdd({
+      const dialog = confirmationDialogAdd({
         title: 'Contact Form',
         body: `
           <form id="contactForm" style="margin-top: 10px;">
@@ -714,6 +742,7 @@ confirmationDialogAdd({
 
               if (name && email && message) {
                 alert(`Form submitted!\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}`);
+                dialog.close();
               } else {
                 alert('Please fill in all fields');
               }
