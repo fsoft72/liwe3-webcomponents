@@ -401,6 +401,12 @@ const dialog = confirmationDialogAdd({
 							dialog.close();
 						},
 					},
+					{
+						label: 'Cancel',
+						onClick: () => {
+							dialog.close();
+						},
+					},
 				],
 			} );
 		};
@@ -439,17 +445,17 @@ const dialog = confirmationDialogAdd({
         `,
 				buttons: [
 					{
-						label: 'Decline',
-						onClick: () => {
-							alert( 'Terms declined' );
-							dialog.close();
-						},
-					},
-					{
 						label: 'Accept',
 						backgroundColor: '#28a745',
 						onClick: () => {
 							alert( 'Terms accepted!' );
+							dialog.close();
+						},
+					},
+					{
+						label: 'Decline',
+						onClick: () => {
+							alert( 'Terms declined' );
 							dialog.close();
 						},
 					},
@@ -735,9 +741,10 @@ const dialog = confirmationDialogAdd({
 						label: 'Submit',
 						backgroundColor: '#28a745',
 						onClick: () => {
-							const name = document.getElementById( 'name' ).value;
-							const email = document.getElementById( 'email' ).value;
-							const message = document.getElementById( 'message' ).value;
+							// Access form elements from shadow DOM
+							const name = dialog.shadowRoot.getElementById( 'name' ).value;
+							const email = dialog.shadowRoot.getElementById( 'email' ).value;
+							const message = dialog.shadowRoot.getElementById( 'message' ).value;
 
 							if ( name && email && message ) {
 								alert( `Form submitted!\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}` );
