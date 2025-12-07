@@ -1,28 +1,28 @@
 /**
- * ConfirmationDialog Web Component
- * A customizable confirmation dialog with HTML body, custom buttons, and modal support
+ * Dialog Web Component
+ * A customizable dialog with HTML body, custom buttons, and modal support
  */
 
-export type ConfirmationDialogButton = {
+export type DialogButton = {
   label: string;
   backgroundColor?: string;
   onClick: () => void;
 };
 
-export type ConfirmationDialogConfig = {
-  title?: string; // Default: "Confirmation Dialog"
+export type DialogConfig = {
+  title?: string; // Default: "Dialog"
   body: string; // HTML content
-  buttons?: ConfirmationDialogButton[];
+  buttons?: DialogButton[];
   modal?: boolean; // If true, dims background and prevents interaction outside dialog
   escToClose?: boolean; // If true, Esc key closes dialog
   clickToClose?: boolean; // If true, clicking outside closes dialog (like cancel)
   onClose?: () => void;
 };
 
-export class ConfirmationDialogElement extends HTMLElement {
+export class DialogElement extends HTMLElement {
   declare shadowRoot: ShadowRoot;
-  private config: ConfirmationDialogConfig = {
-    title: 'Confirmation Dialog',
+  private config: DialogConfig = {
+    title: 'Dialog',
     body: '',
     modal: true,
     escToClose: true,
@@ -52,7 +52,7 @@ export class ConfirmationDialogElement extends HTMLElement {
   /**
    * Shows the dialog with the given configuration
    */
-  show ( config: ConfirmationDialogConfig ): void {
+  show ( config: DialogConfig ): void {
     this.config = { ...this.config, ...config };
     this.render();
     this.setupKeyboardListeners();
@@ -113,7 +113,7 @@ export class ConfirmationDialogElement extends HTMLElement {
     if ( this.backdrop ) return;
 
     this.backdrop = document.createElement( 'div' );
-    this.backdrop.className = 'confirmation-dialog-backdrop';
+    this.backdrop.className = 'dialog-backdrop';
     this.backdrop.style.position = 'fixed';
     this.backdrop.style.top = '0';
     this.backdrop.style.left = '0';
@@ -198,7 +198,7 @@ export class ConfirmationDialogElement extends HTMLElement {
    * Renders the component
    */
   private render (): void {
-    const title = this.config.title || 'Confirmation Dialog';
+    const title = this.config.title || 'Dialog';
     const buttons = this.config.buttons || [];
 
     // Determine button layout:
@@ -379,19 +379,19 @@ export class ConfirmationDialogElement extends HTMLElement {
 /**
  * Conditionally defines the custom element if in a browser environment.
  */
-const defineConfirmationDialog = ( tagName: string = 'liwe3-confirmation-dialog' ): void => {
+const defineDialog = ( tagName: string = 'liwe3-dialog' ): void => {
   if ( typeof window !== 'undefined' && !window.customElements.get( tagName ) ) {
-    customElements.define( tagName, ConfirmationDialogElement );
+    customElements.define( tagName, DialogElement );
   }
 };
 
 // Auto-register with default tag name
-defineConfirmationDialog();
+defineDialog();
 
 /**
- * Container ID for confirmation dialogs
+ * Container ID for dialogs
  */
-const DIALOG_CONTAINER_ID = 'liwe3-confirmation-dialog-container';
+const DIALOG_CONTAINER_ID = 'liwe3-dialog-container';
 
 /**
  * Gets or creates the dialog container element
@@ -412,17 +412,17 @@ const getDialogContainer = (): HTMLElement => {
 };
 
 /**
- * Shows a confirmation dialog with the given configuration.
- * This is the recommended way to display confirmation dialogs.
+ * Shows a dialog with the given configuration.
+ * This is the recommended way to display dialogs.
  *
  * @param config - The dialog configuration
  * @returns The dialog element instance
  *
  * @example
  * ```typescript
- * import { confirmationDialogAdd } from '@liwe3/webcomponents';
+ * import { dialogAdd } from '@liwe3/webcomponents';
  *
- * confirmationDialogAdd({
+ * dialogAdd({
  *   title: 'Delete File',
  *   body: '<p>Are you sure you want to delete this file? This action cannot be undone.</p>',
  *   buttons: [
@@ -446,9 +446,9 @@ const getDialogContainer = (): HTMLElement => {
  * });
  * ```
  */
-const confirmationDialogAdd = ( config: ConfirmationDialogConfig ): ConfirmationDialogElement => {
+const dialogAdd = ( config: DialogConfig ): DialogElement => {
   const container = getDialogContainer();
-  const dialog = document.createElement( 'liwe3-confirmation-dialog' ) as ConfirmationDialogElement;
+  const dialog = document.createElement( 'liwe3-dialog' ) as DialogElement;
 
   // Allow pointer events on individual dialogs
   dialog.style.pointerEvents = 'auto';
@@ -462,4 +462,4 @@ const confirmationDialogAdd = ( config: ConfirmationDialogConfig ): Confirmation
   return dialog;
 };
 
-export { defineConfirmationDialog, confirmationDialogAdd };
+export { defineDialog, dialogAdd };

@@ -4,7 +4,7 @@
  */
 
 // Re-export types from the core package
-export type { SelectOption, AITextEditorConfig, ToastType, ToastButton, ToastConfig, ToastElement, ConfirmationDialogButton, ConfirmationDialogConfig, ConfirmationDialogElement, PopoverMenuItem,
+export type { SelectOption, AITextEditorConfig, ToastType, ToastButton, ToastConfig, ToastElement, DialogButton, DialogConfig, DialogElement, PopoverMenuItem,
   PopoverMenuConfig, DateRange, TreeNode, UploadedFile, ChunkUploaderConfig, CheckListItem, ButtonToolbarItem, ButtonToolbarGroup } from '@liwe3/webcomponents';
 
 // Export Svelte components
@@ -33,5 +33,5 @@ export { default as CheckList } from './CheckList.svelte';
 // Export Toasts component and toastAdd function
 export { default as Toasts, toastAdd } from './Toasts.svelte';
 
-// Export ConfirmationDialogs component and confirmationDialogAdd function
-export { default as ConfirmationDialogs, confirmationDialogAdd } from './ConfirmationDialogs.svelte';
+// Export Dialogs component and dialogAdd function
+export { default as Dialogs, dialogAdd } from './Dialogs.svelte';

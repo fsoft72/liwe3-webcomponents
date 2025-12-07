@@ -1,17 +1,17 @@
 <script lang="ts">
-	import { confirmationDialogAdd } from '@liwe3/webcomponents-svelte';
+	import { dialogAdd } from '@liwe3/webcomponents-svelte';
 
 	// Basic dialog
 	const showBasicDialog = () => {
-		confirmationDialogAdd({
-			title: 'Confirmation Dialog',
-			body: '<p>This is a basic confirmation dialog with default settings.</p>',
+		dialogAdd({
+			title: 'Dialog',
+			body: '<p>This is a basic dialog with default settings.</p>',
 		});
 	};
 
 	// Delete file dialog
 	const showDeleteDialog = () => {
-		const dialog = confirmationDialogAdd({
+		const dialog = dialogAdd({
 			title: 'Delete File',
 			body: '<p>Are you sure you want to delete <strong>document.pdf</strong>?</p><p>This action cannot be undone.</p>',
 			buttons: [
@@ -36,7 +36,7 @@
 
 	// Save changes dialog
 	const showSaveChangesDialog = () => {
-		const dialog = confirmationDialogAdd({
+		const dialog = dialogAdd({
 			title: 'Unsaved Changes',
 			body: '<p>You have unsaved changes. Do you want to save them before leaving?</p>',
 			buttons: [
@@ -68,7 +68,7 @@
 
 	// HTML content dialog
 	const showHtmlContentDialog = () => {
-		confirmationDialogAdd({
+		dialogAdd({
 			title: 'Rich HTML Content',
 			body: `
 				<h3 style="margin-top: 0;">Features</h3>
@@ -99,7 +99,7 @@
 			<p><strong>End of document</strong></p>
 		`;
 
-		const dialog = confirmationDialogAdd({
+		const dialog = dialogAdd({
 			title: 'Scrollable Content',
 			body: longContent,
 			buttons: [
@@ -117,7 +117,7 @@
 
 	// Modal vs non-modal
 	const showNonModalDialog = () => {
-		confirmationDialogAdd({
+		dialogAdd({
 			title: 'Non-Modal Dialog',
 			body: '<p>This is a non-modal dialog. The background is not dimmed.</p>',
 			modal: false,
@@ -126,7 +126,7 @@
 
 	// Stacked dialogs
 	const showStackedDialogs = () => {
-		confirmationDialogAdd({
+		dialogAdd({
 			title: 'First Dialog',
 			body: '<p>This is the first dialog. Click the button below to open a second dialog on top.</p>',
 			buttons: [
@@ -134,7 +134,7 @@
 					label: 'Open Second Dialog',
 					backgroundColor: '#667eea',
 					onClick: () => {
-						confirmationDialogAdd({
+						dialogAdd({
 							title: 'Second Dialog',
 							body: '<p>This is the second dialog stacked on top of the first one.</p>',
 						});
@@ -146,7 +146,7 @@
 
 	// Form dialog
 	const showFormDialog = () => {
-		const dialog = confirmationDialogAdd({
+		const dialog = dialogAdd({
 			title: 'Contact Form',
 			body: `
 				<form id="contactForm" style="margin-top: 10px;">
@@ -190,16 +190,16 @@
 
 <div class="demo-container">
 	<header class="demo-header">
-		<h1>Confirmation Dialog Component</h1>
+		<h1>Dialog Component</h1>
 		<p class="subtitle">
-			A customizable confirmation dialog with HTML body, modal backdrop, and custom buttons
+			A customizable dialog with HTML body, modal backdrop, and custom buttons
 		</p>
 	</header>
 
 	<section class="demo-section">
 		<h2>Overview</h2>
 		<p>
-			The ConfirmationDialog component provides a powerful way to show modal dialogs to users.
+			The Dialog component provides a powerful way to show modal dialogs to users.
 			It supports HTML content, custom buttons, modal backdrop with blur effect, keyboard
 			controls, and smooth animations.
 		</p>
@@ -237,32 +237,32 @@
 	<section class="demo-section">
 		<h2>Usage Example</h2>
 		<p>
-			First, add the <code>&lt;ConfirmationDialogs /&gt;</code> component to your layout to initialize
+			First, add the <code>&lt;Dialogs /&gt;</code> component to your layout to initialize
 			the dialog system:
 		</p>
 		<div class="code-block">
 			<pre><code
 					>&lt;!-- +layout.svelte --&gt;
 &lt;script&gt;
-  import &#123; ConfirmationDialogs &#125; from '@liwe3/webcomponents-svelte';
+  import &#123; Dialogs &#125; from '@liwe3/webcomponents-svelte';
 &lt;/script&gt;
 
-&lt;ConfirmationDialogs /&gt;
+&lt;Dialogs /&gt;
 
 &lt;slot /&gt;</code
 				></pre>
 		</div>
 
 		<p style="margin-top: 1.5rem;">
-			Then use <code>confirmationDialogAdd()</code> anywhere in your app:
+			Then use <code>dialogAdd()</code> anywhere in your app:
 		</p>
 		<div class="code-block">
 			<pre><code
 					>&lt;script&gt;
-  import &#123; confirmationDialogAdd &#125; from '@liwe3/webcomponents-svelte';
+  import &#123; dialogAdd &#125; from '@liwe3/webcomponents-svelte';
 
   const handleDelete = () => &#123;
-    const dialog = confirmationDialogAdd(&#123;
+    const dialog = dialogAdd(&#123;
       title: 'Delete File',
       body: '&lt;p&gt;Are you sure?&lt;/p&gt;',
       buttons: [
@@ -306,7 +306,7 @@
 				<tr>
 					<td><code>title</code></td>
 					<td><code>string</code></td>
-					<td><code>"Confirmation Dialog"</code></td>
+					<td><code>"Dialog"</code></td>
 					<td>The dialog title</td>
 				</tr>
 				<tr>
@@ -317,7 +317,7 @@
 				</tr>
 				<tr>
 					<td><code>buttons</code></td>
-					<td><code>ConfirmationDialogButton[]</code></td>
+					<td><code>DialogButton[]</code></td>
 					<td><code>[]</code></td>
 					<td>Array of custom buttons</td>
 				</tr>
@@ -392,7 +392,7 @@
 			<tbody>
 				<tr>
 					<td><code>show(config)</code></td>
-					<td><code>ConfirmationDialogConfig</code></td>
+					<td><code>DialogConfig</code></td>
 					<td>Shows the dialog with the given configuration</td>
 				</tr>
 				<tr>
