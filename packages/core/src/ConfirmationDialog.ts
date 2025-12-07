@@ -69,7 +69,8 @@ export class ConfirmationDialogElement extends HTMLElement {
         dialog.classList.add( 'show' );
       }
       if ( this.backdrop ) {
-        this.backdrop.classList.add( 'show' );
+        // Use inline style instead of class since backdrop is outside shadow DOM
+        this.backdrop.style.opacity = '1';
       }
     } );
   }
@@ -85,7 +86,8 @@ export class ConfirmationDialogElement extends HTMLElement {
       dialog.classList.add( 'closing' );
     }
     if ( this.backdrop ) {
-      this.backdrop.classList.add( 'closing' );
+      // Use inline style instead of class since backdrop is outside shadow DOM
+      this.backdrop.style.opacity = '0';
     }
 
     // Wait for animation to complete
@@ -319,14 +321,6 @@ export class ConfirmationDialogElement extends HTMLElement {
             min-width: 90vw;
             max-width: 90vw;
           }
-        }
-
-        .confirmation-dialog-backdrop.show {
-          opacity: 1 !important;
-        }
-
-        .confirmation-dialog-backdrop.closing {
-          opacity: 0 !important;
         }
       </style>
 
