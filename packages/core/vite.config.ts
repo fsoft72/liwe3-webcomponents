@@ -11,6 +11,7 @@ export default defineConfig( {
         AIMarkdownEditor: resolve( __dirname, 'src/AIMarkdownEditor.ts' ),
         MarkdownPreview: resolve( __dirname, 'src/MarkdownPreview.ts' ),
         Toast: resolve( __dirname, 'src/Toast.ts' ),
+        ConfirmationDialog: resolve( __dirname, 'src/ConfirmationDialog.ts' ),
         PopoverMenu: resolve( __dirname, 'src/PopoverMenu.ts' ),
         DateSelector: resolve( __dirname, 'src/DateSelector.ts' ),
         TreeView: resolve( __dirname, 'src/TreeView.ts' ),

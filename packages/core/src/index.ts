@@ -27,6 +27,15 @@ export {
   type ToastConfig
 } from './Toast';
 
+// Export ConfirmationDialog
+export {
+  ConfirmationDialogElement,
+  defineConfirmationDialog,
+  confirmationDialogAdd,
+  type ConfirmationDialogButton,
+  type ConfirmationDialogConfig
+} from './ConfirmationDialog';
+
 // Export PopoverMenu
 export {
   PopoverMenuElement,
@@ -112,6 +121,7 @@ export const defineAllComponents = (): void => {
     import( './AIMarkdownEditor' ).then( ( { defineAIMarkdownEditor } ) => defineAIMarkdownEditor() );
     import( './MarkdownPreview' ).then( ( { defineMarkdownPreview } ) => defineMarkdownPreview() );
     import( './Toast' ).then( ( { defineToast } ) => defineToast() );
+    import( './ConfirmationDialog' ).then( ( { defineConfirmationDialog } ) => defineConfirmationDialog() );
     import( './PopoverMenu' ).then( ( { definePopoverMenu } ) => definePopoverMenu() );
     import( './DateSelector' ).then( ( { defineDateSelector } ) => defineDateSelector() );
     import( './TreeView' ).then( ( { defineTreeView } ) => defineTreeView() );
