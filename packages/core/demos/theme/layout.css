@@ -1,0 +1,359 @@
+/* CSS3 Flexbox Grid System */
+
+/* Container for rows */
+.liwe3-row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    max-width: 100%;
+}
+
+/* Base column styling for all responsive classes */
+[class*="liwe3-col-"],
+[class*="liwe3-lg-"],
+[class*="liwe3-md-"],
+[class*="liwe3-sm-"],
+[class*="liwe3-xs-"] {
+    box-sizing: border-box;
+    display: flex;
+    align-items: stretch;
+    flex-direction: column;
+}
+
+/* Column classes (these apply to all screen sizes) */
+.liwe3-col-1 {
+    flex: 0 0 calc(100% / 12);
+    max-width: calc(100% / 12);
+}
+
+.liwe3-col-2 {
+    flex: 0 0 calc(100% / 6);
+    max-width: calc(100% / 6);
+}
+
+.liwe3-col-3 {
+    flex: 0 0 calc(100% / 4);
+    max-width: calc(100% / 4);
+}
+
+.liwe3-col-4 {
+    flex: 0 0 calc(100% / 3);
+    max-width: calc(100% / 3);
+}
+
+.liwe3-col-5 {
+    flex: 0 0 calc(100% * 5 / 12);
+    max-width: calc(100% * 5 / 12);
+}
+
+.liwe3-col-6 {
+    flex: 0 0 calc(100% / 2);
+    max-width: calc(100% / 2);
+}
+
+.liwe3-col-7 {
+    flex: 0 0 calc(100% * 7 / 12);
+    max-width: calc(100% * 7 / 12);
+}
+
+.liwe3-col-8 {
+    flex: 0 0 calc(100% * 2 / 3);
+    max-width: calc(100% * 2 / 3);
+}
+
+.liwe3-col-9 {
+    flex: 0 0 calc(100% * 3 / 4);
+    max-width: calc(100% * 3 / 4);
+}
+
+.liwe3-col-10 {
+    flex: 0 0 calc(100% * 5 / 6);
+    max-width: calc(100% * 5 / 6);
+}
+
+.liwe3-col-11 {
+    flex: 0 0 calc(100% * 11 / 12);
+    max-width: calc(100% * 11 / 12);
+}
+
+.liwe3-col-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+/* Default div behavior (same as liwe3-col-12) */
+.liwe3-row>div:not([class*="liwe3-col-"]):not([class*="liwe3-lg-"]):not([class*="liwe3-md-"]):not([class*="liwe3-sm-"]):not([class*="liwe3-xs-"]) {
+    flex: 0 0 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+/* Flexible row (will take all vertical space)*/
+.liwe3-row.flexible {
+    flex: 1;
+    min-height: 0;
+}
+
+/* Mobile-first: responsive classes default to 100% width (stacked) */
+[class*="liwe3-lg-"],
+[class*="liwe3-md-"],
+[class*="liwe3-sm-"],
+[class*="liwe3-xs-"] {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+/* Extra small screens (xs) - up to 639px */
+@media (max-width: 639px) {
+    .liwe3-xs-1 {
+        flex: 0 0 calc(100% / 12);
+        max-width: calc(100% / 12);
+    }
+
+    .liwe3-xs-2 {
+        flex: 0 0 calc(100% / 6);
+        max-width: calc(100% / 6);
+    }
+
+    .liwe3-xs-3 {
+        flex: 0 0 calc(100% / 4);
+        max-width: calc(100% / 4);
+    }
+
+    .liwe3-xs-4 {
+        flex: 0 0 calc(100% / 3);
+        max-width: calc(100% / 3);
+    }
+
+    .liwe3-xs-5 {
+        flex: 0 0 calc(100% * 5 / 12);
+        max-width: calc(100% * 5 / 12);
+    }
+
+    .liwe3-xs-6 {
+        flex: 0 0 calc(100% / 2);
+        max-width: calc(100% / 2);
+    }
+
+    .liwe3-xs-7 {
+        flex: 0 0 calc(100% * 7 / 12);
+        max-width: calc(100% * 7 / 12);
+    }
+
+    .liwe3-xs-8 {
+        flex: 0 0 calc(100% * 2 / 3);
+        max-width: calc(100% * 2 / 3);
+    }
+
+    .liwe3-xs-9 {
+        flex: 0 0 calc(100% * 3 / 4);
+        max-width: calc(100% * 3 / 4);
+    }
+
+    .liwe3-xs-10 {
+        flex: 0 0 calc(100% * 5 / 6);
+        max-width: calc(100% * 5 / 6);
+    }
+
+    .liwe3-xs-11 {
+        flex: 0 0 calc(100% * 11 / 12);
+        max-width: calc(100% * 11 / 12);
+    }
+
+    .liwe3-xs-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* Small screens (sm) - 640px and up */
+@media (min-width: 640px) {
+    .liwe3-sm-1 {
+        flex: 0 0 calc(100% / 12);
+        max-width: calc(100% / 12);
+    }
+
+    .liwe3-sm-2 {
+        flex: 0 0 calc(100% / 6);
+        max-width: calc(100% / 6);
+    }
+
+    .liwe3-sm-3 {
+        flex: 0 0 calc(100% / 4);
+        max-width: calc(100% / 4);
+    }
+
+    .liwe3-sm-4 {
+        flex: 0 0 calc(100% / 3);
+        max-width: calc(100% / 3);
+    }
+
+    .liwe3-sm-5 {
+        flex: 0 0 calc(100% * 5 / 12);
+        max-width: calc(100% * 5 / 12);
+    }
+
+    .liwe3-sm-6 {
+        flex: 0 0 calc(100% / 2);
+        max-width: calc(100% / 2);
+    }
+
+    .liwe3-sm-7 {
+        flex: 0 0 calc(100% * 7 / 12);
+        max-width: calc(100% * 7 / 12);
+    }
+
+    .liwe3-sm-8 {
+        flex: 0 0 calc(100% * 2 / 3);
+        max-width: calc(100% * 2 / 3);
+    }
+
+    .liwe3-sm-9 {
+        flex: 0 0 calc(100% * 3 / 4);
+        max-width: calc(100% * 3 / 4);
+    }
+
+    .liwe3-sm-10 {
+        flex: 0 0 calc(100% * 5 / 6);
+        max-width: calc(100% * 5 / 6);
+    }
+
+    .liwe3-sm-11 {
+        flex: 0 0 calc(100% * 11 / 12);
+        max-width: calc(100% * 11 / 12);
+    }
+
+    .liwe3-sm-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* Medium screens (md) - 768px and up */
+@media (min-width: 768px) {
+    .liwe3-md-1 {
+        flex: 0 0 calc(100% / 12);
+        max-width: calc(100% / 12);
+    }
+
+    .liwe3-md-2 {
+        flex: 0 0 calc(100% / 6);
+        max-width: calc(100% / 6);
+    }
+
+    .liwe3-md-3 {
+        flex: 0 0 calc(100% / 4);
+        max-width: calc(100% / 4);
+    }
+
+    .liwe3-md-4 {
+        flex: 0 0 calc(100% / 3);
+        max-width: calc(100% / 3);
+    }
+
+    .liwe3-md-5 {
+        flex: 0 0 calc(100% * 5 / 12);
+        max-width: calc(100% * 5 / 12);
+    }
+
+    .liwe3-md-6 {
+        flex: 0 0 calc(100% / 2);
+        max-width: calc(100% / 2);
+    }
+
+    .liwe3-md-7 {
+        flex: 0 0 calc(100% * 7 / 12);
+        max-width: calc(100% * 7 / 12);
+    }
+
+    .liwe3-md-8 {
+        flex: 0 0 calc(100% * 2 / 3);
+        max-width: calc(100% * 2 / 3);
+    }
+
+    .liwe3-md-9 {
+        flex: 0 0 calc(100% * 3 / 4);
+        max-width: calc(100% * 3 / 4);
+    }
+
+    .liwe3-md-10 {
+        flex: 0 0 calc(100% * 5 / 6);
+        max-width: calc(100% * 5 / 6);
+    }
+
+    .liwe3-md-11 {
+        flex: 0 0 calc(100% * 11 / 12);
+        max-width: calc(100% * 11 / 12);
+    }
+
+    .liwe3-md-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* Large screens (lg) - 1200px and up */
+@media (min-width: 1200px) {
+    .liwe3-lg-1 {
+        flex: 0 0 calc(100% / 12);
+        max-width: calc(100% / 12);
+    }
+
+    .liwe3-lg-2 {
+        flex: 0 0 calc(100% / 6);
+        max-width: calc(100% / 6);
+    }
+
+    .liwe3-lg-3 {
+        flex: 0 0 calc(100% / 4);
+        max-width: calc(100% / 4);
+    }
+
+    .liwe3-lg-4 {
+        flex: 0 0 calc(100% / 3);
+        max-width: calc(100% / 3);
+    }
+
+    .liwe3-lg-5 {
+        flex: 0 0 calc(100% * 5 / 12);
+        max-width: calc(100% * 5 / 12);
+    }
+
+    .liwe3-lg-6 {
+        flex: 0 0 calc(100% / 2);
+        max-width: calc(100% / 2);
+    }
+
+    .liwe3-lg-7 {
+        flex: 0 0 calc(100% * 7 / 12);
+        max-width: calc(100% * 7 / 12);
+    }
+
+    .liwe3-lg-8 {
+        flex: 0 0 calc(100% * 2 / 3);
+        max-width: calc(100% * 2 / 3);
+    }
+
+    .liwe3-lg-9 {
+        flex: 0 0 calc(100% * 3 / 4);
+        max-width: calc(100% * 3 / 4);
+    }
+
+    .liwe3-lg-10 {
+        flex: 0 0 calc(100% * 5 / 6);
+        max-width: calc(100% * 5 / 6);
+    }
+
+    .liwe3-lg-11 {
+        flex: 0 0 calc(100% * 11 / 12);
+        max-width: calc(100% * 11 / 12);
+    }
+
+    .liwe3-lg-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+/* CSS3 Flexbox Grid System */

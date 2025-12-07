@@ -1,0 +1,27 @@
+@font-face {
+    src: url("/fonts/Roboto/Roboto-Regular.ttf");
+    font-family: 'Primary';
+    font-style: normal;
+    font-weight: 400;
+}
+
+@font-face {
+    src: url("/fonts/Roboto/Roboto-Bold.ttf");
+    font-family: 'Primary';
+    font-style: normal;
+    font-weight: 700;
+}
+
+@font-face {
+    src: url("/fonts/Roboto/Roboto-Italic.ttf");
+    font-family: 'Primary';
+    font-style: italic;
+    font-weight: 400;
+}
+
+@font-face {
+    src: url("/fonts/Roboto/Roboto-Medium.ttf");
+    font-family: 'Secondary';
+    font-style: normal;
+    font-weight: 400 700;
+}

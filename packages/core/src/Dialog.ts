@@ -211,7 +211,7 @@ export class DialogElement extends HTMLElement {
       <style>
         :host {
           display: block;
-          font-family: var(--font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+          font-family: var(--font-family, var(--liwe3-font-family, Ubuntu, sans-serif));
           font-size: var(--font-size, 14px);
         }
 
@@ -223,14 +223,15 @@ export class DialogElement extends HTMLElement {
           min-width: 400px;
           max-width: 600px;
           max-height: 80vh;
-          background: var(--dialog-background, white);
-          border-radius: var(--dialog-border-radius, 8px);
+          background: var(--dialog-background, var(--liwe3-surface-raised, white));
+          border-radius: var(--dialog-border-radius, var(--liwe3-border-radius, 8px));
           box-shadow: var(--dialog-shadow, 0 10px 40px rgba(0, 0, 0, 0.2));
           z-index: 99999;
           display: flex;
           flex-direction: column;
           opacity: 0;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          font-family: var(--font-family, var(--liwe3-font-family, Ubuntu, sans-serif));
         }
 
         .dialog-container.show {
@@ -245,7 +246,7 @@ export class DialogElement extends HTMLElement {
 
         .dialog-header {
           padding: 20px 24px;
-          border-bottom: 1px solid var(--dialog-border-color, #e0e0e0);
+          border-bottom: 1px solid var(--dialog-border-color, var(--liwe3-border-default, #e0e0e0));
           flex-shrink: 0;
         }
 
@@ -253,26 +254,26 @@ export class DialogElement extends HTMLElement {
           margin: 0;
           font-size: 20px;
           font-weight: 600;
-          color: var(--dialog-title-color, #333);
+          color: var(--dialog-title-color, var(--liwe3-text-mode1, #333));
         }
 
         .dialog-body {
           padding: 24px;
           overflow-y: auto;
           flex: 1;
-          color: var(--dialog-text-color, #555);
+          color: var(--dialog-text-color, var(--liwe3-text-mode2, #555));
           line-height: 1.6;
         }
 
         .dialog-footer {
           padding: 16px 24px;
-          border-top: 1px solid var(--dialog-border-color, #e0e0e0);
+          border-top: 1px solid var(--dialog-border-color, var(--liwe3-border-default, #e0e0e0));
           display: flex;
           justify-content: space-between;
           align-items: center;
           gap: 12px;
           flex-shrink: 0;
-          background: var(--dialog-background, white);
+          background: var(--dialog-background, var(--liwe3-surface-raised, white));
         }
 
         .footer-left {
@@ -288,10 +289,10 @@ export class DialogElement extends HTMLElement {
 
         .dialog-button {
           padding: 8px 20px;
-          border: 1px solid var(--dialog-button-border-color, #ccc);
-          border-radius: var(--dialog-button-border-radius, 4px);
-          background: var(--dialog-button-background, white);
-          color: var(--dialog-button-color, #333);
+          border: 1px solid var(--dialog-button-border-color, var(--liwe3-border-default, #ccc));
+          border-radius: var(--dialog-button-border-radius, var(--liwe3-border-radius, 4px));
+          background: var(--dialog-button-background, var(--liwe3-surface-raised, white));
+          color: var(--dialog-button-color, var(--liwe3-text-mode1, #333));
           font-size: 14px;
           cursor: pointer;
           transition: all 0.2s;
@@ -300,20 +301,20 @@ export class DialogElement extends HTMLElement {
         }
 
         .dialog-button:hover {
-          background-color: var(--dialog-button-hover-background, #f8f9fa);
-          border-color: var(--dialog-button-hover-border-color, #999);
+          background-color: var(--dialog-button-hover-background, var(--liwe3-hover-overlay, #f8f9fa));
+          border-color: var(--dialog-button-hover-border-color, var(--liwe3-border-strong, #999));
         }
 
         .dialog-button:active {
-          background-color: var(--dialog-button-active-background, #e9ecef);
+          background-color: var(--dialog-button-active-background, var(--liwe3-active-overlay, #e9ecef));
         }
 
         .close-button {
           padding: 8px 20px;
-          border: 1px solid var(--dialog-close-border-color, #ccc);
-          border-radius: var(--dialog-button-border-radius, 4px);
-          background: var(--dialog-close-background, white);
-          color: var(--dialog-close-color, #333);
+          border: 1px solid var(--dialog-close-border-color, var(--liwe3-border-default, #ccc));
+          border-radius: var(--dialog-button-border-radius, var(--liwe3-border-radius, 4px));
+          background: var(--dialog-close-background, var(--liwe3-surface-raised, white));
+          color: var(--dialog-close-color, var(--liwe3-text-mode1, #333));
           font-size: 14px;
           cursor: pointer;
           transition: all 0.2s;
@@ -322,8 +323,8 @@ export class DialogElement extends HTMLElement {
         }
 
         .close-button:hover {
-          background-color: var(--dialog-close-hover-background, #f8f9fa);
-          border-color: var(--dialog-close-hover-border-color, #999);
+          background-color: var(--dialog-close-hover-background, var(--liwe3-hover-overlay, #f8f9fa));
+          border-color: var(--dialog-close-hover-border-color, var(--liwe3-border-strong, #999));
         }
 
         @media (max-width: 768px) {

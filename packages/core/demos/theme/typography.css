@@ -1,0 +1,164 @@
+/* Typography */
+a {
+    color: var(--liwe3-link-color);
+    text-decoration: none;
+}
+
+a:active,
+a:focus,
+a:hover {
+    text-decoration: underline;
+}
+
+a:active {
+    color: var(--liwe3-link-active-color);
+}
+
+a:hover {
+    color: var(--liwe3-link-hover-color);
+}
+
+a:disabled {
+    color: var(--liwe3-link-disabled-color);
+}
+
+a:visited {
+    color: var(--liwe3-link-visited-color);
+}
+
+h1,
+h2 {
+    font-family: var(--liwe3-secondary-font-family);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 700;
+    margin: var(--liwe3-space-2) 0;
+}
+
+h1 {
+    font-size: 2.5rem;
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+h2 {
+    font-size: 2rem;
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+h3 {
+    font-size: 1.75rem;
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+h4 {
+    font-size: 1.5rem;
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+h5 {
+    font-size: 1.25rem;
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+h6 {
+    font-size: 1rem;
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+p {
+    font-size: 1rem;
+    font-weight: var(--liwe3-font-weight);
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+a {
+    font-size: 1rem;
+    font-weight: var(--liwe3-font-weight);
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+li {
+    font-size: 1rem;
+    font-weight: var(--liwe3-font-weight);
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+blockquote {
+    font-size: 1rem;
+    font-weight: var(--liwe3-font-weight);
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+small {
+    font-size: 0.875rem;
+    font-weight: var(--liwe3-font-weight);
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+code {
+    font-size: 1rem;
+    font-weight: var(--liwe3-font-weight);
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+pre {
+    font-size: 1rem;
+    font-weight: var(--liwe3-font-weight);
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+kbd {
+    font-size: 1rem;
+    font-weight: var(--liwe3-font-weight);
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+strong {
+    font-size: 1rem;
+    font-weight: calc((var(--liwe3-font-weight) /2) * 3);
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}
+
+.liwe3-lead {
+    font-size: 1.25rem;
+    font-weight: calc((var(--liwe3-font-weight) /2) * 2.5);
+    line-height: 1.2;
+    letter-spacing: 0;
+    text-align: left;
+}

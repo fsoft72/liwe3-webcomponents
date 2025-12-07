@@ -1,0 +1,219 @@
+.form-container {
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+
+    .title {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 1.75rem;
+        font-weight: 700;
+    }
+
+    .subtitle {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 1rem;
+    }
+
+    /* Input Base Styles */
+    input,
+    select,
+    textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+    input[type="color"] {
+        padding: 0 !important;
+    }
+
+    input[type="checkbox"],
+    input[type="radio"] {
+        width: 1.25rem;
+        height: 1.25rem;
+        cursor: pointer;
+        position: relative;
+    }
+
+    input[type="radio"] {
+        border-radius: 50%;
+
+        &:checked::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+    }
+
+    input[type="checkbox"]:checked::after {
+        content: '✓';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 0.8rem;
+        font-weight: bold;
+    }
+}
+
+/* Form Group Styles */
+.form-group {
+    position: relative;
+
+    &.floating {
+        position: relative;
+
+        .form-input {
+            padding-top: 1.2rem;
+            padding-bottom: 0.3rem;
+        }
+
+        label {
+            position: absolute;
+            left: 1rem;
+            top: 0.75rem;
+            pointer-events: none;
+            margin-bottom: 0;
+        }
+
+        .form-input:focus+label,
+        .form-input:not(:placeholder-shown)+label {
+            top: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+    }
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    font-size: 0.9rem;
+
+    &.required::after {
+        content: ' *';
+    }
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Checkbox and Radio Styles */
+.checkbox-group,
+.radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.checkbox-item,
+.radio-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+/* Range Slider */
+input[type="range"] {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    &::-webkit-slider-track {
+        width: 100%;
+        height: 6px;
+    }
+
+    &::-moz-range-track {
+        width: 100%;
+        height: 6px;
+        cursor: pointer;
+    }
+
+    &::-webkit-slider-thumb {
+        appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    &::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        -moz-appearance: none;
+    }
+}
+
+/* Button Base Styles */
+button,
+input[type="submit"],
+input[type="button"] {
+    padding: 0.875rem 2rem;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* Error and Success Messages */
+.message {
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin: 1rem 0;
+    font-weight: 500;
+}
+
+/* Form data display */
+.form-data-display {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.form-data {
+    & .title {
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+    }
+
+    & .content {
+        font-size: 0.875rem;
+        white-space: pre-wrap;
+        overflow-x: auto;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .form-container {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .checkbox-group,
+    .radio-group {
+        flex-direction: column;
+    }
+}
