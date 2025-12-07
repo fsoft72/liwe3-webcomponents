@@ -260,8 +260,6 @@ export class ConfirmationDialogElement extends HTMLElement {
           align-items: center;
           gap: 12px;
           flex-shrink: 0;
-          position: sticky;
-          bottom: 0;
           background: var(--dialog-background, white);
         }
 
