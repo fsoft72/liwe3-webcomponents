@@ -31,7 +31,6 @@ export class ConfirmationDialogElement extends HTMLElement {
   private backdrop?: HTMLElement;
   private escKeyHandler?: ( e: KeyboardEvent ) => void;
   private eventsBound: boolean = false;
-  private originalBodyOverflow?: string;
 
   constructor () {
     super();
@@ -48,7 +47,6 @@ export class ConfirmationDialogElement extends HTMLElement {
     if ( this.backdrop ) {
       this.backdrop.remove();
     }
-    this.restoreBodyScroll();
   }
 
   /**
@@ -62,7 +60,6 @@ export class ConfirmationDialogElement extends HTMLElement {
     // Create backdrop if modal is enabled
     if ( this.config.modal ) {
       this.createBackdrop();
-      this.preventBodyScroll();
     }
 
     // Add opening animation class
@@ -100,9 +97,6 @@ export class ConfirmationDialogElement extends HTMLElement {
         this.backdrop.remove();
         this.backdrop = undefined;
       }
-
-      // Restore body scroll
-      this.restoreBodyScroll();
 
       this.dispatchEvent( new CustomEvent( 'close' ) );
       if ( this.config.onClose ) {
@@ -165,26 +159,6 @@ export class ConfirmationDialogElement extends HTMLElement {
   }
 
   /**
-   * Prevents body scroll when dialog is open
-   */
-  private preventBodyScroll (): void {
-    // Save the current overflow value so we can restore it later
-    this.originalBodyOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-  }
-
-  /**
-   * Restores body scroll when dialog is closed
-   */
-  private restoreBodyScroll (): void {
-    // Restore the original overflow value
-    if ( this.originalBodyOverflow !== undefined ) {
-      document.body.style.overflow = this.originalBodyOverflow;
-      this.originalBodyOverflow = undefined;
-    }
-  }
-
-  /**
    * Binds all event listeners
    */
   private bindEvents (): void {
@@ -208,6 +182,14 @@ export class ConfirmationDialogElement extends HTMLElement {
         }
       }
     } );
+
+    // Prevent scroll propagation to body when scrolling within dialog
+    const dialogContainer = this.shadowRoot.querySelector( '.dialog-container' ) as HTMLElement;
+    if ( dialogContainer ) {
+      dialogContainer.addEventListener( 'wheel', ( e ) => {
+        e.stopPropagation();
+      }, { passive: true } );
+    }
   }
 
   /**
