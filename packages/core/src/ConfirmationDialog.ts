@@ -356,7 +356,7 @@ export class ConfirmationDialogElement extends HTMLElement {
                 ${ button.label }
               </button>
             `).join( '' ) }
-            <button class="close-button">Close</button>
+            ${ buttons.length === 0 ? '<button class="close-button">Close</button>' : '' }
           </div>
         </div>
       </div>
