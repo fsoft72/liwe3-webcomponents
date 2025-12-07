@@ -119,7 +119,9 @@ export class ConfirmationDialogElement extends HTMLElement {
     this.backdrop.style.left = '0';
     this.backdrop.style.width = '100%';
     this.backdrop.style.height = '100%';
-    this.backdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+    this.backdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+    this.backdrop.style.backdropFilter = 'blur(4px)';
+    ( this.backdrop.style as any ).webkitBackdropFilter = 'blur(4px)'; // Safari support
     this.backdrop.style.zIndex = '99998';
     this.backdrop.style.opacity = '0';
     this.backdrop.style.transition = 'opacity 0.3s ease';
