@@ -92,18 +92,14 @@ export class DialogElement extends HTMLElement {
 			dialog.classList.add( 'closing' );
 		}
 		if ( this.backdrop ) {
-			// Use inline style instead of class since backdrop is outside shadow DOM
-			this.backdrop.style.opacity = '0';
+			this.backdrop.remove();
+			this.backdrop = undefined;
 		}
 
 		// Wait for animation to complete
-		const animationDuration = this.config.fxSpeed || 1000;
+		const animationDuration = this.config.fxAppear === 'none' ? 0 : ( this.config.fxSpeed || 1000 );
 		setTimeout( () => {
 			this.removeKeyboardListeners();
-			if ( this.backdrop ) {
-				this.backdrop.remove();
-				this.backdrop = undefined;
-			}
 
 			this.dispatchEvent( new CustomEvent( 'close' ) );
 			if ( this.config.onClose ) {
