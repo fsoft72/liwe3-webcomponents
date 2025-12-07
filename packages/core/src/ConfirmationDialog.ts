@@ -201,9 +201,11 @@ export class ConfirmationDialogElement extends HTMLElement {
     const title = this.config.title || 'Confirmation Dialog';
     const buttons = this.config.buttons || [];
 
-    // Determine button layout: first button on left, rest on right
-    const firstButton = buttons.length > 0 ? buttons[ 0 ] : null;
-    const rightButtons = buttons.length > 1 ? buttons.slice( 1 ) : [];
+    // Determine button layout:
+    // - If only 1 button, put it on the right
+    // - If 2+ buttons, put first on left, rest on right
+    const firstButton = buttons.length > 1 ? buttons[ 0 ] : null;
+    const rightButtons = buttons.length === 1 ? buttons : buttons.slice( 1 );
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -358,7 +360,7 @@ export class ConfirmationDialogElement extends HTMLElement {
             ${ rightButtons.map( ( button, index ) => `
               <button
                 class="dialog-button"
-                data-index="${ index + 1 }"
+                data-index="${ firstButton ? index + 1 : index }"
                 style="${ button.backgroundColor ? `background-color: ${ button.backgroundColor }; color: white; border-color: ${ button.backgroundColor };` : '' }"
               >
                 ${ button.label }
