@@ -10,7 +10,8 @@
       "Bash(git commit:*)",
       "Read(//ramdisk/**)",
       "Bash(pnpm add:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(ls:*)"
     ],
     "deny": [],
     "ask": []
