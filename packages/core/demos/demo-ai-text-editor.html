@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AITextEditor Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        h2 { 
+            margin-top: 0;
+            color: #555;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border-left: 4px solid #2196F3;
+        }
+        .instructions h3 {
+            margin-top: 0;
+            color: #1976D2;
+        }
+        .instructions ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin: 5px 0;
+        }
+        .instructions code {
+            background: rgba(0,0,0,0.05);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+        .config-panel {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .config-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .config-group label {
+            font-weight: 500;
+            color: #555;
+            font-size: 14px;
+        }
+        .config-group input,
+        .config-group textarea,
+        .config-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+        .config-group textarea {
+            resize: vertical;
+            min-height: 60px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+        .config-group input[type="number"] {
+            width: 100px;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: #4facfe;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #3a9de8;
+        }
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+        .btn-danger {
+            background: #ff6b6b;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #ff5252;
+        }
+        .editor-container {
+            height: 400px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .embedded-container {
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            padding: 20px;
+            background: #fafbfc;
+            min-height: 340px;
+        }
+        .status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .status-indicator.active {
+            background: #d4edda;
+            color: #155724;
+        }
+        .status-indicator.inactive {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .status-indicator .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .status-indicator.active .dot {
+            background: #28a745;
+        }
+        .status-indicator.inactive .dot {
+            background: #dc3545;
+        }
+        .loading-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #fff3cd;
+            color: #856404;
+        }
+        .loading-indicator.hidden {
+            display: none;
+        }
+        .log-container {
+            background: #333;
+            color: #fff;
+            padding: 15px;
+            border-radius: 6px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 12px;
+        }
+        .log-entry { 
+            margin-bottom: 6px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid #444;
+        }
+        .log-entry .timestamp {
+            color: #888;
+            margin-right: 8px;
+        }
+        .log-entry .event {
+            color: #4facfe;
+            font-weight: bold;
+            margin-right: 8px;
+        }
+        .log-entry .detail {
+            color: #ccc;
+        }
+        .info-box {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            border-left: 3px solid #6c757d;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #495057;
+        }
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+        }
+        .warning {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <h1>AI Text Editor Demo</h1>
+
+    <div class="instructions">
+        <h3>🤖 How to use the AI Text Editor</h3>
+        <ul>
+            <li>Configure your OpenAI API key below (it's saved in localStorage)</li>
+            <li>Type some text in the editor and pause for a moment</li>
+            <li>The AI will suggest continuations in gray text</li>
+            <li>Press <code>Tab</code> to accept the suggestion</li>
+            <li>Press <code>Escape</code> to reject the suggestion</li>
+            <li>Navigate with arrow keys to dismiss suggestions</li>
+            <li>For multi-paragraph suggestions, use <code>Tab</code> repeatedly to accept each paragraph</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>Configuration</h2>
+        
+        <div class="config-panel">
+            <div class="config-group">
+                <label for="apiKey">OpenAI API Key</label>
+                <input 
+                    type="password" 
+                    id="apiKey" 
+                    placeholder="sk-..."
+                />
+                <div class="info-box warning">
+                    ⚠️ Your API key is stored locally in your browser and never sent to our servers. 
+                    It's only used to make requests directly to the OpenAI API.
+                </div>
+            </div>
+
+            <div class="config-group">
+                <label for="apiEndpoint">API Endpoint</label>
+                <input 
+                    type="text" 
+                    id="apiEndpoint" 
+                    value="https://api.openai.com/v1/chat/completions"
+                />
+            </div>
+
+            <div class="config-group">
+                <label for="modelName">Model Name</label>
+                <select id="modelName">
+                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                    <option value="gpt-4">GPT-4</option>
+                    <option value="gpt-4-turbo-preview">GPT-4 Turbo</option>
+                </select>
+            </div>
+
+            <div class="config-group">
+                <label for="suggestionDelay">Suggestion Delay (seconds)</label>
+                <input 
+                    type="number" 
+                    id="suggestionDelay" 
+                    value="1" 
+                    min="0.1" 
+                    max="10" 
+                    step="0.1"
+                />
+            </div>
+
+            <div class="config-group">
+                <label for="systemPrompt">System Prompt</label>
+                <textarea 
+                    id="systemPrompt"
+                >You are a helpful writing assistant. Continue the user's text naturally and coherently. Provide 1-3 sentences that would logically follow their writing. Keep the same tone and style. Do not repeat what they've already written.</textarea>
+            </div>
+
+            <div class="config-group">
+                <label for="context">Context (optional)</label>
+                <textarea 
+                    id="context"
+                    placeholder="Add any context that should guide the AI suggestions..."
+                ></textarea>
+            </div>
+
+            <div class="button-group">
+                <button class="btn-primary" id="applyConfigBtn">Apply Configuration</button>
+                <button class="btn-secondary" id="resetConfigBtn">Reset to Defaults</button>
+                <button class="btn-danger" id="clearApiKeyBtn">Clear API Key</button>
+            </div>
+        </div>
+
+        <div style="margin-top: 15px; display: flex; gap: 15px; flex-wrap: wrap;">
+            <div class="status-indicator" id="statusIndicator">
+                <span class="dot"></span>
+                <span id="statusText">No API Key</span>
+            </div>
+            <div class="loading-indicator hidden" id="loadingIndicator">
+                <span>⏳</span>
+                <span>AI is thinking...</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="two-column">
+        <div class="section">
+            <h2>Standard Editor</h2>
+            <div class="editor-container">
+                <liwe3-ai-text-editor id="editor1"></liwe3-ai-text-editor>
+            </div>
+            <div class="info-box" style="margin-top: 15px;">
+                This is the standard editor with built-in status indicator and loading spinner.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Embedded Mode</h2>
+            <div class="embedded-container">
+                <liwe3-ai-text-editor id="editor2" embedded style="height: 300px;"></liwe3-ai-text-editor>
+            </div>
+            <div class="info-box" style="margin-top: 15px;">
+                This is embedded mode - no border, status indicator, or loading spinner. Perfect for integrating into custom UIs.
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>API Methods</h2>
+        <div class="button-group">
+            <button class="btn-secondary" id="getValueBtn">Get Value</button>
+            <button class="btn-secondary" id="setValueBtn">Set Sample Value</button>
+            <button class="btn-secondary" id="clearValueBtn">Clear Value</button>
+            <button class="btn-secondary" id="getConfigBtn">Get Configuration</button>
+            <button class="btn-secondary" id="triggerSuggestionBtn">Trigger Suggestion</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Event Log</h2>
+        <div class="log-container" id="logContainer"></div>
+        <button class="btn-secondary" id="clearLogBtn" style="margin-top: 10px;">Clear Log</button>
+    </div>
+
+    <script type="module">
+        import { AITextEditorElement } from '../dist/AITextEditor.js';
+
+        // Wait for custom elements to be defined
+        await customElements.whenDefined('liwe3-ai-text-editor');
+
+        const editor1 = document.getElementById('editor1');
+        const editor2 = document.getElementById('editor2');
+        const statusIndicator = document.getElementById('statusIndicator');
+        const statusText = document.getElementById('statusText');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+
+        console.log('Editors loaded:', { editor1, editor2 });
+        console.log('Editor1 has methods:', editor1 && typeof editor1.getText === 'function');
+
+        // Logging setup (must be before any log calls)
+        const logContainer = document.getElementById('logContainer');
+        function log(event, detail) {
+            if (!logContainer) return;
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            const timestamp = new Date().toLocaleTimeString();
+            entry.innerHTML = `<span class="timestamp">[${timestamp}]</span><span class="event">${event}</span><span class="detail">${detail}</span>`;
+            logContainer.appendChild(entry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        function clearLog() {
+            if (!logContainer) return;
+            logContainer.innerHTML = '';
+            log('log-cleared', 'Event log cleared');
+        }
+
+        // Initialize configuration inputs
+        function initConfigInputs() {
+            if (!editor1 || !editor1.getApiKey) {
+                console.error('Editor1 not ready');
+                return;
+            }
+            const apiKey = editor1.getApiKey();
+            const apiEndpoint = editor1.getApiEndpoint();
+            const modelName = editor1.getModelName();
+            const suggestionDelay = editor1.getSuggestionDelay();
+            const systemPrompt = editor1.getSystemPrompt();
+            const context = editor1.getContext();
+
+            document.getElementById('apiKey').value = apiKey;
+            document.getElementById('apiEndpoint').value = apiEndpoint;
+            document.getElementById('modelName').value = modelName;
+            document.getElementById('suggestionDelay').value = suggestionDelay;
+            document.getElementById('systemPrompt').value = systemPrompt;
+            document.getElementById('context').value = context;
+        }
+
+        // Configure editors with callbacks
+        editor1.configure({
+            onStatusChange: (hasApiKey) => {
+                updateStatusIndicator(hasApiKey);
+                log('status-change', `API Key ${hasApiKey ? 'configured' : 'not configured'}`);
+            },
+            onLoadingChange: (isLoading) => {
+                updateLoadingIndicator(isLoading);
+                log('loading-change', `Loading: ${isLoading}`);
+            }
+        });
+
+        editor2.configure({
+            embedded: true,
+            onStatusChange: (hasApiKey) => {
+                log('embedded-status-change', `Embedded editor - API Key ${hasApiKey ? 'configured' : 'not configured'}`);
+            },
+            onLoadingChange: (isLoading) => {
+                log('embedded-loading-change', `Embedded editor - Loading: ${isLoading}`);
+            }
+        });
+
+        // Event listeners for editor 1
+        editor1.addEventListener('change', (e) => {
+            log('change', `Value changed (${e.detail.value.length} chars)`);
+        });
+
+        editor1.addEventListener('suggestion-shown', () => {
+            log('suggestion-shown', 'AI suggestion displayed');
+        });
+
+        editor1.addEventListener('suggestion-accepted', () => {
+            log('suggestion-accepted', 'User accepted suggestion with Tab');
+        });
+
+        editor1.addEventListener('suggestion-rejected', () => {
+            log('suggestion-rejected', 'User rejected suggestion with Escape');
+        });
+
+        // Event listeners for editor 2
+        editor2.addEventListener('change', (e) => {
+            log('embedded-change', `Embedded editor value changed (${e.detail.value.length} chars)`);
+        });
+
+        // Update status indicator
+        function updateStatusIndicator(hasApiKey) {
+            if (hasApiKey) {
+                statusIndicator.classList.remove('inactive');
+                statusIndicator.classList.add('active');
+                statusText.textContent = 'API Key Configured';
+            } else {
+                statusIndicator.classList.remove('active');
+                statusIndicator.classList.add('inactive');
+                statusText.textContent = 'No API Key';
+            }
+        }
+
+        // Update loading indicator
+        function updateLoadingIndicator(isLoading) {
+            if (isLoading) {
+                loadingIndicator.classList.remove('hidden');
+            } else {
+                loadingIndicator.classList.add('hidden');
+            }
+        }
+
+        // Apply configuration
+        function applyConfig() {
+            const apiKey = document.getElementById('apiKey').value;
+            const apiEndpoint = document.getElementById('apiEndpoint').value;
+            const modelName = document.getElementById('modelName').value;
+            const suggestionDelay = parseFloat(document.getElementById('suggestionDelay').value);
+            const systemPrompt = document.getElementById('systemPrompt').value;
+            const context = document.getElementById('context').value;
+
+            // Apply to both editors
+            [editor1, editor2].forEach(editor => {
+                if (apiKey) editor.setApiKey(apiKey);
+                editor.setApiEndpoint(apiEndpoint);
+                editor.setModelName(modelName);
+                editor.setSuggestionDelay(suggestionDelay);
+                editor.setSystemPrompt(systemPrompt);
+                editor.setContext(context);
+            });
+
+            log('config-applied', 'Configuration updated for both editors');
+        }
+
+        // Reset configuration
+        function resetConfig() {
+            editor1.setApiEndpoint('https://api.openai.com/v1/chat/completions');
+            editor1.setModelName('gpt-3.5-turbo');
+            editor1.setSuggestionDelay(1);
+            editor1.setSystemPrompt("You are a helpful writing assistant. Continue the user's text naturally and coherently. Provide 1-3 sentences that would logically follow their writing. Keep the same tone and style. Do not repeat what they've already written.");
+            editor1.setContext('');
+
+            // Sync to editor2
+            editor2.setApiEndpoint(editor1.getApiEndpoint());
+            editor2.setModelName(editor1.getModelName());
+            editor2.setSuggestionDelay(editor1.getSuggestionDelay());
+            editor2.setSystemPrompt(editor1.getSystemPrompt());
+            editor2.setContext(editor1.getContext());
+
+            initConfigInputs();
+            log('config-reset', 'Configuration reset to defaults');
+        }
+
+        // Clear API key
+        function clearApiKey() {
+            editor1.setApiKey('');
+            editor2.setApiKey('');
+            document.getElementById('apiKey').value = '';
+            log('api-key-cleared', 'API key removed from both editors');
+        }
+
+        // Get value
+        function getValue() {
+            const value = editor1.getText();
+            log('get-value', `Current value: "${value.substring(0, 50)}${value.length > 50 ? '...' : ''}"`);
+            alert(`Editor value (${value.length} chars):\n\n${value}`);
+        }
+
+        // Set value
+        function setValue() {
+            const sampleText = 'The quick brown fox jumps over the lazy dog. This is a sample text to demonstrate the AI text editor capabilities.';
+            editor1.setText(sampleText);
+            log('set-value', 'Sample value set');
+        }
+
+        // Clear value
+        function clearValue() {
+            editor1.setText('');
+            log('clear-value', 'Editor cleared');
+        }
+
+        // Get configuration
+        function getConfig() {
+            const config = {
+                apiKey: editor1.getApiKey() ? '***' + editor1.getApiKey().slice(-4) : 'Not set',
+                apiEndpoint: editor1.getApiEndpoint(),
+                modelName: editor1.getModelName(),
+                suggestionDelay: editor1.getSuggestionDelay(),
+                systemPrompt: editor1.getSystemPrompt().substring(0, 50) + '...',
+                context: editor1.getContext() || 'Not set'
+            };
+            log('get-config', JSON.stringify(config, null, 2));
+            alert('Configuration:\n\n' + JSON.stringify(config, null, 2));
+        }
+
+        // Trigger suggestion manually
+        function triggerSuggestion() {
+            // Trigger by simulating a text input event
+            const event = new Event('input', { bubbles: true });
+            editor1.shadowRoot?.querySelector('textarea')?.dispatchEvent(event);
+            log('trigger-suggestion', 'Manually triggered suggestion');
+        }
+
+        // Button event listeners
+        document.getElementById('applyConfigBtn').addEventListener('click', applyConfig);
+        document.getElementById('resetConfigBtn').addEventListener('click', resetConfig);
+        document.getElementById('clearApiKeyBtn').addEventListener('click', clearApiKey);
+        document.getElementById('getValueBtn').addEventListener('click', getValue);
+        document.getElementById('setValueBtn').addEventListener('click', setValue);
+        document.getElementById('clearValueBtn').addEventListener('click', clearValue);
+        document.getElementById('getConfigBtn').addEventListener('click', getConfig);
+        document.getElementById('triggerSuggestionBtn').addEventListener('click', triggerSuggestion);
+        document.getElementById('clearLogBtn').addEventListener('click', clearLog);
+
+        // Initialize
+        initConfigInputs();
+        updateStatusIndicator(!!editor1.getApiKey());
+        log('initialized', 'Demo loaded and ready');
+    </script>
+</body>
+</html>
