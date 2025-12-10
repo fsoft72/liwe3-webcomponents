@@ -81,6 +81,16 @@
       "types": "./dist/MarkdownPreview.d.ts",
       "import": "./dist/MarkdownPreview.js",
       "default": "./dist/MarkdownPreview.js"
+    },
+    "./checklist": {
+      "types": "./dist/CheckList.d.ts",
+      "import": "./dist/CheckList.js",
+      "default": "./dist/CheckList.js"
+    },
+    "./resizable-cropper": {
+      "types": "./dist/ResizableCropper.d.ts",
+      "import": "./dist/ResizableCropper.js",
+      "default": "./dist/ResizableCropper.js"
     }
   },
   "files": [

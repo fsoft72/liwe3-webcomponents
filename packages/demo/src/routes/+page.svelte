@@ -129,6 +129,16 @@
       </p>
       <span class="card-link">View Demo →</span>
     </a>
+
+    <a href="/resizable-cropper" class="component-card">
+      <div class="card-icon">✂️</div>
+      <h2>ResizableCropper</h2>
+      <p>
+        Image resize and crop container with zoom, pan, and aspect ratio support.
+        Save/restore state with getValues() and setValues() API.
+      </p>
+      <span class="card-link">View Demo →</span>
+    </a>
   </section>
 
   <section class="features">
