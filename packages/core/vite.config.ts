@@ -22,6 +22,7 @@ export default defineConfig( {
         CheckList: resolve( __dirname, 'src/CheckList.ts' ),
         ButtonToolbar: resolve( __dirname, 'src/ButtonToolbar.ts' ),
         ResizableCropper: resolve( __dirname, 'src/ResizableCropper.ts' ),
+        ComicBalloon: resolve( __dirname, 'src/ComicBalloon.ts' ),
       },
       formats: [ 'es' ],
       fileName: ( format, entryName ) => `${ entryName }.js`,

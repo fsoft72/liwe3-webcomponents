@@ -122,6 +122,16 @@ export {
   type ResizableCropperValues
 } from './ResizableCropper';
 
+// Export ComicBalloon
+export {
+  ComicBalloonElement,
+  defineComicBalloon,
+  BalloonType,
+  type HandlerPosition,
+  type ContentChangeEvent,
+  type HandlerMoveEvent
+} from './ComicBalloon';
+
 // Convenience function to register all components at once
 export const defineAllComponents = (): void => {
   if ( typeof window !== 'undefined' ) {
@@ -140,5 +150,6 @@ export const defineAllComponents = (): void => {
     import( './CheckList' ).then( ( { defineCheckList } ) => defineCheckList() );
     import( './ButtonToolbar' ).then( ( { defineButtonToolbar } ) => defineButtonToolbar() );
     import( './ResizableCropper' ).then( ( { defineResizableCropper } ) => defineResizableCropper() );
+    import( './ComicBalloon' ).then( ( { defineComicBalloon } ) => defineComicBalloon() );
   }
 };
