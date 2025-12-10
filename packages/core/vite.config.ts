@@ -21,6 +21,7 @@ export default defineConfig( {
         ChunkUploader: resolve( __dirname, 'src/ChunkUploader.ts' ),
         CheckList: resolve( __dirname, 'src/CheckList.ts' ),
         ButtonToolbar: resolve( __dirname, 'src/ButtonToolbar.ts' ),
+        ResizableCropper: resolve( __dirname, 'src/ResizableCropper.ts' ),
       },
       formats: [ 'es' ],
       fileName: ( format, entryName ) => `${ entryName }.js`,

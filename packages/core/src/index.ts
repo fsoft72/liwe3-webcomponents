@@ -113,6 +113,15 @@ export {
   defineMarkdownPreview
 } from './MarkdownPreview';
 
+// Export ResizableCropper
+export {
+  ResizableCropperElement,
+  defineResizableCropper,
+  type ResizableCropperState,
+  type ResizableCropEventDetail,
+  type ResizableCropperValues
+} from './ResizableCropper';
+
 // Convenience function to register all components at once
 export const defineAllComponents = (): void => {
   if ( typeof window !== 'undefined' ) {
@@ -130,5 +139,6 @@ export const defineAllComponents = (): void => {
     import( './ChunkUploader' ).then( ( { defineChunkUploader } ) => defineChunkUploader() );
     import( './CheckList' ).then( ( { defineCheckList } ) => defineCheckList() );
     import( './ButtonToolbar' ).then( ( { defineButtonToolbar } ) => defineButtonToolbar() );
+    import( './ResizableCropper' ).then( ( { defineResizableCropper } ) => defineResizableCropper() );
   }
 };
