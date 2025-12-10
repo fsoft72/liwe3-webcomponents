@@ -192,6 +192,17 @@
         </liwe3-chunk-uploader>
     </div>
 
+    <div class="uploader-container">
+        <h2 style="margin-bottom: 16px;">Compact Single File Uploader</h2>
+        <liwe3-chunk-uploader
+            id="compactUploader"
+            server-url=""
+            chunk-size="5"
+            max-file-size="5120"
+            compact>
+        </liwe3-chunk-uploader>
+    </div>
+
     <div class="log-container">
         <h2>Event Log</h2>
         <div id="eventLog">
@@ -207,6 +218,7 @@
         import { defineChunkUploader } from '../dist/ChunkUploader.js';
 
         const uploader = document.getElementById('uploader');
+        const compactUploader = document.getElementById('compactUploader');
         const eventLog = document.getElementById('eventLog');
 
         // Load saved configuration
@@ -214,6 +226,7 @@
         if (savedUrl) {
             document.getElementById('serverUrl').value = savedUrl;
             uploader.serverURL = savedUrl;
+            compactUploader.serverURL = savedUrl;
         }
 
         // Set up callbacks
@@ -225,6 +238,14 @@
             logEvent(`All uploads complete! Total files: ${files.length}`, false);
         };
 
+        compactUploader.onfilecomplete = (file) => {
+            logEvent(`[Compact] File completed: ${file.file.name} (${formatBytes(file.file.size)})`, false);
+        };
+
+        compactUploader.onuploadcomplete = (files) => {
+            logEvent(`[Compact] Upload complete!`, false);
+        };
+
         // Listen to custom events
         uploader.addEventListener('filecomplete', (e) => {
             console.log('File complete event:', e.detail);
@@ -232,6 +253,14 @@
 
         uploader.addEventListener('uploadcomplete', (e) => {
             console.log('Upload complete event:', e.detail);
+        });
+
+        compactUploader.addEventListener('filecomplete', (e) => {
+            console.log('[Compact] File complete event:', e.detail);
+        });
+
+        compactUploader.addEventListener('uploadcomplete', (e) => {
+            console.log('[Compact] Upload complete event:', e.detail);
         });
 
         // Helper functions
@@ -244,18 +273,23 @@
 
             if (serverUrl) {
                 uploader.serverURL = serverUrl;
+                compactUploader.serverURL = serverUrl;
                 localStorage.setItem('uploaderServerUrl', serverUrl);
             }
 
             uploader.chunkSize = chunkSize;
             uploader.maxFileSize = maxFileSize;
+            compactUploader.chunkSize = chunkSize;
+            compactUploader.maxFileSize = maxFileSize;
 
             if (authToken) {
                 uploader.authToken = authToken;
+                compactUploader.authToken = authToken;
             }
 
             if (validFiletypes) {
                 uploader.validFiletypes = validFiletypes.split(',').map(t => t.trim());
+                compactUploader.validFiletypes = validFiletypes.split(',').map(t => t.trim());
             }
 
             logEvent(`Configuration applied: Chunk Size=${chunkSize}MB, Max Size=${maxFileSize}MB`, false);
@@ -269,6 +303,7 @@
         window.clearUrl = () => {
             document.getElementById('serverUrl').value = '';
             uploader.serverURL = '';
+            compactUploader.serverURL = '';
             localStorage.removeItem('uploaderServerUrl');
             logEvent('Server URL cleared', false);
         };

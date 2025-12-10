@@ -24,6 +24,7 @@ export interface ChunkUploaderConfig {
 	labelDropFiles? : string; // Custom text for drop zone (default: "Drop files here")
 	labelBrowse? : string; // Custom label for browse button (default: "Browse Files")
 	folder? : string; // Destination folder name for uploads
+	compact? : boolean; // Compact mode (single file, no preview)
 	onfilecomplete? : ( file : UploadedFile ) => void;
 	onuploadcomplete? : ( files : UploadedFile[] ) => void;
 	parseResponse? : ( response : any, endpoint : 'initiate' | 'part' | 'complete' ) => any; // Transform endpoint responses
@@ -51,7 +52,7 @@ export class ChunkUploaderElement extends HTMLElement {
 	}
 
 	static get observedAttributes () : string[] {
-		return [ 'server-url', 'chunk-size', 'auth-token', 'valid-filetypes', 'max-file-size', 'label-drop-files', 'label-browse', 'folder' ];
+		return [ 'server-url', 'chunk-size', 'auth-token', 'valid-filetypes', 'max-file-size', 'label-drop-files', 'label-browse', 'folder', 'compact' ];
 	}
 
 	attributeChangedCallback ( name : string, oldValue : string | null, newValue : string | null ) : void {
@@ -82,6 +83,10 @@ export class ChunkUploaderElement extends HTMLElement {
 					break;
 				case 'folder':
 					this.config.folder = newValue || undefined;
+					break;
+				case 'compact':
+					this.config.compact = newValue !== null;
+					this.updateCompactMode();
 					break;
 			}
 		}
@@ -183,6 +188,20 @@ export class ChunkUploaderElement extends HTMLElement {
 		}
 	}
 
+	get compact () : boolean {
+		return !!this.config.compact;
+	}
+
+	set compact ( value : boolean ) {
+		this.config.compact = value;
+		if ( value ) {
+			this.setAttribute( 'compact', '' );
+		} else {
+			this.removeAttribute( 'compact' );
+		}
+		this.updateCompactMode();
+	}
+
 	set onfilecomplete ( callback : (( file : UploadedFile ) => void) | undefined ) {
 		this.config.onfilecomplete = callback;
 	}
@@ -207,6 +226,22 @@ export class ChunkUploaderElement extends HTMLElement {
 		}
 		if ( browseBtn ) {
 			browseBtn.textContent = this.config.labelBrowse || 'Browse Files';
+		}
+	}
+
+	/**
+	 * Updates compact mode styles and attributes
+	 */
+	private updateCompactMode () : void {
+		const container = this.shadowRoot.querySelector( '.container' );
+		const fileInput = this.shadowRoot.querySelector( '#fileInput' ) as HTMLInputElement;
+
+		if ( this.config.compact ) {
+			container?.classList.add( 'compact' );
+			fileInput?.removeAttribute( 'multiple' );
+		} else {
+			container?.classList.remove( 'compact' );
+			fileInput?.setAttribute( 'multiple', '' );
 		}
 	}
 
@@ -273,8 +308,15 @@ export class ChunkUploaderElement extends HTMLElement {
 	 * Adds files to the upload queue
 	 */
 	private async addFiles ( fileList : FileList ) : Promise<void> {
+		if ( this.config.compact ) {
+			this.files.clear();
+		}
+
 		const files = Array.from( fileList );
-		for ( const file of files ) {
+		const filesToProcess = this.config.compact ? [ files[0] ] : files;
+
+		for ( const file of filesToProcess ) {
+			if ( !file ) continue;
 			const validation = this.validateFile( file );
 
 			const id = this.generateFileId();
@@ -314,6 +356,9 @@ export class ChunkUploaderElement extends HTMLElement {
 			throw new Error( 'Server URL is not configured' );
 		}
 
+		// Remove trailing slash from serverURL if present
+		const serverUrl = this.config.serverURL.replace( /\/$/, '' );
+
 		const { file } = uploadedFile;
 		uploadedFile.status = 'uploading';
 		uploadedFile.progress = 0;
@@ -329,14 +374,16 @@ export class ChunkUploaderElement extends HTMLElement {
 			}
 
 			// Step 1: Initiate multipart upload
-			const initResponse = await fetch( `${this.config.serverURL}/api/upload/initiate`, {
+			const initResponse = await fetch( `${serverUrl}/api/upload/initiate`, {
 				method: 'POST',
+				mode: 'cors',
 				headers,
 				body: JSON.stringify( {
 					fileName: file.name,
 					fileType: file.type,
 					folder: this.config.folder,
 				} ),
+				signal: this.abortController?.signal,
 			} );
 
 			if ( !initResponse.ok ) {
@@ -380,8 +427,9 @@ export class ChunkUploaderElement extends HTMLElement {
 					partHeaders['Authorization'] = `Bearer ${this.config.authToken}`;
 				}
 
-				const partResponse = await fetch( `${this.config.serverURL}/api/upload/part`, {
+				const partResponse = await fetch( `${serverUrl}/api/upload/part`, {
 					method: 'POST',
+					mode: 'cors',
 					headers: partHeaders,
 					body: chunk,
 					signal: this.abortController?.signal,
@@ -405,14 +453,16 @@ export class ChunkUploaderElement extends HTMLElement {
 			}
 
 			// Step 3: Complete multipart upload
-			const completeResponse = await fetch( `${this.config.serverURL}/api/upload/complete`, {
+			const completeResponse = await fetch( `${serverUrl}/api/upload/complete`, {
 				method: 'POST',
+				mode: 'cors',
 				headers,
 				body: JSON.stringify( {
 					uploadId,
 					key,
 					parts,
 				} ),
+				signal: this.abortController?.signal,
 			} );
 
 			if ( !completeResponse.ok ) {
@@ -546,8 +596,11 @@ export class ChunkUploaderElement extends HTMLElement {
 			// If upload was initiated, abort it on the server
 			if ( file.uploadId && file.key ) {
 				try {
-					await fetch( `${this.config.serverURL}/api/upload/abort`, {
+					// Remove trailing slash from serverURL if present
+					const serverUrl = this.config.serverURL.replace( /\/$/, '' );
+					await fetch( `${serverUrl}/api/upload/abort`, {
 						method: 'POST',
+						mode: 'cors',
 						headers,
 						body: JSON.stringify( {
 							uploadId: file.uploadId,
@@ -976,6 +1029,72 @@ export class ChunkUploaderElement extends HTMLElement {
         .buttons-container {
           display: flex;
           align-items: center;
+        }
+
+        /* Compact Mode Styles */
+        .container.compact .upload-zone {
+          padding: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 8px;
+        }
+
+        .container.compact .upload-icon,
+        .container.compact .upload-hint {
+          display: none;
+        }
+
+        .container.compact .upload-text {
+          font-size: 14px;
+          margin-bottom: 0;
+        }
+
+        .container.compact .browse-btn {
+          margin-top: 0;
+          padding: 6px 12px;
+          font-size: 14px;
+        }
+
+        .container.compact .file-cards-container {
+          margin-top: 12px;
+        }
+
+        .container.compact .file-card {
+          width: 100%;
+          display: flex;
+          align-items: center;
+          padding: 8px;
+          height: auto;
+        }
+
+        .container.compact .preview {
+          display: none !important;
+        }
+
+        .container.compact .file-info {
+          margin-bottom: 0;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          flex: 0 0 auto;
+        }
+
+        .container.compact .file-name {
+          margin-bottom: 0;
+          max-width: 150px;
+        }
+
+        .container.compact .progress-container {
+          margin-top: 0;
+          flex: 1;
+          margin-left: 12px;
+          margin-right: 32px;
+        }
+
+        .container.compact .remove-btn {
+          top: 50%;
+          transform: translateY(-50%);
         }
       </style>
 

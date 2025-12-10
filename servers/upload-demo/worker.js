@@ -39,7 +39,7 @@ export default {
     try {
       // CORS preflight support
       if (request.method === "OPTIONS") {
-        return handleCORS();
+        return handleCORS(request);
       }
 
       const url = new URL(request.url);
@@ -71,7 +71,7 @@ export default {
 };
 
 async function handleInitiate(request, env) {
-  const { fileName, fileType } = await request.json();
+  const { fileName, fileType, folder } = await request.json();
 
   if (!fileName) {
     return jsonResponse({ error: "fileName is required" }, 400);
@@ -79,7 +79,8 @@ async function handleInitiate(request, env) {
 
   // Use a time-based key so uploads are unique, or customize as needed
   const timestamp = Date.now();
-  const key = `uploads/${timestamp}-${fileName}`;
+  const prefix = folder ? (folder.endsWith('/') ? folder : `${folder}/`) : 'uploads/';
+  const key = `${prefix}${timestamp}-${fileName}`;
 
   const multipartUpload = await env.MY_BUCKET.createMultipartUpload(key, {
     httpMetadata: {
@@ -162,12 +163,16 @@ async function handleAbort(request, env) {
   });
 }
 
-function handleCORS() {
+function handleCORS(request) {
+  // Allow all requested headers to avoid CORS issues
+  const reqHeaders = request.headers.get("Access-Control-Request-Headers");
+  const allowHeaders = reqHeaders || "Content-Type, X-Upload-Id, X-Key, X-Part-Number, Authorization";
+
   return new Response(null, {
     headers: {
       "Access-Control-Allow-Origin": "*",
       "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type, X-Upload-Id, X-Key, X-Part-Number, Authorization",
+      "Access-Control-Allow-Headers": allowHeaders,
       "Access-Control-Max-Age": "86400",
     },
   });
