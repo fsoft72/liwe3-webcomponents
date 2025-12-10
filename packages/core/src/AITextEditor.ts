@@ -7,7 +7,7 @@ const AI_TEXT_EDITOR_API_KEY = 'ai-text-editor-api-key';
 
 export interface AITextEditorConfig {
   apiKey?: string;
-  suggestionDelay?: number;
+  suggestionDelay?: number; // Delay in seconds before showing AI suggestions
   systemPrompt?: string;
   apiEndpoint?: string;
   modelName?: string;
@@ -31,7 +31,7 @@ export class AITextEditorElement extends HTMLElement {
   private isShowingSuggestion: boolean = false;
 
   private apiKey: string = '';
-  private suggestionDelay: number = 1000;
+  private suggestionDelay: number = 1000; // Stored in milliseconds (default: 1000ms = 1 second)
   private systemPrompt: string = "You are a helpful writing assistant. Continue the user's text naturally and coherently. Provide 1-3 sentences that would logically follow their writing. Keep the same tone and style. Do not repeat what they've already written.";
   private apiEndpoint: string = 'https://api.openai.com/v1/chat/completions';
   private modelName: string = 'gpt-3.5-turbo';
