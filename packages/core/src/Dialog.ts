@@ -6,7 +6,7 @@
 export type DialogButton = {
 	label : string;
 	backgroundColor? : string;
-	onclick : () => void;
+	onclick : ( dialog? : DialogElement ) => void;
 };
 
 export type DialogConfig = {
@@ -18,7 +18,7 @@ export type DialogConfig = {
 	clickToClose? : boolean; // If true, clicking outside closes dialog (like cancel)
 	fxAppear? : 'none' | 'fade' | 'slide'; // Animation effect when dialog appears (default: 'none')
 	fxSpeed? : number; // Animation duration in milliseconds (default: 1000)
-	onClose? : () => void;
+	onclose? : () => void;
 };
 
 export class DialogElement extends HTMLElement {
@@ -102,8 +102,8 @@ export class DialogElement extends HTMLElement {
 			this.removeKeyboardListeners();
 
 			this.dispatchEvent( new CustomEvent( 'close' ) );
-			if ( this.config.onClose ) {
-				this.config.onClose();
+			if ( this.config.onclose ) {
+				this.config.onclose();
 			}
 			this.remove();
 		}, animationDuration );
@@ -182,7 +182,7 @@ export class DialogElement extends HTMLElement {
 				if ( buttonIndex !== undefined ) {
 					const button = this.config.buttons?.[parseInt( buttonIndex, 10 )];
 					if ( button && button.onclick ) {
-						button.onclick();
+						button.onclick( this );
 					}
 				}
 			}
@@ -472,14 +472,16 @@ const getDialogContainer = () : HTMLElement => {
  *     {
  *       label: 'Delete',
  *       backgroundColor: '#dc3545',
- *       onclick: () => {
+ *       onclick: (dialog) => {
  *         console.log('File deleted');
+ *         dialog.close();
  *       }
  *     },
  *     {
  *       label: 'Cancel',
- *       onclick: () => {
+ *       onclick: (dialog) => {
  *         console.log('Cancelled');
+ *         dialog.close();
  *       }
  *     }
  *   ],
