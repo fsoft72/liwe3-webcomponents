@@ -6,7 +6,7 @@
 export type DialogButton = {
 	label : string;
 	backgroundColor? : string;
-	onClick : () => void;
+	onclick : () => void;
 };
 
 export type DialogConfig = {
@@ -181,8 +181,8 @@ export class DialogElement extends HTMLElement {
 				const buttonIndex = ( target.closest( '.dialog-button' ) as HTMLElement ).dataset.index;
 				if ( buttonIndex !== undefined ) {
 					const button = this.config.buttons?.[parseInt( buttonIndex, 10 )];
-					if ( button && button.onClick ) {
-						button.onClick();
+					if ( button && button.onclick ) {
+						button.onclick();
 					}
 				}
 			}
@@ -205,8 +205,11 @@ export class DialogElement extends HTMLElement {
 		const buttons = this.config.buttons || [];
 		const animationSpeed = this.config.fxSpeed || 1000;
 		const animationDuration = `${animationSpeed}ms`;
-		const fxClass = this.config.fxAppear === 'fade' ? 'fx-fade' :
-			this.config.fxAppear === 'slide' ? 'fx-slide' : '';
+		const fxClass = this.config.fxAppear === 'fade'
+			? 'fx-fade'
+			: this.config.fxAppear === 'slide'
+			? 'fx-slide'
+			: '';
 
 		// Determine button layout:
 		// - If only 1 button, put it on the right
@@ -469,13 +472,13 @@ const getDialogContainer = () : HTMLElement => {
  *     {
  *       label: 'Delete',
  *       backgroundColor: '#dc3545',
- *       onClick: () => {
+ *       onclick: () => {
  *         console.log('File deleted');
  *       }
  *     },
  *     {
  *       label: 'Cancel',
- *       onClick: () => {
+ *       onclick: () => {
  *         console.log('Cancelled');
  *       }
  *     }

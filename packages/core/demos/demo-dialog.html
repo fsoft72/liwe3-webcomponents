@@ -312,14 +312,14 @@ const dialog = dialogAdd({
     {
       label: 'Delete',
       backgroundColor: '#dc3545',
-      onClick: () => {
+      onclick: () => {
         console.log('File deleted');
         dialog.close(); // Close the dialog after action
       }
     },
     {
       label: 'Cancel',
-      onClick: () => {
+      onclick: () => {
         console.log('Cancelled');
         dialog.close();
       }
@@ -357,14 +357,14 @@ const dialog = dialogAdd({
 					{
 						label: 'Delete',
 						backgroundColor: '#dc3545',
-						onClick: () => {
+						onclick: () => {
 							alert( 'File deleted!' );
 							dialog.close();
 						},
 					},
 					{
 						label: 'Cancel',
-						onClick: () => {
+						onclick: () => {
 							console.log( 'Cancelled' );
 							dialog.close();
 						},
@@ -392,7 +392,7 @@ const dialog = dialogAdd({
 					{
 						label: 'Delete My Account',
 						backgroundColor: '#dc3545',
-						onClick: () => {
+						onclick: () => {
 							alert( 'Account deletion initiated' );
 							dialog.close();
 						},
@@ -410,21 +410,21 @@ const dialog = dialogAdd({
 					{
 						label: 'Save',
 						backgroundColor: '#28a745',
-						onClick: () => {
+						onclick: () => {
 							alert( 'Changes saved!' );
 							dialog.close();
 						},
 					},
 					{
 						label: "Don't save",
-						onClick: () => {
+						onclick: () => {
 							console.log( "Don't save" );
 							dialog.close();
 						},
 					},
 					{
 						label: 'Cancel',
-						onClick: () => {
+						onclick: () => {
 							dialog.close();
 						},
 					},
@@ -783,7 +783,8 @@ const dialog = dialogAdd({
 		window.showNoAnimationDialog = () => {
 			dialogAdd( {
 				title: 'No Animation',
-				body: '<p>This dialog appears instantly without any animation effect.</p><p>This is the default behavior when <code>fxAppear</code> is set to <code>"none"</code> or not specified.</p>',
+				body:
+					'<p>This dialog appears instantly without any animation effect.</p><p>This is the default behavior when <code>fxAppear</code> is set to <code>"none"</code> or not specified.</p>',
 				fxAppear: 'none',
 			} );
 		};

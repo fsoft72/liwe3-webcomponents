@@ -29,14 +29,14 @@ export type { DialogConfig, DialogElement };
  *     {
  *       label: 'Delete',
  *       backgroundColor: '#dc3545',
- *       onClick: () => {
+ *       onclick: () => {
  *         console.log('File deleted');
  *         dialog?.close();
  *       }
  *     },
  *     {
  *       label: 'Cancel',
- *       onClick: () => {
+ *       onclick: () => {
  *         dialog?.close();
  *       }
  *     }
