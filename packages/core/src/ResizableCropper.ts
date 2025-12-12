@@ -4,39 +4,48 @@
  */
 
 export interface ResizableCropperState {
-	width: number;
-	height: number;
-	minWidth: number;
-	minHeight: number;
-	aspectRatio: string | null;
-	contentElement: HTMLElement | null;
-	contentLeft: number;
-	contentTop: number;
+	width : number;
+	height : number;
+	minWidth : number;
+	minHeight : number;
+	aspectRatio : string | null;
+	contentElement : HTMLElement | null;
+	contentLeft : number;
+	contentTop : number;
+	rotation : number;
+	wrapperLeft : number;
+	wrapperTop : number;
 }
 
 export interface ResizableCropperValues {
-	wrapperWidth: number;
-	wrapperHeight: number;
-	contentWidth: number;
-	contentHeight: number;
-	contentLeft: number;
-	contentTop: number;
-	zoom: number;
+	wrapperWidth : number;
+	wrapperHeight : number;
+	wrapperLeft : number;
+	wrapperTop : number;
+	contentWidth : number;
+	contentHeight : number;
+	contentLeft : number;
+	contentTop : number;
+	zoom : number;
+	rotation : number;
 }
 
 export interface ResizableCropEventDetail {
-	width: number;
-	height: number;
-	contentLeft: number;
-	contentTop: number;
-	action: 'scale' | 'crop' | 'pan';
-	handle?: string;
+	width : number;
+	height : number;
+	wrapperLeft : number;
+	wrapperTop : number;
+	contentLeft : number;
+	contentTop : number;
+	action : 'scale' | 'crop' | 'pan' | 'rotate' | 'move';
+	rotation? : number;
+	handle? : string;
 }
 
 export class ResizableCropperElement extends HTMLElement {
-	declare shadowRoot: ShadowRoot;
+	declare shadowRoot : ShadowRoot;
 
-	private state: ResizableCropperState = {
+	private state : ResizableCropperState = {
 		width: 200,
 		height: 150,
 		minWidth: 50,
@@ -45,15 +54,18 @@ export class ResizableCropperElement extends HTMLElement {
 		contentElement: null,
 		contentLeft: 0,
 		contentTop: 0,
+		rotation: 0,
+		wrapperLeft: 0,
+		wrapperTop: 0,
 	};
 
-	private wrapper!: HTMLElement;
-	private contentSlot!: HTMLSlotElement;
-	private handlesContainer!: HTMLElement;
+	private wrapper! : HTMLElement;
+	private contentSlot! : HTMLSlotElement;
+	private handlesContainer! : HTMLElement;
 
 	private isDragging = false;
-	private dragAction: 'scale' | 'crop' | 'pan' | null = null;
-	private dragHandle: string | null = null;
+	private dragAction : 'scale' | 'crop' | 'pan' | 'rotate' | 'move' | null = null;
+	private dragHandle : string | null = null;
 	private dragStartX = 0;
 	private dragStartY = 0;
 	private dragStartWidth = 0;
@@ -64,6 +76,14 @@ export class ResizableCropperElement extends HTMLElement {
 	private dragStartContentHeight = 0;
 	private initialContentWidth = 0;
 	private initialContentHeight = 0;
+	private _dragStartRotation = 0;
+	private _dragStartPointerAngle = 0;
+	private _dragRotateCenterX = 0;
+	private _dragRotateCenterY = 0;
+	private _interactionMode : 'transform' | 'crop' = 'transform';
+	private _dragPointerOffsetX = 0;
+	private _dragPointerOffsetY = 0;
+	private _dragMoveContainer : HTMLElement | null = null;
 
 	constructor () {
 		super();
@@ -71,11 +91,11 @@ export class ResizableCropperElement extends HTMLElement {
 		this.render();
 	}
 
-	static get observedAttributes (): string[] {
-		return [ 'width', 'height', 'min-width', 'min-height', 'aspect-ratio', 'disabled', 'allow-crop', 'allow-resize' ];
+	static get observedAttributes () : string[] {
+		return [ 'width', 'height', 'min-width', 'min-height', 'aspect-ratio', 'disabled', 'allow-crop', 'allow-resize', 'allow-rotate', 'allow-drag' ];
 	}
 
-	attributeChangedCallback ( name: string, oldValue: string | null, newValue: string | null ): void {
+	attributeChangedCallback ( name : string, oldValue : string | null, newValue : string | null ) : void {
 		if ( oldValue === newValue ) return;
 
 		switch ( name ) {
@@ -98,18 +118,24 @@ export class ResizableCropperElement extends HTMLElement {
 				break;
 			case 'allow-crop':
 			case 'allow-resize':
+			case 'allow-rotate':
+			case 'allow-drag':
 				this.updateHandlesVisibility();
+				this._applyInteractionModeUI();
 				break;
 		}
 	}
 
-	connectedCallback (): void {
+	connectedCallback () : void {
 		this.wrapper = this.shadowRoot.querySelector( '#wrapper' )!;
+		this.shadowRoot.querySelector( '#clipper' )!;
 		this.contentSlot = this.shadowRoot.querySelector( 'slot' )!;
 		this.handlesContainer = this.shadowRoot.querySelector( '#handles-container' )!;
 
 		this.updateWrapperDimensions();
 		this.updateHandlesVisibility();
+		this._applyInteractionModeUI();
+		this._syncWrapperPositionFromLayout( this._getContainerForMove() );
 		this.bindEvents();
 
 		this.contentSlot.addEventListener( 'slotchange', () => {
@@ -119,18 +145,30 @@ export class ResizableCropperElement extends HTMLElement {
 		this.updateContentElement();
 	}
 
-	disconnectedCallback (): void {
+	disconnectedCallback () : void {
 		this.unbindEvents();
 	}
 
-	private updateContentElement (): void {
+	private _applyInteractionModeUI () : void {
+		if ( !this.wrapper ) return;
+		this.wrapper.style.cursor = this._interactionMode === 'transform' && this.allowDrag && !this.disabled ? 'move' : '';
+	}
+
+	private _setInteractionMode ( mode : 'transform' | 'crop' ) : void {
+		if ( this._interactionMode === mode ) return;
+		this._interactionMode = mode;
+		this.updateHandlesVisibility();
+		this._applyInteractionModeUI();
+	}
+
+	private updateContentElement () : void {
 		const nodes = this.contentSlot.assignedElements();
 		if ( nodes.length > 0 ) {
-			this.state.contentElement = nodes[ 0 ] as HTMLElement;
+			this.state.contentElement = nodes[0] as HTMLElement;
 			this.state.contentElement.style.position = 'absolute';
-			this.state.contentElement.style.left = `${ this.state.contentLeft }px`;
-			this.state.contentElement.style.top = `${ this.state.contentTop }px`;
-			
+			this.state.contentElement.style.left = `${this.state.contentLeft}px`;
+			this.state.contentElement.style.top = `${this.state.contentTop}px`;
+
 			// Get initial content dimensions
 			if ( this.state.contentElement instanceof HTMLImageElement ) {
 				if ( this.state.contentElement.complete ) {
@@ -144,62 +182,157 @@ export class ResizableCropperElement extends HTMLElement {
 		}
 	}
 
-	private initializeContentSize (): void {
+	private initializeContentSize () : void {
 		if ( !this.state.contentElement ) return;
-		const rect = this.state.contentElement.getBoundingClientRect();
-		if ( rect.width > 0 ) {
-			this.state.contentElement.style.width = `${ rect.width }px`;
+		const width = this.state.contentElement.offsetWidth;
+		const height = this.state.contentElement.offsetHeight;
+		if ( width > 0 ) {
+			this.state.contentElement.style.width = `${width}px`;
 			this.state.contentElement.style.height = 'auto';
-			this.initialContentWidth = rect.width;
-			this.initialContentHeight = rect.height;
+			this.initialContentWidth = width;
+			this.initialContentHeight = height;
 		}
 	}
 
-	private updateWrapperDimensions (): void {
+	private updateWrapperDimensions () : void {
 		if ( !this.wrapper ) return;
-		this.wrapper.style.width = `${ this.state.width }px`;
-		this.wrapper.style.height = `${ this.state.height }px`;
+		this.wrapper.style.width = `${this.state.width}px`;
+		this.wrapper.style.height = `${this.state.height}px`;
+		this._applyWrapperTransform();
 	}
 
-	private updateHandlesVisibility (): void {
+	private _applyWrapperTransform () : void {
+		if ( !this.wrapper ) return;
+		this.wrapper.style.transformOrigin = 'center center';
+		this.wrapper.style.transform = `rotate(${this.state.rotation}deg)`;
+	}
+
+	private updateHandlesVisibility () : void {
 		if ( !this.handlesContainer ) return;
 
 		const scaleHandle = this.handlesContainer.querySelector( '[data-action="scale"]' ) as HTMLElement;
+		const rotateHandle = this.handlesContainer.querySelector( '[data-action="rotate"]' ) as HTMLElement;
 		const cropHandles = this.handlesContainer.querySelectorAll( '[data-action="crop"]' );
 
 		if ( scaleHandle ) {
 			scaleHandle.style.display = this.allowResize ? '' : 'none';
 		}
 
+		if ( rotateHandle ) {
+			rotateHandle.style.display = this.allowRotate ? '' : 'none';
+		}
+
 		cropHandles.forEach( ( handle ) => {
-			( handle as HTMLElement ).style.display = this.allowCrop ? '' : 'none';
+			( handle as HTMLElement ).style.display = this.allowCrop && this._interactionMode === 'crop' ? '' : 'none';
 		} );
 	}
 
-	private bindEvents (): void {
+	private bindEvents () : void {
 		this.handlesContainer.addEventListener( 'pointerdown', this.handlePointerDown );
-		
+		this.wrapper.addEventListener( 'pointerdown', this.handleWrapperPointerDown );
+		this.wrapper.addEventListener( 'dblclick', this.handleWrapperDoubleClick );
+		document.addEventListener( 'pointerdown', this.handleDocumentPointerDown, true );
+
 		// Add listener for dragging the content/image itself
 		this.contentSlot.addEventListener( 'slotchange', () => {
 			const elements = this.contentSlot.assignedElements();
 			if ( elements.length > 0 ) {
-				const content = elements[ 0 ] as HTMLElement;
+				const content = elements[0] as HTMLElement;
 				content.addEventListener( 'pointerdown', this.handleContentPointerDown );
 			}
 		} );
 	}
 
-	private unbindEvents (): void {
+	private unbindEvents () : void {
 		this.handlesContainer.removeEventListener( 'pointerdown', this.handlePointerDown );
-		
+		this.wrapper.removeEventListener( 'pointerdown', this.handleWrapperPointerDown );
+		this.wrapper.removeEventListener( 'dblclick', this.handleWrapperDoubleClick );
+		document.removeEventListener( 'pointerdown', this.handleDocumentPointerDown, true );
+
 		const elements = this.contentSlot.assignedElements();
 		if ( elements.length > 0 ) {
-			const content = elements[ 0 ] as HTMLElement;
+			const content = elements[0] as HTMLElement;
 			content.removeEventListener( 'pointerdown', this.handleContentPointerDown );
 		}
 	}
 
-	private handlePointerDown = ( event: PointerEvent ): void => {
+	private handleWrapperDoubleClick = ( event : MouseEvent ) : void => {
+		if ( this.disabled ) return;
+		event.preventDefault();
+		event.stopPropagation();
+		this._setInteractionMode( 'crop' );
+	};
+
+	private handleDocumentPointerDown = ( event : PointerEvent ) : void => {
+		if ( this._interactionMode !== 'crop' ) return;
+		const path = event.composedPath();
+		if ( path.includes( this ) ) return;
+		this._setInteractionMode( 'transform' );
+	};
+
+	private _getContainerForMove () : HTMLElement {
+		return this.parentElement || ( this.offsetParent as HTMLElement ) || document.body;
+	}
+
+	private _ensureContainerPositionedForMove ( container : HTMLElement ) : void {
+		const computed = window.getComputedStyle( container );
+		if ( computed.position !== 'static' ) return;
+		container.style.position = 'relative';
+	}
+
+	private _syncWrapperPositionFromLayout ( container : HTMLElement ) : void {
+		const containerRect = container.getBoundingClientRect();
+		const hostRect = this.getBoundingClientRect();
+		const scrollLeft = container.scrollLeft;
+		const scrollTop = container.scrollTop;
+		const originLeft = containerRect.left + container.clientLeft;
+		const originTop = containerRect.top + container.clientTop;
+		this.state.wrapperLeft = hostRect.left - originLeft + scrollLeft;
+		this.state.wrapperTop = hostRect.top - originTop + scrollTop;
+	}
+
+	private _ensureAbsolutePositionForMove ( container : HTMLElement ) : void {
+		this._ensureContainerPositionedForMove( container );
+		this._syncWrapperPositionFromLayout( container );
+		this.style.position = 'absolute';
+		this.style.left = `${this.state.wrapperLeft}px`;
+		this.style.top = `${this.state.wrapperTop}px`;
+		this.style.touchAction = 'none';
+	}
+
+	private handleWrapperPointerDown = ( event : PointerEvent ) : void => {
+		if ( this.disabled ) return;
+		if ( !this.allowDrag ) return;
+		if ( this._interactionMode !== 'transform' ) return;
+
+		const target = event.target as HTMLElement;
+		if ( target.closest( '[data-action]' ) ) return;
+
+		// In transform mode, dragging anywhere moves the whole component
+		event.preventDefault();
+		event.stopPropagation();
+
+		const container = this._getContainerForMove();
+		this._dragMoveContainer = container;
+		this._ensureAbsolutePositionForMove( container );
+		this._syncWrapperPositionFromLayout( container );
+
+		const hostRect = this.getBoundingClientRect();
+		this._dragPointerOffsetX = event.clientX - hostRect.left;
+		this._dragPointerOffsetY = event.clientY - hostRect.top;
+
+		this.isDragging = true;
+		this.dragAction = 'move';
+		this.dragHandle = null;
+		this.dragStartX = event.clientX;
+		this.dragStartY = event.clientY;
+
+		document.addEventListener( 'pointermove', this.handlePointerMove );
+		document.addEventListener( 'pointerup', this.handlePointerUp );
+		this.dispatchEvent( new CustomEvent( 'rcw:move-start', { detail: { action: 'move' } } ) );
+	};
+
+	private handlePointerDown = ( event : PointerEvent ) : void => {
 		if ( this.disabled ) return;
 
 		const target = event.target as HTMLElement;
@@ -209,8 +342,10 @@ export class ResizableCropperElement extends HTMLElement {
 		event.preventDefault();
 		event.stopPropagation();
 
+		this.dragAction = handle.dataset.action as 'scale' | 'crop' | 'rotate';
+		if ( this.dragAction === 'crop' && this._interactionMode !== 'crop' ) return;
+		if ( this.dragAction === 'rotate' && !this.allowRotate ) return;
 		this.isDragging = true;
-		this.dragAction = handle.dataset.action as 'scale' | 'crop';
 		this.dragHandle = handle.dataset.corner || handle.dataset.side || null;
 		this.dragStartX = event.clientX;
 		this.dragStartY = event.clientY;
@@ -218,34 +353,45 @@ export class ResizableCropperElement extends HTMLElement {
 		this.dragStartHeight = this.state.height;
 		this.dragStartContentLeft = this.state.contentLeft;
 		this.dragStartContentTop = this.state.contentTop;
-		
-		// Get current content dimensions
+
+		// Get current content dimensions (ignore transforms)
 		if ( this.state.contentElement ) {
-			const rect = this.state.contentElement.getBoundingClientRect();
-			this.dragStartContentWidth = rect.width;
-			this.dragStartContentHeight = rect.height;
+			this.dragStartContentWidth = this.state.contentElement.offsetWidth;
+			this.dragStartContentHeight = this.state.contentElement.offsetHeight;
+		}
+
+		if ( this.dragAction === 'rotate' ) {
+			const wrapperRect = this.wrapper.getBoundingClientRect();
+			this._dragRotateCenterX = wrapperRect.left + wrapperRect.width / 2;
+			this._dragRotateCenterY = wrapperRect.top + wrapperRect.height / 2;
+			this._dragStartPointerAngle = Math.atan2( event.clientY - this._dragRotateCenterY, event.clientX - this._dragRotateCenterX );
+			this._dragStartRotation = this.state.rotation;
 		}
 
 		document.addEventListener( 'pointermove', this.handlePointerMove );
 		document.addEventListener( 'pointerup', this.handlePointerUp );
 
-		const eventName = this.dragAction === 'scale' ? 'rcw:scale-start' : 'rcw:crop-start';
-		this.dispatchEvent( new CustomEvent( eventName, {
-			detail: { action: this.dragAction, handle: this.dragHandle }
-		} ) );
+		const eventName = this.dragAction === 'scale'
+			? 'rcw:scale-start'
+			: this.dragAction === 'crop'
+			? 'rcw:crop-start'
+			: 'rcw:rotate-start';
+		this.dispatchEvent(
+			new CustomEvent( eventName, {
+				detail: { action: this.dragAction, handle: this.dragHandle },
+			} ),
+		);
 	};
 
-	private handleContentPointerDown = ( event: PointerEvent ): void => {
+	private handleContentPointerDown = ( event : PointerEvent ) : void => {
 		if ( this.disabled ) return;
-		
+		if ( this._interactionMode !== 'crop' ) return;
+
 		// Only allow panning if content is larger than wrapper
 		if ( !this.state.contentElement ) return;
-		
-		const contentRect = this.state.contentElement.getBoundingClientRect();
-		const wrapperRect = this.wrapper.getBoundingClientRect();
-		
-		// Check if content is larger than wrapper in either dimension
-		const canPan = contentRect.width > wrapperRect.width || contentRect.height > wrapperRect.height;
+
+		// Check if content is larger than wrapper in either dimension (ignore transforms)
+		const canPan = this.state.contentElement.offsetWidth > this.state.width || this.state.contentElement.offsetHeight > this.state.height;
 		if ( !canPan ) return;
 
 		event.preventDefault();
@@ -262,13 +408,32 @@ export class ResizableCropperElement extends HTMLElement {
 		document.addEventListener( 'pointermove', this.handlePointerMove );
 		document.addEventListener( 'pointerup', this.handlePointerUp );
 
-		this.dispatchEvent( new CustomEvent( 'rcw:pan-start', {
-			detail: { action: 'pan' }
-		} ) );
+		this.dispatchEvent(
+			new CustomEvent( 'rcw:pan-start', {
+				detail: { action: 'pan' },
+			} ),
+		);
 	};
 
-	private handlePointerMove = ( event: PointerEvent ): void => {
+	private handlePointerMove = ( event : PointerEvent ) : void => {
 		if ( !this.isDragging ) return;
+		if ( this.dragAction === 'move' ) {
+			const container = this._dragMoveContainer || this._getContainerForMove();
+			const containerRect = container.getBoundingClientRect();
+			const originLeft = containerRect.left + container.clientLeft;
+			const originTop = containerRect.top + container.clientTop;
+			this.state.wrapperLeft = event.clientX - originLeft + container.scrollLeft - this._dragPointerOffsetX;
+			this.state.wrapperTop = event.clientY - originTop + container.scrollTop - this._dragPointerOffsetY;
+			this.style.left = `${this.state.wrapperLeft}px`;
+			this.style.top = `${this.state.wrapperTop}px`;
+			this.dispatchChange( 'move' );
+			return;
+		}
+		if ( this.dragAction === 'rotate' ) {
+			this.handleRotate( event.clientX, event.clientY );
+			this.dispatchChange( 'rotate' );
+			return;
+		}
 
 		const deltaX = event.clientX - this.dragStartX;
 		const deltaY = event.clientY - this.dragStartY;
@@ -283,8 +448,15 @@ export class ResizableCropperElement extends HTMLElement {
 
 		this.dispatchChange( this.dragAction! );
 	};
+	private handleRotate ( pointerX : number, pointerY : number ) : void {
+		const pointerAngle = Math.atan2( pointerY - this._dragRotateCenterY, pointerX - this._dragRotateCenterX );
+		const deltaAngle = pointerAngle - this._dragStartPointerAngle;
+		const deltaDegrees = deltaAngle * ( 180 / Math.PI );
+		this.state.rotation = this._dragStartRotation + deltaDegrees;
+		this._applyWrapperTransform();
+	}
 
-	private handlePointerUp = (): void => {
+	private handlePointerUp = () : void => {
 		if ( !this.isDragging ) return;
 
 		this.isDragging = false;
@@ -297,9 +469,10 @@ export class ResizableCropperElement extends HTMLElement {
 
 		this.dragAction = null;
 		this.dragHandle = null;
+		this._dragMoveContainer = null;
 	};
 
-	private handleScale ( deltaX: number, deltaY: number, handleCorner: string ): void {
+	private handleScale ( deltaX : number, deltaY : number, handleCorner : string ) : void {
 		if ( !this.state.contentElement ) return;
 
 		let newWidth = this.dragStartWidth;
@@ -360,9 +533,9 @@ export class ResizableCropperElement extends HTMLElement {
 		// Update content size proportionally
 		const newContentWidth = this.dragStartContentWidth * scale;
 		const newContentHeight = this.dragStartContentHeight * scale;
-		
-		this.state.contentElement.style.width = `${ newContentWidth }px`;
-		this.state.contentElement.style.height = `${ newContentHeight }px`;
+
+		this.state.contentElement.style.width = `${newContentWidth}px`;
+		this.state.contentElement.style.height = `${newContentHeight}px`;
 
 		// Adjust content position proportionally to keep it centered relative to wrapper
 		this.state.contentLeft = this.dragStartContentLeft * scale;
@@ -372,7 +545,7 @@ export class ResizableCropperElement extends HTMLElement {
 		this.clampContentPosition();
 	}
 
-	private handleCrop ( deltaX: number, deltaY: number, side: string ): void {
+	private handleCrop ( deltaX : number, deltaY : number, side : string ) : void {
 		// Crop resizes the wrapper (visible area), not the content
 		let newWidth = this.dragStartWidth;
 		let newHeight = this.dragStartHeight;
@@ -431,21 +604,22 @@ export class ResizableCropperElement extends HTMLElement {
 		this.clampContentPosition();
 	}
 
-	private clampContentPosition (): void {
+	private clampContentPosition () : void {
 		if ( !this.state.contentElement ) return;
 
-		const contentRect = this.state.contentElement.getBoundingClientRect();
-		const minLeft = Math.min( 0, this.state.width - contentRect.width );
-		const minTop = Math.min( 0, this.state.height - contentRect.height );
+		const contentWidth = this.state.contentElement.offsetWidth;
+		const contentHeight = this.state.contentElement.offsetHeight;
+		const minLeft = Math.min( 0, this.state.width - contentWidth );
+		const minTop = Math.min( 0, this.state.height - contentHeight );
 
 		this.state.contentLeft = Math.max( minLeft, Math.min( 0, this.state.contentLeft ) );
 		this.state.contentTop = Math.max( minTop, Math.min( 0, this.state.contentTop ) );
 
-		this.state.contentElement.style.left = `${ this.state.contentLeft }px`;
-		this.state.contentElement.style.top = `${ this.state.contentTop }px`;
+		this.state.contentElement.style.left = `${this.state.contentLeft}px`;
+		this.state.contentElement.style.top = `${this.state.contentTop}px`;
 	}
 
-	private handlePan ( deltaX: number, deltaY: number ): void {
+	private handlePan ( deltaX : number, deltaY : number ) : void {
 		if ( !this.state.contentElement ) return;
 
 		// Pan the content by moving its position
@@ -456,11 +630,11 @@ export class ResizableCropperElement extends HTMLElement {
 		this.clampContentPosition();
 	}
 
-	private parseAspectRatio ( ratio: string ): number | null {
+	private parseAspectRatio ( ratio : string ) : number | null {
 		const parts = ratio.split( '/' );
 		if ( parts.length === 2 ) {
-			const width = parseFloat( parts[ 0 ] );
-			const height = parseFloat( parts[ 1 ] );
+			const width = parseFloat( parts[0] );
+			const height = parseFloat( parts[1] );
 			if ( !isNaN( width ) && !isNaN( height ) && height !== 0 ) {
 				return width / height;
 			}
@@ -468,32 +642,37 @@ export class ResizableCropperElement extends HTMLElement {
 		return null;
 	}
 
-	private dispatchChange ( action: 'scale' | 'crop' | 'pan' ): void {
-		const detail: ResizableCropEventDetail = {
+	private dispatchChange ( action : 'scale' | 'crop' | 'pan' | 'rotate' | 'move' ) : void {
+		const detail : ResizableCropEventDetail = {
 			width: this.state.width,
 			height: this.state.height,
+			wrapperLeft: this.state.wrapperLeft,
+			wrapperTop: this.state.wrapperTop,
 			contentLeft: this.state.contentLeft,
 			contentTop: this.state.contentTop,
 			action,
+			rotation: this.state.rotation,
 			handle: this.dragHandle || undefined,
 		};
 
 		this.dispatchEvent( new CustomEvent( 'rcw:change', { detail } ) );
-		
+
 		// Dispatch the onChange event with full values
 		this.dispatchOnChange();
 	}
 
-	private dispatchOnChange (): void {
+	private dispatchOnChange () : void {
 		const values = this.getValues();
-		this.dispatchEvent( new CustomEvent( 'change', { 
-			detail: values,
-			bubbles: true,
-			composed: true
-		} ) );
+		this.dispatchEvent(
+			new CustomEvent( 'change', {
+				detail: values,
+				bubbles: true,
+				composed: true,
+			} ),
+		);
 	}
 
-	private render (): void {
+	private render () : void {
 		this.shadowRoot.innerHTML = `
 			<style>
 				:host {
@@ -503,10 +682,18 @@ export class ResizableCropperElement extends HTMLElement {
 
 				#wrapper {
 					position: relative;
-					overflow: hidden;
 					border: 2px solid #007bff;
 					box-sizing: border-box;
 					background: rgba(0, 123, 255, 0.05);
+				}
+
+				#clipper {
+					position: absolute;
+					top: 0;
+					left: 0;
+					right: 0;
+					bottom: 0;
+					overflow: hidden;
 				}
 
 				::slotted(*) {
@@ -534,7 +721,22 @@ export class ResizableCropperElement extends HTMLElement {
 					background: white;
 					border: 2px solid #007bff;
 					pointer-events: auto;
+					touch-action: none;
 					z-index: 1000;
+				}
+
+				.handle.rotate {
+					width: 10px;
+					height: 10px;
+					border-radius: 50%;
+					top: -18px;
+					left: 50%;
+					transform: translateX(-50%);
+					cursor: grab;
+				}
+
+				.handle.rotate:active {
+					cursor: grabbing;
 				}
 
 				.handle.scale {
@@ -620,12 +822,17 @@ export class ResizableCropperElement extends HTMLElement {
 			</style>
 
 			<div id="wrapper">
-				<slot></slot>
-				
+				<div id="clipper">
+					<slot></slot>
+				</div>
+
 				<div id="handles-container">
+					<!-- Rotate handle (top-center) -->
+					<div class="handle rotate" data-action="rotate"></div>
+
 					<!-- Scale handle (only bottom-right corner) -->
 					<div class="handle scale br" data-action="scale" data-corner="br"></div>
-					
+
 					<!-- Crop handles (only right and bottom) -->
 					<div class="handle crop b" data-action="crop" data-side="b"></div>
 					<div class="handle crop r" data-action="crop" data-side="r"></div>
@@ -635,43 +842,43 @@ export class ResizableCropperElement extends HTMLElement {
 	}
 
 	// Public API - Getters and Setters
-	get width (): number {
+	get width () : number {
 		return this.state.width;
 	}
 
-	set width ( value: number ) {
+	set width ( value : number ) {
 		this.setAttribute( 'width', String( value ) );
 	}
 
-	get height (): number {
+	get height () : number {
 		return this.state.height;
 	}
 
-	set height ( value: number ) {
+	set height ( value : number ) {
 		this.setAttribute( 'height', String( value ) );
 	}
 
-	get minWidth (): number {
+	get minWidth () : number {
 		return this.state.minWidth;
 	}
 
-	set minWidth ( value: number ) {
+	set minWidth ( value : number ) {
 		this.setAttribute( 'min-width', String( value ) );
 	}
 
-	get minHeight (): number {
+	get minHeight () : number {
 		return this.state.minHeight;
 	}
 
-	set minHeight ( value: number ) {
+	set minHeight ( value : number ) {
 		this.setAttribute( 'min-height', String( value ) );
 	}
 
-	get aspectRatio (): string | null {
+	get aspectRatio () : string | null {
 		return this.state.aspectRatio;
 	}
 
-	set aspectRatio ( value: string | null ) {
+	set aspectRatio ( value : string | null ) {
 		if ( value ) {
 			this.setAttribute( 'aspect-ratio', value );
 		} else {
@@ -679,11 +886,11 @@ export class ResizableCropperElement extends HTMLElement {
 		}
 	}
 
-	get disabled (): boolean {
+	get disabled () : boolean {
 		return this.hasAttribute( 'disabled' );
 	}
 
-	set disabled ( value: boolean ) {
+	set disabled ( value : boolean ) {
 		if ( value ) {
 			this.setAttribute( 'disabled', '' );
 		} else {
@@ -691,11 +898,11 @@ export class ResizableCropperElement extends HTMLElement {
 		}
 	}
 
-	get allowCrop (): boolean {
+	get allowCrop () : boolean {
 		return this.hasAttribute( 'allow-crop' ) ? this.getAttribute( 'allow-crop' ) !== 'false' : true;
 	}
 
-	set allowCrop ( value: boolean ) {
+	set allowCrop ( value : boolean ) {
 		if ( value ) {
 			this.setAttribute( 'allow-crop', 'true' );
 		} else {
@@ -703,11 +910,11 @@ export class ResizableCropperElement extends HTMLElement {
 		}
 	}
 
-	get allowResize (): boolean {
+	get allowResize () : boolean {
 		return this.hasAttribute( 'allow-resize' ) ? this.getAttribute( 'allow-resize' ) !== 'false' : true;
 	}
 
-	set allowResize ( value: boolean ) {
+	set allowResize ( value : boolean ) {
 		if ( value ) {
 			this.setAttribute( 'allow-resize', 'true' );
 		} else {
@@ -715,25 +922,54 @@ export class ResizableCropperElement extends HTMLElement {
 		}
 	}
 
+	get allowRotate () : boolean {
+		return this.hasAttribute( 'allow-rotate' ) ? this.getAttribute( 'allow-rotate' ) !== 'false' : true;
+	}
+
+	set allowRotate ( value : boolean ) {
+		if ( value ) {
+			this.setAttribute( 'allow-rotate', 'true' );
+		} else {
+			this.setAttribute( 'allow-rotate', 'false' );
+		}
+	}
+
+	get allowDrag () : boolean {
+		return this.hasAttribute( 'allow-drag' ) ? this.getAttribute( 'allow-drag' ) !== 'false' : true;
+	}
+
+	set allowDrag ( value : boolean ) {
+		if ( value ) {
+			this.setAttribute( 'allow-drag', 'true' );
+		} else {
+			this.setAttribute( 'allow-drag', 'false' );
+		}
+	}
+
 	/**
 	 * Gets the current values including wrapper size, content size, position, and zoom level
 	 */
-	public getValues (): ResizableCropperValues {
-		const contentRect = this.state.contentElement?.getBoundingClientRect();
-		const contentWidth = contentRect?.width || 0;
-		const contentHeight = contentRect?.height || 0;
-		
+	public getValues () : ResizableCropperValues {
+		// Keep wrapperLeft/wrapperTop in sync even when not moved yet.
+		this._syncWrapperPositionFromLayout( this._getContainerForMove() );
+
+		const contentWidth = this.state.contentElement?.offsetWidth || 0;
+		const contentHeight = this.state.contentElement?.offsetHeight || 0;
+
 		// Calculate zoom based on current content size vs initial size
 		const zoom = this.initialContentWidth > 0 ? contentWidth / this.initialContentWidth : 1;
 
 		return {
 			wrapperWidth: this.state.width,
 			wrapperHeight: this.state.height,
+			wrapperLeft: this.state.wrapperLeft,
+			wrapperTop: this.state.wrapperTop,
 			contentWidth,
 			contentHeight,
 			contentLeft: this.state.contentLeft,
 			contentTop: this.state.contentTop,
 			zoom,
+			rotation: this.state.rotation,
 		};
 	}
 
@@ -741,9 +977,7 @@ export class ResizableCropperElement extends HTMLElement {
 	 * Sets the values to reproduce size, zoom and pan
 	 * @param values - The values to set
 	 */
-	public setValues ( values: Partial<ResizableCropperValues> ): void {
-		if ( !this.state.contentElement ) return;
-
+	public setValues ( values : Partial<ResizableCropperValues> ) : void {
 		// Set wrapper size
 		if ( values.wrapperWidth !== undefined ) {
 			this.state.width = values.wrapperWidth;
@@ -753,16 +987,35 @@ export class ResizableCropperElement extends HTMLElement {
 		}
 		this.updateWrapperDimensions();
 
+		if ( values.wrapperLeft !== undefined || values.wrapperTop !== undefined ) {
+			const container = this._getContainerForMove();
+			this._ensureAbsolutePositionForMove( container );
+			if ( values.wrapperLeft !== undefined ) this.state.wrapperLeft = values.wrapperLeft;
+			if ( values.wrapperTop !== undefined ) this.state.wrapperTop = values.wrapperTop;
+			this.style.left = `${this.state.wrapperLeft}px`;
+			this.style.top = `${this.state.wrapperTop}px`;
+		}
+
+		if ( values.rotation !== undefined ) {
+			this.state.rotation = values.rotation;
+			this._applyWrapperTransform();
+		}
+
+		if ( !this.state.contentElement ) {
+			this.dispatchOnChange();
+			return;
+		}
+
 		// Set content size based on zoom or explicit dimensions
 		if ( values.zoom !== undefined && this.initialContentWidth > 0 ) {
 			const newContentWidth = this.initialContentWidth * values.zoom;
 			const newContentHeight = this.initialContentHeight * values.zoom;
-			this.state.contentElement.style.width = `${ newContentWidth }px`;
-			this.state.contentElement.style.height = `${ newContentHeight }px`;
+			this.state.contentElement.style.width = `${newContentWidth}px`;
+			this.state.contentElement.style.height = `${newContentHeight}px`;
 		} else if ( values.contentWidth !== undefined ) {
-			this.state.contentElement.style.width = `${ values.contentWidth }px`;
+			this.state.contentElement.style.width = `${values.contentWidth}px`;
 			if ( values.contentHeight !== undefined ) {
-				this.state.contentElement.style.height = `${ values.contentHeight }px`;
+				this.state.contentElement.style.height = `${values.contentHeight}px`;
 			} else {
 				this.state.contentElement.style.height = 'auto';
 			}
@@ -787,7 +1040,7 @@ export class ResizableCropperElement extends HTMLElement {
 /**
  * Conditionally defines the custom element if in a browser environment.
  */
-export const defineResizableCropper = ( tagName: string = 'liwe3-resizable-cropper' ): void => {
+export const defineResizableCropper = ( tagName : string = 'liwe3-resizable-cropper' ) : void => {
 	if ( typeof window !== 'undefined' && !window.customElements.get( tagName ) ) {
 		customElements.define( tagName, ResizableCropperElement );
 	}
