@@ -30,6 +30,19 @@ export interface ResizableCropperValues {
 	rotation : number;
 }
 
+export interface ResizableCropperComponentState {
+	mode : 'transform' | 'crop';
+	disabled : boolean;
+	allowCrop : boolean;
+	allowResize : boolean;
+	allowRotate : boolean;
+	allowDrag : boolean;
+	minWidth : number;
+	minHeight : number;
+	aspectRatio : string | null;
+	values : ResizableCropperValues;
+}
+
 export interface ResizableCropEventDetail {
 	width : number;
 	height : number;
@@ -1034,6 +1047,42 @@ export class ResizableCropperElement extends HTMLElement {
 
 		// Dispatch change event
 		this.dispatchOnChange();
+	}
+
+	/**
+	 * Gets a serializable state snapshot of the component including flags, constraints, mode,
+	 * and the current transform/crop values.
+	 */
+	public getState () : ResizableCropperComponentState {
+		return {
+			mode: this._interactionMode,
+			disabled: this.disabled,
+			allowCrop: this.allowCrop,
+			allowResize: this.allowResize,
+			allowRotate: this.allowRotate,
+			allowDrag: this.allowDrag,
+			minWidth: this.minWidth,
+			minHeight: this.minHeight,
+			aspectRatio: this.aspectRatio,
+			values: this.getValues(),
+		};
+	}
+
+	/**
+	 * Restores a state snapshot produced by getState().
+	 * @param state - State to restore
+	 */
+	public setState ( state : Partial<ResizableCropperComponentState> ) : void {
+		if ( state.disabled !== undefined ) this.disabled = state.disabled;
+		if ( state.allowCrop !== undefined ) this.allowCrop = state.allowCrop;
+		if ( state.allowResize !== undefined ) this.allowResize = state.allowResize;
+		if ( state.allowRotate !== undefined ) this.allowRotate = state.allowRotate;
+		if ( state.allowDrag !== undefined ) this.allowDrag = state.allowDrag;
+		if ( state.minWidth !== undefined ) this.minWidth = state.minWidth;
+		if ( state.minHeight !== undefined ) this.minHeight = state.minHeight;
+		if ( state.aspectRatio !== undefined ) this.aspectRatio = state.aspectRatio;
+		if ( state.mode !== undefined ) this._setInteractionMode( state.mode );
+		if ( state.values ) this.setValues( state.values );
 	}
 }
 

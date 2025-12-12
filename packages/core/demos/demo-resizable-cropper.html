@@ -213,6 +213,8 @@
 				<button id="get-values-btn">Get Values</button>
 				<button id="set-values-btn">Set Example Values</button>
 				<button id="restore-values-btn" disabled>Restore Saved Values</button>
+				<button id="save-state-btn">Save State</button>
+				<button id="restore-state-btn" disabled>Restore Saved State</button>
 			</div>
 			<pre id="values-output" style="background: #f0f0f0; padding: 10px; border-radius: 4px; font-size: 12px; display: none"></pre>
 		</div>
@@ -358,9 +360,12 @@
 		const getValuesBtn = document.getElementById( 'get-values-btn' );
 		const setValuesBtn = document.getElementById( 'set-values-btn' );
 		const restoreValuesBtn = document.getElementById( 'restore-values-btn' );
+		const saveStateBtn = document.getElementById( 'save-state-btn' );
+		const restoreStateBtn = document.getElementById( 'restore-state-btn' );
 		const valuesOutput = document.getElementById( 'values-output' );
 
 		let savedValues = null;
+		let savedState = null;
 
 		// Update info panel
 		function updateInfo( detail ) {
@@ -475,6 +480,23 @@
 			}
 		} );
 
+		// Save state button
+		saveStateBtn.addEventListener( 'click', () => {
+			savedState = demo1.getState();
+			valuesOutput.textContent = JSON.stringify( savedState, null, 2 );
+			valuesOutput.style.display = 'block';
+			restoreStateBtn.disabled = false;
+			console.log( 'Saved state:', savedState );
+		} );
+
+		// Restore saved state button
+		restoreStateBtn.addEventListener( 'click', () => {
+			if ( savedState ) {
+				demo1.setState( savedState );
+				console.log( 'Restored state:', savedState );
+			}
+		} );
+
 		resetBtn.addEventListener( 'click', () => {
 			demo1.width = 300;
 			demo1.height = 200;
@@ -497,6 +519,8 @@
 			allowCropCheckbox.checked = true;
 			allowDragCheckbox.checked = true;
 			disabledCheckbox.checked = false;
+			restoreStateBtn.disabled = true;
+			savedState = null;
 
 			// Reset content position by recreating the image
 			const img = demo1.querySelector( 'img' );
