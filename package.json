@@ -17,7 +17,7 @@
     "clean": "rm -rf packages/*/dist packages/*/.svelte-kit .turbo",
     "clean:all": "rm -rf packages/*/dist packages/*/.svelte-kit packages/*/node_modules packages/*/.vite packages/*/.turbo .turbo .vite node_modules/.cache node_modules/.vite"
   },
-  "packageManager": "pnpm@10.23.0",
+  "packageManager": "pnpm@10.26.0",
   "devDependencies": {
     "turbo": "^2.6.3"
   }
