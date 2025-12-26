@@ -2,6 +2,8 @@
 
 A collection of reusable, framework-agnostic web components with Svelte 5 wrappers.
 
+See working demo at [Github Pages Demo](https://liwe3.github.io/liwe3-webcomponents/)
+
 ## Packages
 
 ### [@liwe3/webcomponents](./packages/core/)
