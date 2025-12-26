@@ -12,3 +12,6 @@ PUBLISHING.md
 
 # Wrangler (Cloudflare Workers)
 .wrangler/
+
+# GitHub Pages deployment
+.gh-pages-temp/

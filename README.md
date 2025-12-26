@@ -93,6 +93,20 @@ pnpm run dev
 
 The demo app will be available at `http://localhost:5173`
 
+### Deploying Demos to GitHub Pages
+
+The repository includes static HTML demos in `packages/core/demos/` that showcase each component.
+
+```bash
+# Deploy to gh-pages branch (recommended)
+pnpm run deploy:demos
+
+# Or deploy to docs/ folder on main branch
+pnpm run deploy:demos:docs
+```
+
+For detailed instructions, see [DEPLOY_DEMOS.md](./DEPLOY_DEMOS.md)
+
 ### Package Structure
 
 ```
