@@ -1,0 +1,42 @@
+export type ImageMode = 'stretch' | '1:1' | 'cover' | 'contain';
+export type ImagePosition = 'center' | 'top' | 'bottom' | 'left' | 'right' | 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+export type ImageFX = 'none' | 'bokeh' | 'pan-left' | 'pan-right' | 'zoom-in' | 'zoom-out';
+export declare class ImageView extends HTMLElement {
+    private _src;
+    private _width;
+    private _height;
+    private _mode;
+    private _position;
+    private _fx;
+    private _fxHover;
+    private _alt;
+    private _isHovering;
+    private container;
+    private img;
+    constructor();
+    private _handleMouseEnter;
+    private _handleMouseLeave;
+    static get observedAttributes(): string[];
+    attributeChangedCallback(name: string, oldValue: string, newValue: string): void;
+    connectedCallback(): void;
+    private updateDimensions;
+    private updateClasses;
+    private render;
+    get src(): string;
+    set src(value: string);
+    get width(): string;
+    set width(value: string);
+    get height(): string;
+    set height(value: string);
+    get mode(): ImageMode;
+    set mode(value: ImageMode);
+    get position(): ImagePosition;
+    set position(value: ImagePosition);
+    get fx(): ImageFX;
+    set fx(value: ImageFX);
+    get fxHover(): ImageFX;
+    set fxHover(value: ImageFX);
+    get alt(): string;
+    set alt(value: string);
+}
+//# sourceMappingURL=ImageView.d.ts.map

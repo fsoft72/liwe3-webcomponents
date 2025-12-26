@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Media Manager UI (Demo) - @liwe3/webcomponents</title>
+  <style>
+    :root {
+      --bg-0: #0f172a;
+      /* page background */
+      --bg-1: #111827;
+      /* panels */
+      --bg-2: #0b1220;
+      /* sidebar darker */
+      --bg-3: #1f2937;
+      /* cards */
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --brand: #4f79ff;
+      --brand-2: #5ea0ff;
+      --stroke: rgba(255, 255, 255, 0.06);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, -apple-system, Segoe UI, Roboto, Inter, system-ui, sans-serif;
+      color: var(--text);
+      background: var(--bg-0);
+      overflow: hidden;
+    }
+
+    /* Shell */
+    .app {
+      display: grid;
+      grid-template-columns: 280px 1fr 360px;
+      grid-template-rows: 64px 1fr;
+      grid-template-areas:
+        "sidebar topbar details"
+        "sidebar content details";
+      height: 100vh;
+      gap: 16px;
+      padding: 12px 12px 12px 12px;
+      transition: grid-template-columns 0.3s ease-in-out;
+    }
+
+    .app.sidebar-hidden {
+      grid-template-columns: 60px 1fr 360px;
+    }
+
+    .app.details-hidden {
+      grid-template-columns: 280px 1fr 0px;
+    }
+
+    .app.sidebar-hidden.details-hidden {
+      grid-template-columns: 60px 1fr 0px;
+    }
+
+    .sidebar-drawer {
+      grid-area: sidebar;
+      height: 100%;
+      --drawer-bg: var(--bg-2);
+      --drawer-border: var(--stroke);
+      --drawer-text: var(--text);
+      --drawer-icon-bg: rgba(255, 255, 255, 0.05);
+      --drawer-icon-hover: rgba(255, 255, 255, 0.08);
+      --drawer-button-hover: rgba(255, 255, 255, 0.05);
+      --drawer-shadow: none;
+    }
+
+    .sidebar-drawer .sidebar-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 0 4px;
+    }
+
+    .sidebar-section {
+      --drawer-bg: rgba(255, 255, 255, 0.03);
+      --drawer-border: var(--stroke);
+      --drawer-icon-bg: rgba(255, 255, 255, 0.08);
+      --drawer-icon-hover: rgba(255, 255, 255, 0.12);
+      --drawer-button-hover: rgba(255, 255, 255, 0.06);
+      --drawer-shadow: none;
+    }
+
+    .topbar {
+      grid-area: topbar;
+      background: var(--bg-1);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .content {
+      grid-area: content;
+      background: var(--bg-1);
+      border-radius: var(--radius);
+      padding: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .details {
+      grid-area: details;
+      background: var(--bg-1);
+      border-radius: var(--radius);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      overflow: hidden;
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+      position: relative;
+    }
+
+    .details {
+      grid-area: details;
+      height: 100%;
+      --drawer-bg: var(--bg-1);
+      --drawer-border: var(--stroke);
+      --drawer-text: var(--text);
+      --drawer-icon-bg: rgba(255, 255, 255, 0.05);
+      --drawer-icon-hover: rgba(255, 255, 255, 0.08);
+      --drawer-button-hover: rgba(255, 255, 255, 0.05);
+      --drawer-shadow: none;
+      --drawer-vertical-size: 100%;
+    }
+
+    .details .drawer-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px;
+      position: relative;
+      height: 100%;
+    }
+
+    .details .drawer-toggle,
+    .details .drawer-title {
+      display: none;
+    }
+
+    .app.details-hidden .details {
+      display: none;
+    }
+
+    /* Topbar */
+
+    .search .icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      opacity: .7;
+    }
+
+    .topbar .sep {
+      width: 1px;
+      height: 28px;
+      background: var(--stroke);
+    }
+
+    .btn {
+      height: 38px;
+      padding: 0 14px;
+      border-radius: 10px;
+      border: 1px solid var(--stroke);
+      background: #0f172a;
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn.ghost {
+      background: #0f172a;
+    }
+
+    .btn.primary {
+      background: var(--brand);
+      border-color: transparent;
+    }
+
+    /* Sidebar */
+    .section {
+      margin: 0;
+      padding: 12px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--stroke);
+    }
+
+    liwe3-tree-view {
+      --tree-font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter;
+      --tree-font-size: 14px;
+      --tree-text-color: var(--text);
+      --tree-background: transparent;
+      --tree-padding: 4px;
+      --tree-node-border-radius: 8px;
+      --tree-hover-background: rgba(255, 255, 255, 0.06);
+      --tree-expand-hover-background: rgba(255, 255, 255, 0.08);
+      --tree-icon-color: #cbd5e1;
+      --tree-focus-color: var(--brand-2);
+      --tree-checkbox-border: #334155;
+      --tree-checkbox-background: #0f172a;
+      --tree-checkbox-checked-background: var(--brand);
+      --tree-checkbox-checked-border: var(--brand);
+      --tree-checkbox-hover-border: #4b5563;
+      --tree-checkbox-hover-shadow: rgba(79, 121, 255, 0.15);
+      --tree-label-color: var(--text);
+      --tree-label-hover-color: var(--brand-2);
+      --tree-guide-line-color: rgba(255, 255, 255, 0.06);
+    }
+
+    /* Content */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .toolbar .spacer {
+      flex: 1;
+    }
+
+    .chip {
+      background: #0f172a;
+      border: 1px solid var(--stroke);
+      height: 36px;
+      padding: 0 12px;
+      border-radius: 10px;
+      display: inline-flex;
+      align-items: center;
+      color: var(--muted);
+    }
+
+    .grid {
+      flex: 1;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .grid-inner {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--bg-3);
+      border: 1px solid var(--stroke);
+      border-radius: 14px;
+      height: 150px;
+
+      .search input {
+        width: 100%;
+        height: 40px;
+        border-radius: 10px;
+        border: 1px solid var(--stroke);
+        background: #0f172a;
+        color: var(--text);
+        padding: 0 14px 0 38px;
+        outline: none;
+      }
+
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .card:hover {
+      border-color: var(--brand);
+    }
+
+    .container-thumb {
+      position: absolute;
+      inset: 0;
+    }
+
+    liwe3-image-view {
+      position: absolute;
+      inset: 0;
+    }
+
+    .meta {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      background: rgba(0, 0, 0, 0.45);
+      padding: 6px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .play {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.55);
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--stroke);
+    }
+
+    /* ContainerBox styling for dark theme */
+    liwe3-container-box {
+      --container-box-menu-bg: var(--bg-3);
+      --container-box-menu-border: var(--stroke);
+      --container-box-menu-radius: 8px;
+      --container-box-menu-padding: 6px 10px;
+      --container-box-menu-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+      --container-box-menu-color: var(--text);
+      --container-box-menu-hover-bg: rgba(255, 255, 255, 0.06);
+      --container-box-menu-offset: 8px;
+    }
+
+    /* Details */
+    .details-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--stroke);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: background 0.2s;
+      z-index: 10;
+    }
+
+    .details-close:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .details h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      padding-right: 32px;
+    }
+
+    .panel {
+      background: #0f172a;
+      border: 1px solid var(--stroke);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .panel h3 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .kvs {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .tag-input {
+      height: 38px;
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid var(--stroke);
+      border-radius: 10px;
+      color: var(--text);
+      padding: 0 12px;
+    }
+
+    .actions {
+      margin-top: auto;
+      display: grid;
+      gap: 10px;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn.full {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* Small helpers */
+    .muted {
+      color: var(--muted);
+    }
+
+    @media (max-width: 1100px) {
+      .app {
+        grid-template-columns: 240px 1fr;
+        grid-template-areas:
+          "sidebar topbar"
+          "sidebar content";
+      }
+
+      .details {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <!-- Sidebar Drawer -->
+    <liwe3-drawer id="sidebar-drawer" class="sidebar-drawer" direction="horizontal" title="Library" icon="☰"
+      show-title-when-shrunk="true" closable="false">
+      <div class="sidebar-content">
+        <liwe3-drawer class="sidebar-section" direction="vertical" title="Folders" icon="📁"
+          show-title-when-shrunk="true" closable="false" content-padding="0">
+          <liwe3-tree-view id="folders-tree" show-border="false"></liwe3-tree-view>
+        </liwe3-drawer>
+
+        <liwe3-drawer class="sidebar-section" direction="vertical" title="Collections" icon="🗂️"
+          show-title-when-shrunk="true" closable="false" content-padding="0">
+          <liwe3-tree-view id="collections-tree" show-border="false"></liwe3-tree-view>
+        </liwe3-drawer>
+      </div>
+    </liwe3-drawer>
+
+    <!-- Top bar -->
+    <div class="topbar">
+      <div class="title">Folders</div>
+      <div class="search">
+        <span class="icon">🔎</span>
+        <input placeholder="Search" />
+      </div>
+      <div class="sep"></div>
+      <span class="muted">Sort by</span>
+      <div style="width:170px"><liwe3-select id="sortSelect" placeholder="Sort By"></liwe3-select></div>
+      <div class="sep"></div>
+      <span class="muted">View Mode</span>
+      <button class="btn ghost">▤</button>
+      <button class="btn ghost">▦</button>
+      <div class="spacer"></div>
+      <button class="btn primary">⬆ Upload</button>
+    </div>
+
+    <!-- Content -->
+    <main class="content">
+      <div class="toolbar">
+        <div>
+          <div style="font-size:20px;font-weight:700;">Aodia Fosts</div>
+          <div class="muted" style="font-size:12px;">Heos: Most: Media: Fovools</div>
+        </div>
+        <div class="spacer"></div>
+        <div class="chip">Filters</div>
+      </div>
+
+      <div class="grid">
+        <div class="grid-inner">
+          <!-- A small set of placeholder cards to resemble the gallery -->
+          <div class="card">
+            <liwe3-container-box class="container-thumb">
+              <liwe3-image-view src="https://picsum.photos/400/300?random=1" width="100%" height="100%" mode="cover"
+                fx-hover="zoom-in"></liwe3-image-view>
+            </liwe3-container-box>
+            <div class="meta">Nidits</div>
+          </div>
+          <div class="card">
+            <liwe3-container-box class="container-thumb">
+              <liwe3-image-view src="https://picsum.photos/400/300?random=2" width="100%" height="100%" mode="cover"
+                fx-hover="pan-left"></liwe3-image-view>
+            </liwe3-container-box>
+          </div>
+          <div class="card">
+            <liwe3-container-box class="container-thumb">
+              <liwe3-image-view src="https://picsum.photos/400/300?random=3" width="100%" height="100%" mode="cover"
+                fx-hover="pan-right"></liwe3-image-view>
+            </liwe3-container-box>
+            <div class="meta">Melloni</div>
+          </div>
+          <div class="card">
+            <liwe3-container-box class="container-thumb">
+              <liwe3-image-view src="https://picsum.photos/400/300?random=4" width="100%" height="100%" mode="cover"
+                fx-hover="zoom-in"></liwe3-image-view>
+            </liwe3-container-box>
+          </div>
+          <div class="card">
+            <liwe3-container-box class="container-thumb">
+              <liwe3-image-view src="https://picsum.photos/400/300?random=5" width="100%" height="100%" mode="cover"
+                fx-hover="bokeh"></liwe3-image-view>
+              <div class="play">▶</div>
+            </liwe3-container-box>
+          </div>
+          <div class="card">
+            <liwe3-container-box class="container-thumb">
+              <liwe3-image-view src="https://picsum.photos/400/300?random=6" width="100%" height="100%" mode="cover"
+                fx-hover="pan-left"></liwe3-image-view>
+            </liwe3-container-box>
+            <div class="meta">NλN0s</div>
+          </div>
+          <div class="card">
+            <liwe3-container-box class="container-thumb">
+              <liwe3-image-view src="https://picsum.photos/400/300?random=7" width="100%" height="100%" mode="cover"
+                fx-hover="zoom-in"></liwe3-image-view>
+            </liwe3-container-box>
+          </div>
+          <div class="card">
+            <liwe3-container-box class="container-thumb">
+              <liwe3-image-view src="https://picsum.photos/400/300?random=8" width="100%" height="100%" mode="cover"
+                fx-hover="pan-right"></liwe3-image-view>
+            </liwe3-container-box>
+          </div>
+          <div class="card">
+            <liwe3-container-box class="container-thumb">
+              <liwe3-image-view src="https://picsum.photos/400/300?random=9" width="100%" height="100%" mode="cover"
+                fx-hover="zoom-in"></liwe3-image-view>
+            </liwe3-container-box>
+          </div>
+          <div class="card">
+            <liwe3-container-box class="container-thumb">
+              <liwe3-image-view src="https://picsum.photos/400/300?random=10" width="100%" height="100%" mode="cover"
+                fx-hover="pan-left"></liwe3-image-view>
+            </liwe3-container-box>
+          </div>
+          <div class="card">
+            <liwe3-container-box class="container-thumb">
+              <liwe3-image-view src="https://picsum.photos/400/300?random=11" width="100%" height="100%" mode="cover"
+                fx-hover="zoom-in"></liwe3-image-view>
+            </liwe3-container-box>
+          </div>
+          <div class="card">
+            <liwe3-container-box class="container-thumb">
+              <liwe3-image-view src="https://picsum.photos/400/300?random=12" width="100%" height="100%" mode="cover"
+                fx-hover="pan-right"></liwe3-image-view>
+            </liwe3-container-box>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Details Panel -->
+    <liwe3-drawer id="details-drawer" class="details" direction="vertical" title="Details" show-title-when-shrunk="true"
+      show-toggle-button="false" closable="false">
+      <div class="details-close" id="details-close">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="opacity:.7">
+          <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;">
+        <div class="title">Details</div>
+        <button class="btn primary">⬆ Upload</button>
+      </div>
+
+      <div class="panel">
+        <div class="kvs">
+          <div><b>File Name:</b> project_aura2_image.jpg</div>
+          <div><b>Type:</b> Image</div>
+          <div><b>Size:</b> 1.3 MB</div>
+          <div><b>Res:</b> 4090×900</div>
+          <div><b>Date:</b> 2029-10-26</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div style="margin-bottom:8px;">Tags</div>
+        <liwe3-select id="tagsSelect" multiple searchable placeholder="Select tags"></liwe3-select>
+      </div>
+
+      <div class="panel">
+        <div style="display:grid;gap:8px;">
+          <div class="kvs">⬆ Uploaded by John Doe</div>
+          <div class="kvs">👥 Shared with Team Alpha</div>
+          <div class="kvs">🕓 Edited 5 minutes ago</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <div class="row">
+          <button class="btn primary full">Download</button>
+          <button class="btn full" style="background:#243b6b;border-color:transparent;">Edit in Studio</button>
+        </div>
+        <button class="btn full" style="height:44px;background:#0f172a;border:1px solid var(--stroke);">Generate AI
+          Preview</button>
+      </div>
+    </liwe3-drawer>
+  </div>
+
+  <!-- Import the TreeView component and populate the trees -->
+  <script type="module">
+    import '../dist/Drawer.js';
+    import '../dist/TreeView.js';
+    import '../dist/SmartSelect.js';
+    import '../dist/ContainerBox.js';
+    import '../dist/ImageView.js';
+
+    const app = document.querySelector( '.app' );
+    if ( !app ) {
+      console.error( '[demo-media-manager] Root .app container missing' );
+    }
+
+    const sidebarDrawer = document.getElementById( 'sidebar-drawer' );
+    if ( !sidebarDrawer ) {
+      console.error( '[demo-media-manager] Sidebar drawer not found' );
+    } else {
+      const syncSidebarState = ( state ) => {
+        if ( !app ) return;
+        if ( state === 'shrunk' ) {
+          app.classList.add( 'sidebar-hidden' );
+          return;
+        }
+        app.classList.remove( 'sidebar-hidden' );
+      };
+
+      sidebarDrawer.addEventListener( 'drawer-state-change', ( event ) => {
+        if ( event.target !== sidebarDrawer ) return;
+        syncSidebarState( event.detail?.newState );
+      } );
+
+      syncSidebarState( sidebarDrawer.getAttribute( 'state' ) || 'expanded' );
+    }
+
+    const foldersTree = document.getElementById( 'folders-tree' );
+    foldersTree.data = [
+      {
+        id: 'folders', label: 'Folders', expanded: true, children: [
+          { id: 'all', label: 'All Media', icon: '📁' },
+          { id: 'images', label: 'Images', icon: '🖼️' },
+          { id: 'videos', label: 'Videos', icon: '🎬' },
+          { id: 'audio', label: 'Audio', icon: '🎵' },
+          { id: 'docs', label: 'Documents', icon: '📄' },
+          { id: 'archived', label: 'Archived', icon: '🗄️' }
+        ]
+      }
+    ];
+
+    const collectionsTree = document.getElementById( 'collections-tree' );
+    collectionsTree.data = [
+      {
+        id: 'collections', label: 'Collections', expanded: true, children: [
+          { id: 'arch', label: 'Archived', icon: '🗂️' },
+          { id: 'shared', label: 'Shared', icon: '🤝' }
+        ]
+      }
+    ];
+
+    // SmartSelect: Sort By
+    const sortSelect = document.getElementById( 'sortSelect' );
+    sortSelect.options = [
+      { value: 'name', label: 'Name' },
+      { value: 'date', label: 'Date' },
+      { value: 'size', label: 'Size' },
+      { value: 'type', label: 'Type' }
+    ];
+    sortSelect.placeholder = 'Sort By';
+
+    // SmartSelect: Tags (multi + searchable)
+    const tagsSelect = document.getElementById( 'tagsSelect' );
+    tagsSelect.options = [
+      { value: 'featured', label: 'Featured' },
+      { value: 'raw', label: 'Raw' },
+      { value: 'approved', label: 'Approved' },
+      { value: 'draft', label: 'Draft' },
+      { value: 'needs-review', label: 'Needs Review' },
+      { value: 'shared', label: 'Shared' },
+      { value: 'archived', label: 'Archived' },
+      { value: 'video', label: 'Video' },
+      { value: 'image', label: 'Image' }
+    ];
+    tagsSelect.value = [ 'featured', 'image' ]; // example pre-selected tags
+
+    // Setup ContainerBox menus for all thumbnails
+    const containerBoxes = document.querySelectorAll( '.container-thumb' );
+
+    containerBoxes.forEach( ( box, index ) => {
+      box.setMenuPosition( 'top-right' );
+      box.setMenuItems( [
+        {
+          label: 'Edit',
+          onclick: () => {
+            console.log( `Edit clicked for item ${ index + 1 }` );
+            alert( `Edit item ${ index + 1 }` );
+          }
+        },
+        {
+          label: 'Properties',
+          onclick: () => {
+            console.log( `Properties clicked for item ${ index + 1 }` );
+            // Show details panel if hidden
+            if ( app?.classList.contains( 'details-hidden' ) ) {
+              app.classList.remove( 'details-hidden' );
+            }
+          }
+        },
+        { label: '---sep' },
+        {
+          label: 'Delete',
+          onclick: () => {
+            console.log( `Delete clicked for item ${ index + 1 }` );
+            if ( confirm( `Delete item ${ index + 1 }?` ) ) {
+              alert( `Item ${ index + 1 } deleted` );
+            }
+          }
+        }
+      ] );
+    } );
+
+    // Details panel close functionality
+    const detailsClose = document.getElementById( 'details-close' );
+    if ( !detailsClose ) {
+      console.error( '[demo-media-manager] Details close button missing' );
+    } else {
+      detailsClose.addEventListener( 'click', () => {
+        app?.classList.toggle( 'details-hidden' );
+      } );
+    }
+  </script>
+</body>
+
+</html>

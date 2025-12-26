@@ -1,0 +1,1 @@
+{"version":3,"file":"MarkdownPreview.svelte.d.ts","sourceRoot":"","sources":["../src/lib/MarkdownPreview.svelte.ts"],"names":[],"mappings":"AAME,UAAU,KAAK;IACb,KAAK,CAAC,EAAE,MAAM,CAAC;IACf,MAAM,CAAC,EAAE,MAAM,CAAC;IAChB,eAAe,CAAC,EAAE,MAAM,IAAI,CAAC;CAC9B;AAiDH,QAAA,MAAM,eAAe,2CAAwC,CAAC;AAC9D,KAAK,eAAe,GAAG,UAAU,CAAC,OAAO,eAAe,CAAC,CAAC;AAC1D,eAAe,eAAe,CAAC"}

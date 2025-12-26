@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PopoverMenu Component Demo - @liwe3/webcomponents</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 60px;
+    }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .subtitle {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    .demo-section {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #333;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+    }
+
+    .description {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .menu-container {
+      margin-top: 20px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .code-block {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      margin: 0;
+      white-space: pre-wrap;
+    }
+
+    .output-area {
+      margin-top: 20px;
+      padding: 20px;
+      background: #e9ecef;
+      border-radius: 8px;
+      min-height: 60px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+
+    .output-title {
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 10px;
+    }
+
+    .output-content {
+      color: #212529;
+      white-space: pre-wrap;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .feature-list li {
+      padding: 10px 0;
+      color: #666;
+      display: flex;
+      align-items: center;
+    }
+
+    .feature-list li::before {
+      content: '✓';
+      color: #28a745;
+      font-weight: bold;
+      margin-right: 10px;
+      font-size: 18px;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 32px;
+      }
+
+      .demo-section {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📋 PopoverMenu Component Demo</h1>
+      <p class="subtitle">A customizable menu bar with nested submenus</p>
+    </header>
+
+    <div class="demo-section">
+      <h2 class="section-title">Features</h2>
+      <ul class="feature-list">
+        <li>Multiple top-level menu items</li>
+        <li>Unlimited nested submenu levels</li>
+        <li>Hover and click interactions</li>
+        <li>Smart positioning to prevent overflow</li>
+        <li>Separator support for menu organization</li>
+        <li>Enable/disable menu items</li>
+        <li>Fully customizable with CSS variables</li>
+        <li>TypeScript support with full type definitions</li>
+      </ul>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Example 1: Basic Menu Bar</h2>
+      <p class="description">
+        A simple menu bar with File, Edit, and View menus. Click on menu items to see them in action.
+      </p>
+      <div class="menu-container">
+        <liwe3-popover-menu id="menu1"></liwe3-popover-menu>
+      </div>
+      <div class="output-area">
+        <div class="output-title">Output Console:</div>
+        <div class="output-content" id="output1">Click a menu item to see output...</div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Example 2: Nested Submenus</h2>
+      <p class="description">
+        Demonstrates multi-level nested submenus with hover interactions. Hover over items with arrows to open submenus.
+      </p>
+      <div class="menu-container">
+        <liwe3-popover-menu id="menu2"></liwe3-popover-menu>
+      </div>
+      <div class="output-area">
+        <div class="output-title">Output Console:</div>
+        <div class="output-content" id="output2">Interact with the menu...</div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Example 3: Menu with Separators</h2>
+      <p class="description">
+        Shows how to use separators to organize menu items into logical groups.
+      </p>
+      <div class="menu-container">
+        <liwe3-popover-menu id="menu3"></liwe3-popover-menu>
+      </div>
+      <div class="output-area">
+        <div class="output-title">Output Console:</div>
+        <div class="output-content" id="output3">Select a menu item...</div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Example 4: Disabled Menu Items</h2>
+      <p class="description">
+        Demonstrates disabled menu items that cannot be clicked or interacted with.
+      </p>
+      <div class="menu-container">
+        <liwe3-popover-menu id="menu4"></liwe3-popover-menu>
+      </div>
+      <div class="output-area">
+        <div class="output-title">Output Console:</div>
+        <div class="output-content" id="output4">Try clicking disabled items...</div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Example 5: Application Menu</h2>
+      <p class="description">
+        A complete application menu bar example with typical menu structure including keyboard shortcuts in labels.
+      </p>
+      <div class="menu-container">
+        <liwe3-popover-menu id="menu5"></liwe3-popover-menu>
+      </div>
+      <div class="output-area">
+        <div class="output-title">Output Console:</div>
+        <div class="output-content" id="output5">Click menu items to see actions...</div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Example 6: Dynamic Menu Updates</h2>
+      <p class="description">
+        Demonstrates adding and removing menu items dynamically.
+      </p>
+      <div class="menu-container">
+        <liwe3-popover-menu id="menu6"></liwe3-popover-menu>
+      </div>
+      <div style="margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+        <button onclick="addDynamicMenu()" style="padding: 10px 20px; border-radius: 6px; border: none; background: #667eea; color: white; cursor: pointer; font-size: 14px;">
+          Add Menu Item
+        </button>
+        <button onclick="removeDynamicMenu()" style="padding: 10px 20px; border-radius: 6px; border: none; background: #dc3545; color: white; cursor: pointer; font-size: 14px;">
+          Remove Last Menu
+        </button>
+      </div>
+      <div class="output-area">
+        <div class="output-title">Output Console:</div>
+        <div class="output-content" id="output6">Use buttons to modify the menu...</div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Example 7: Context Menu Style</h2>
+      <p class="description">
+        A single-menu example that works like a context menu with multiple options.
+      </p>
+      <div class="menu-container">
+        <liwe3-popover-menu id="menu7"></liwe3-popover-menu>
+      </div>
+      <div class="output-area">
+        <div class="output-title">Output Console:</div>
+        <div class="output-content" id="output7">Select an action...</div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Usage Example</h2>
+      <div class="code-block">
+        <pre>// Import the PopoverMenu component
+import { PopoverMenuElement } from '@liwe3/webcomponents';
+
+// Get the menu element
+const menu = document.querySelector('liwe3-popover-menu');
+
+// Set menu items
+menu.setItems([
+  {
+    label: 'File',
+    items: [
+      {
+        label: 'New',
+        onclick: () => console.log('New file')
+      },
+      {
+        label: 'Open',
+        onclick: () => console.log('Open file')
+      },
+      { label: '---sep' }, // Separator
+      {
+        label: 'Save',
+        onclick: () => console.log('Save file')
+      },
+      {
+        label: 'Export',
+        items: [
+          {
+            label: 'PDF',
+            onclick: () => console.log('Export as PDF')
+          },
+          {
+            label: 'HTML',
+            onclick: () => console.log('Export as HTML')
+          }
+        ]
+      }
+    ]
+  },
+  {
+    label: 'Edit',
+    items: [
+      {
+        label: 'Cut',
+        onclick: () => console.log('Cut')
+      },
+      {
+        label: 'Copy',
+        onclick: () => console.log('Copy')
+      },
+      {
+        label: 'Paste',
+        onclick: () => console.log('Paste'),
+        enabled: false // Disabled item
+      }
+    ]
+  }
+]);</pre>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">CSS Customization</h2>
+      <div class="code-block">
+        <pre>/* Available CSS variables for customization */
+liwe3-popover-menu {
+  --popover-menu-bar-background: #fff;
+  --popover-menu-bar-border: #ddd;
+  --popover-menu-bar-radius: 6px;
+  --popover-menu-bar-padding: 4px;
+  --popover-menu-bar-shadow: 0 1px 3px rgba(0,0,0,0.1);
+
+  --popover-menu-trigger-color: #333;
+  --popover-menu-trigger-hover-bg: #f0f0f0;
+  --popover-menu-trigger-active-bg: #e3f2fd;
+  --popover-menu-trigger-active-color: #1976d2;
+
+  --popover-menu-background: white;
+  --popover-menu-border: #ccc;
+  --popover-menu-radius: 6px;
+  --popover-menu-shadow: 0 4px 12px rgba(0,0,0,0.15);
+
+  --popover-menu-item-color: #333;
+  --popover-menu-item-hover-bg: #f5f5f5;
+  --popover-menu-item-disabled-color: #999;
+  --popover-menu-submenu-arrow-color: #666;
+  --popover-menu-separator-color: #e0e0e0;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import the PopoverMenu component -->
+  <script type="module">
+    import { PopoverMenuElement } from './dist/PopoverMenu.js';
+
+    const log = (outputId, message) => {
+      const output = document.getElementById(outputId);
+      const timestamp = new Date().toLocaleTimeString();
+      output.textContent = `[${timestamp}] ${message}`;
+    };
+
+    // Example 1: Basic Menu Bar
+    const menu1 = document.getElementById('menu1');
+    menu1.setItems([
+      {
+        label: 'File',
+        items: [
+          { label: 'New', onclick: () => log('output1', 'New file clicked') },
+          { label: 'Open', onclick: () => log('output1', 'Open file clicked') },
+          { label: 'Save', onclick: () => log('output1', 'Save file clicked') },
+          { label: 'Close', onclick: () => log('output1', 'Close file clicked') }
+        ]
+      },
+      {
+        label: 'Edit',
+        items: [
+          { label: 'Undo', onclick: () => log('output1', 'Undo clicked') },
+          { label: 'Redo', onclick: () => log('output1', 'Redo clicked') },
+          { label: 'Cut', onclick: () => log('output1', 'Cut clicked') },
+          { label: 'Copy', onclick: () => log('output1', 'Copy clicked') },
+          { label: 'Paste', onclick: () => log('output1', 'Paste clicked') }
+        ]
+      },
+      {
+        label: 'View',
+        items: [
+          { label: 'Zoom In', onclick: () => log('output1', 'Zoom In clicked') },
+          { label: 'Zoom Out', onclick: () => log('output1', 'Zoom Out clicked') },
+          { label: 'Reset Zoom', onclick: () => log('output1', 'Reset Zoom clicked') }
+        ]
+      }
+    ]);
+
+    // Example 2: Nested Submenus
+    const menu2 = document.getElementById('menu2');
+    menu2.setItems([
+      {
+        label: 'Tools',
+        items: [
+          { label: 'Settings', onclick: () => log('output2', 'Settings clicked') },
+          {
+            label: 'Advanced',
+            items: [
+              { label: 'Configuration', onclick: () => log('output2', 'Configuration clicked') },
+              {
+                label: 'Developer',
+                items: [
+                  { label: 'Console', onclick: () => log('output2', 'Console clicked') },
+                  { label: 'Debugger', onclick: () => log('output2', 'Debugger clicked') },
+                  {
+                    label: 'Network',
+                    items: [
+                      { label: 'Monitor', onclick: () => log('output2', 'Monitor clicked') },
+                      { label: 'Analytics', onclick: () => log('output2', 'Analytics clicked') }
+                    ]
+                  }
+                ]
+              },
+              { label: 'System', onclick: () => log('output2', 'System clicked') }
+            ]
+          }
+        ]
+      }
+    ]);
+
+    // Example 3: Menu with Separators
+    const menu3 = document.getElementById('menu3');
+    menu3.setItems([
+      {
+        label: 'File',
+        items: [
+          { label: 'New Document', onclick: () => log('output3', 'New Document clicked') },
+          { label: 'New Window', onclick: () => log('output3', 'New Window clicked') },
+          { label: '---sep' },
+          { label: 'Open', onclick: () => log('output3', 'Open clicked') },
+          { label: 'Open Recent', onclick: () => log('output3', 'Open Recent clicked') },
+          { label: '---sep' },
+          { label: 'Save', onclick: () => log('output3', 'Save clicked') },
+          { label: 'Save As', onclick: () => log('output3', 'Save As clicked') },
+          { label: '---sep' },
+          { label: 'Exit', onclick: () => log('output3', 'Exit clicked') }
+        ]
+      }
+    ]);
+
+    // Example 4: Disabled Menu Items
+    const menu4 = document.getElementById('menu4');
+    menu4.setItems([
+      {
+        label: 'Edit',
+        items: [
+          { label: 'Cut', onclick: () => log('output4', 'Cut clicked') },
+          { label: 'Copy', onclick: () => log('output4', 'Copy clicked') },
+          { label: 'Paste', onclick: () => log('output4', 'Paste clicked'), enabled: false },
+          { label: '---sep' },
+          { label: 'Delete', onclick: () => log('output4', 'Delete clicked'), enabled: false },
+          { label: '---sep' },
+          { label: 'Select All', onclick: () => log('output4', 'Select All clicked') }
+        ]
+      }
+    ]);
+
+    // Example 5: Application Menu
+    const menu5 = document.getElementById('menu5');
+    menu5.setItems([
+      {
+        label: 'File',
+        items: [
+          { label: 'New File (Ctrl+N)', onclick: () => log('output5', 'New File') },
+          { label: 'New Window (Ctrl+Shift+N)', onclick: () => log('output5', 'New Window') },
+          { label: '---sep' },
+          { label: 'Open File (Ctrl+O)', onclick: () => log('output5', 'Open File') },
+          { label: 'Open Folder (Ctrl+K Ctrl+O)', onclick: () => log('output5', 'Open Folder') },
+          { label: '---sep' },
+          { label: 'Save (Ctrl+S)', onclick: () => log('output5', 'Save') },
+          { label: 'Save As (Ctrl+Shift+S)', onclick: () => log('output5', 'Save As') },
+          { label: '---sep' },
+          {
+            label: 'Preferences',
+            items: [
+              { label: 'Settings', onclick: () => log('output5', 'Settings') },
+              { label: 'Keyboard Shortcuts', onclick: () => log('output5', 'Keyboard Shortcuts') },
+              { label: 'Color Theme', onclick: () => log('output5', 'Color Theme') }
+            ]
+          },
+          { label: '---sep' },
+          { label: 'Exit', onclick: () => log('output5', 'Exit') }
+        ]
+      },
+      {
+        label: 'Edit',
+        items: [
+          { label: 'Undo (Ctrl+Z)', onclick: () => log('output5', 'Undo') },
+          { label: 'Redo (Ctrl+Y)', onclick: () => log('output5', 'Redo') },
+          { label: '---sep' },
+          { label: 'Cut (Ctrl+X)', onclick: () => log('output5', 'Cut') },
+          { label: 'Copy (Ctrl+C)', onclick: () => log('output5', 'Copy') },
+          { label: 'Paste (Ctrl+V)', onclick: () => log('output5', 'Paste') },
+          { label: '---sep' },
+          { label: 'Find (Ctrl+F)', onclick: () => log('output5', 'Find') },
+          { label: 'Replace (Ctrl+H)', onclick: () => log('output5', 'Replace') }
+        ]
+      },
+      {
+        label: 'View',
+        items: [
+          { label: 'Command Palette (Ctrl+Shift+P)', onclick: () => log('output5', 'Command Palette') },
+          { label: '---sep' },
+          { label: 'Appearance',
+            items: [
+              { label: 'Zoom In (Ctrl++)', onclick: () => log('output5', 'Zoom In') },
+              { label: 'Zoom Out (Ctrl+-)', onclick: () => log('output5', 'Zoom Out') },
+              { label: 'Reset Zoom (Ctrl+0)', onclick: () => log('output5', 'Reset Zoom') },
+              { label: '---sep' },
+              { label: 'Full Screen (F11)', onclick: () => log('output5', 'Full Screen') }
+            ]
+          },
+          { label: '---sep' },
+          { label: 'Toggle Sidebar (Ctrl+B)', onclick: () => log('output5', 'Toggle Sidebar') },
+          { label: 'Toggle Terminal (Ctrl+`)', onclick: () => log('output5', 'Toggle Terminal') }
+        ]
+      },
+      {
+        label: 'Help',
+        items: [
+          { label: 'Documentation', onclick: () => log('output5', 'Documentation') },
+          { label: 'Keyboard Shortcuts', onclick: () => log('output5', 'Keyboard Shortcuts') },
+          { label: '---sep' },
+          { label: 'Report Issue', onclick: () => log('output5', 'Report Issue') },
+          { label: 'About', onclick: () => log('output5', 'About') }
+        ]
+      }
+    ]);
+
+    // Example 6: Dynamic Menu Updates
+    const menu6 = document.getElementById('menu6');
+    menu6.setItems([
+      {
+        label: 'Static Menu 1',
+        items: [
+          { label: 'Option 1', onclick: () => log('output6', 'Static Menu 1 - Option 1') },
+          { label: 'Option 2', onclick: () => log('output6', 'Static Menu 1 - Option 2') }
+        ]
+      },
+      {
+        label: 'Static Menu 2',
+        items: [
+          { label: 'Option A', onclick: () => log('output6', 'Static Menu 2 - Option A') },
+          { label: 'Option B', onclick: () => log('output6', 'Static Menu 2 - Option B') }
+        ]
+      }
+    ]);
+
+    let dynamicMenuCounter = 1;
+    window.addDynamicMenu = () => {
+      menu6.addMenuItem({
+        label: `Dynamic ${dynamicMenuCounter}`,
+        items: [
+          { label: `Item ${dynamicMenuCounter}.1`, onclick: () => log('output6', `Dynamic ${dynamicMenuCounter}.1 clicked`) },
+          { label: `Item ${dynamicMenuCounter}.2`, onclick: () => log('output6', `Dynamic ${dynamicMenuCounter}.2 clicked`) }
+        ]
+      });
+      dynamicMenuCounter++;
+      log('output6', `Added Dynamic Menu ${dynamicMenuCounter - 1}`);
+    };
+
+    window.removeDynamicMenu = () => {
+      const items = menu6.getItems();
+      if (items.length > 2) {
+        menu6.removeMenuItem(items.length - 1);
+        log('output6', 'Removed last menu item');
+      } else {
+        log('output6', 'Cannot remove - minimum 2 menus required');
+      }
+    };
+
+    // Example 7: Context Menu Style
+    const menu7 = document.getElementById('menu7');
+    menu7.setItems([
+      {
+        label: 'Actions',
+        items: [
+          { label: 'Copy Link', onclick: () => log('output7', 'Copy Link') },
+          { label: 'Open in New Tab', onclick: () => log('output7', 'Open in New Tab') },
+          { label: 'Download', onclick: () => log('output7', 'Download') },
+          { label: '---sep' },
+          { label: 'Properties', onclick: () => log('output7', 'Properties') },
+          { label: 'Inspect Element', onclick: () => log('output7', 'Inspect Element') },
+          { label: '---sep' },
+          {
+            label: 'More Actions',
+            items: [
+              { label: 'Bookmark', onclick: () => log('output7', 'Bookmark') },
+              { label: 'Share', onclick: () => log('output7', 'Share') },
+              { label: 'Print', onclick: () => log('output7', 'Print') }
+            ]
+          }
+        ]
+      }
+    ]);
+  </script>
+</body>
+</html>

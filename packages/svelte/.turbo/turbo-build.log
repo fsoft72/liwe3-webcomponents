@@ -1,0 +1,8 @@
+
+
+> @liwe3/webcomponents-svelte@1.1.11 build /home/fabio/dev/cloudflare/liwe3-webcomponents/packages/svelte
+> svelte-package && publint
+
+[1m[32msrc/lib -> dist[22m[39m
+[1m@liwe3/webcomponents-svelte[22m lint results:
+[1m[32mAll good![39m[22m

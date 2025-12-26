@@ -1,0 +1,884 @@
+/* ===================================
+   THEME TRANSITION & UTILITIES
+   ================================== */
+.theme-transition,
+[data-theme] {
+   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.theme-mode1 {
+   --liwe3-current-mode: var(--liwe3-mode1-500);
+   --liwe3-current-mode-light: var(--liwe3-mode1-300);
+   --liwe3-current-mode-dark: var(--liwe3-mode1-700);
+}
+
+.theme-mode2 {
+   --liwe3-current-mode: var(--liwe3-mode2-500);
+   --liwe3-current-mode-light: var(--liwe3-mode2-300);
+   --liwe3-current-mode-dark: var(--liwe3-mode2-700);
+}
+
+.theme-mode3 {
+   --liwe3-current-mode: var(--liwe3-mode3-500);
+   --liwe3-current-mode-light: var(--liwe3-mode3-300);
+   --liwe3-current-mode-dark: var(--liwe3-mode3-700);
+}
+
+.theme-mode4 {
+   --liwe3-current-mode: var(--liwe3-mode4-500);
+   --liwe3-current-mode-light: var(--liwe3-mode4-300);
+   --liwe3-current-mode-dark: var(--liwe3-mode4-700);
+}
+
+/* ===================================
+   COMPONENTS & UTILITY CLASSES
+   ================================== */
+
+.theme-toggle-btn {
+   padding: 0.5rem 1rem;
+   border: 2px solid var(--liwe3-border-default);
+   border-radius: 6px;
+   background: var(--liwe3-surface-raised);
+   color: var(--liwe3-text-mode1);
+   font-weight: 600;
+   cursor: pointer;
+   transition: all 0.3s ease;
+   font-size: 0.875rem;
+
+   &:hover {
+      background-color: var(--liwe3-surface-mode2);
+      border-color: var(--liwe3-current-mode, var(--liwe3-mode1-500));
+      color: var(--liwe3-current-mode, var(--liwe3-mode1-600));
+   }
+}
+
+.multi-mode-gradient {
+   background: linear-gradient(135deg,
+         oklch(from var(--liwe3-mode1-500) calc(l + 0.45) calc(c * 0.2) h),
+         oklch(from var(--liwe3-mode2-500) calc(l + 0.45) calc(c * 0.2) h),
+         oklch(from var(--liwe3-mode3-500) calc(l + 0.45) calc(c * 0.2) h),
+         oklch(from var(--liwe3-mode4-500) calc(l + 0.45) calc(c * 0.2) h));
+}
+
+.surface-container,
+.surface-container-raised {
+   background: var(--liwe3-surface-mode2);
+   padding: 1.5rem;
+   border-radius: 12px;
+   border: 1px solid var(--liwe3-border-default);
+   margin-bottom: 2rem;
+}
+
+.surface-container-raised {
+   background: var(--liwe3-surface-raised);
+   border: 1px solid var(--liwe3-border-subtle);
+}
+
+
+.interactive {
+   transition: all 0.2s ease;
+
+   &:hover {
+      background-color: var(--liwe3-hover-overlay);
+   }
+
+   &:active {
+      background-color: var(--liwe3-active-overlay);
+   }
+
+   &:focus-visible {
+      outline: 2px solid var(--liwe3-focus-ring);
+      outline-offset: 2px;
+   }
+}
+
+/* Card Surfaces */
+.card {
+   background-color: var(--liwe3-surface-raised);
+   border: 1px solid var(--liwe3-border-subtle);
+   border-radius: 8px;
+}
+
+.card-mode2 {
+   background-color: var(--liwe3-surface-mode2);
+   border: 1px solid var(--liwe3-border-default);
+}
+
+/* Error and Success Messages */
+.message {
+   &.success {
+      background: var(--liwe3-success-light);
+      color: var(--liwe3-success-dark);
+      border: 1px solid var(--liwe3-success);
+   }
+
+   &.error {
+      background: var(--liwe3-error-light);
+      color: var(--liwe3-error-dark);
+      border: 1px solid var(--liwe3-error);
+   }
+
+   &.warning {
+      background: var(--liwe3-warning-light);
+      color: var(--liwe3-warning-dark);
+      border: 1px solid var(--liwe3-warning);
+   }
+}
+
+/* ================================
+   FORM ELEMENT STYLES
+   ================================ */
+
+input,
+select,
+textarea {
+   border-radius: var(--liwe3-border-radius);
+}
+
+/* Select Dropdown */
+select {
+   cursor: pointer;
+   background: var(--liwe3-surface-raised);
+}
+
+input::placeholder,
+textarea::placeholder {
+   color: var(--liwe3-text-mode3);
+   opacity: 1;
+}
+
+label {
+   color: var(--liwe3-text-mode1);
+   transition: color 0.2s ease;
+}
+
+label.required::after {
+   color: var(--liwe3-error);
+}
+
+.form-container {
+   background: var(--liwe3-surface-raised);
+   border: 1px solid var(--liwe3-border-subtle);
+   border-radius: var(--liwe3-border-radius);
+   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+   &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg,
+            var(--liwe3-mode1-500) 0%,
+            var(--liwe3-mode1-600) 25%,
+            var(--liwe3-mode1-700) 50%,
+            var(--liwe3-mode1-800) 75%,
+            var(--liwe3-mode1-500) 100%);
+   }
+
+   .title {
+      color: var(--liwe3-text-mode1);
+   }
+
+   .subtitle {
+      color: var(--liwe3-text-mode2);
+   }
+
+   /* Input Base Styles */
+   input,
+   select,
+   textarea {
+      border: 2px solid var(--liwe3-border-default);
+      border-radius: var(--liwe3-border-radius);
+      background: var(--liwe3-surface-raised);
+      color: var(--liwe3-text-mode1);
+
+      &:focus {
+         outline: none;
+         border-color: var(--liwe3-mode1-500);
+         box-shadow: 0 0 0 3px var(--liwe3-focus-ring);
+         transform: translateY(-1px);
+      }
+
+      &:hover {
+         border-color: var(--liwe3-border-strong);
+      }
+   }
+
+   input[type="checkbox"],
+   input[type="radio"] {
+      transition: all 0.3s ease;
+
+      &:checked {
+         background: var(--liwe3-mode1-500);
+         border-color: var(--liwe3-mode1-500);
+      }
+   }
+
+   input[type="radio"] {
+
+      &:checked::after {
+         background: var(--liwe3-border-color);
+      }
+   }
+
+   input[type="checkbox"]:checked::after {
+      color: var(--liwe3-border-color);
+   }
+}
+
+.form-group {
+   label {
+      transition: all 0.3s ease;
+      color: var(--liwe3-text-mode2);
+   }
+
+   .form-input:focus+label,
+   .form-input:not(:placeholder-shown)+label {
+      color: var(--liwe3-mode1-500);
+   }
+
+   &.mode1 {
+
+      label,
+      legend {
+         color: var(--liwe3-mode1-300);
+      }
+   }
+
+   &.mode2 {
+
+      label,
+      legend {
+         color: var(--liwe3-mode2-300);
+      }
+   }
+
+   &.mode3 {
+
+      label,
+      legend {
+         color: var(--liwe3-mode3-300);
+      }
+   }
+
+   &.mode4 {
+
+      label,
+      legend {
+         color: var(--liwe3-mode4-300);
+      }
+   }
+
+   &.error {
+
+      label,
+      legend {
+         color: var(--liwe3-error-300);
+      }
+   }
+
+   &.warning {
+
+      label,
+      legend {
+         color: var(--liwe3-warning-300);
+      }
+   }
+
+   &.success {
+
+      label,
+      legend {
+         color: var(--liwe3-success-300);
+      }
+   }
+
+}
+
+/* Range Slider */
+input[type="range"],
+.form-range {
+   border-radius: 3px;
+   background: linear-gradient(90deg, var(--liwe3-mode1-500), var(--liwe3-mode1-600), var(--liwe3-mode1-700), var(--liwe3-mode1-800));
+   outline: none;
+   transition: all 0.3s ease;
+
+   &::-webkit-slider-track {
+      background: linear-gradient(90deg, var(--liwe3-mode1-500), var(--liwe3-mode1-600), var(--liwe3-mode1-700), var(--liwe3-mode1-800));
+      border-radius: 3px;
+      border: none;
+   }
+
+   &::-moz-range-track {
+      background: linear-gradient(90deg, var(--liwe3-mode1-500), var(--liwe3-mode1-600), var(--liwe3-mode1-700), var(--liwe3-mode1-800));
+      border-radius: 3px;
+      border: none;
+   }
+
+   &::-webkit-slider-thumb {
+      border-radius: 50%;
+      background: var(--liwe3-mode1-500);
+      border: 2px solid var(--liwe3-border-color);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+
+      &:hover {
+         transform: scale(1.2);
+         background: var(--liwe3-mode1-600);
+      }
+   }
+
+   &::-moz-range-thumb {
+      border-radius: 50%;
+      background: var(--liwe3-mode1-500);
+      border: 2px solid var(--liwe3-border-color);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+
+      &:hover {
+         transform: scale(1.2);
+         background: var(--liwe3-mode1-600);
+      }
+   }
+}
+
+/* Input Variants */
+input.mode1,
+.mode1 .form-container,
+.form-container.mode1 {
+
+   input,
+   select,
+   textarea {
+      border-color: var(--liwe3-mode1-300);
+
+      &:focus {
+         border-color: var(--liwe3-mode1-500);
+         box-shadow: 0 0 0 3px oklch(from var(--liwe3-mode1-500) l c h / 0.2);
+      }
+   }
+
+   label,
+   legend {
+      color: var(--liwe3-mode1-600);
+   }
+
+   .form-group.floating {
+
+      .form-input:focus+label,
+      .form-input:not(:placeholder-shown)+label {
+         color: var(--liwe3-mode1-500);
+      }
+   }
+}
+
+input.mode2,
+.mode2 .form-container,
+.form-container.mode2 {
+
+   input,
+   select,
+   textarea {
+      border-color: var(--liwe3-mode2-300);
+
+      &:focus {
+         border-color: var(--liwe3-mode2-500);
+         box-shadow: 0 0 0 3px oklch(from var(--liwe3-mode2-500) l c h / 0.2);
+      }
+   }
+
+   label,
+   legend {
+      color: var(--liwe3-mode2-600);
+   }
+
+   .form-group.floating {
+
+      .form-input:focus+label,
+      .form-input:not(:placeholder-shown)+label {
+         color: var(--liwe3-mode2-500);
+      }
+   }
+}
+
+input.mode3,
+.mode3 .form-container,
+.form-container.mode3 {
+
+   input,
+   select,
+   textarea {
+      border-color: var(--liwe3-mode3-300);
+
+      &:focus {
+         border-color: var(--liwe3-mode3-500);
+         box-shadow: 0 0 0 3px oklch(from var(--liwe3-mode3-500) l c h / 0.2);
+      }
+   }
+
+   label,
+   legend {
+      color: var(--liwe3-mode3-600);
+   }
+
+   .form-group.floating {
+
+      .form-input:focus+label,
+      .form-input:not(:placeholder-shown)+label {
+         color: var(--liwe3-mode3-500);
+      }
+   }
+}
+
+input.mode4,
+.mode4 .form-container,
+.form-container.mode4 {
+
+   input,
+   select,
+   textarea {
+      border-color: var(--liwe3-mode4-300);
+
+      &:focus {
+         border-color: var(--liwe3-mode4-500);
+         box-shadow: 0 0 0 3px oklch(from var(--liwe3-mode4-500) l c h / 0.2);
+      }
+   }
+
+   label,
+   legend {
+      color: var(--liwe3-mode4-600);
+   }
+
+   .form-group.floating {
+
+      .form-input:focus+label,
+      .form-input:not(:placeholder-shown)+label {
+         color: var(--liwe3-mode4-500);
+      }
+   }
+}
+
+input.success,
+.success .form-container,
+.form-container.success {
+
+   input,
+   select,
+   textarea {
+      border-color: var(--liwe3-success-300);
+
+      &:focus {
+         border-color: var(--liwe3-success-500);
+         box-shadow: 0 0 0 3px oklch(from var(--liwe3-success-500) l c h / 0.2);
+      }
+   }
+
+   label,
+   legend {
+      color: var(--liwe3-success-600);
+   }
+
+   .form-group.floating {
+
+      .form-input:focus+label,
+      .form-input:not(:placeholder-shown)+label {
+         color: var(--liwe3-success-500);
+      }
+   }
+}
+
+input.warning,
+.warning .form-container,
+.form-container.warning {
+
+   input,
+   select,
+   textarea {
+      border-color: var(--liwe3-warning-300);
+
+      &:focus {
+         border-color: var(--liwe3-warning-500);
+         box-shadow: 0 0 0 3px oklch(from var(--liwe3-warning-500) l c h / 0.2);
+      }
+   }
+
+   label,
+   legend {
+      color: var(--liwe3-warning-600);
+   }
+
+   .form-group.floating {
+
+      .form-input:focus+label,
+      .form-input:not(:placeholder-shown)+label {
+         color: var(--liwe3-warning-500);
+      }
+   }
+}
+
+input.error,
+.error .form-container,
+.form-container.error {
+
+   input,
+   select,
+   textarea {
+      border-color: var(--liwe3-error-300);
+
+      &:focus {
+         border-color: var(--liwe3-error-500);
+         box-shadow: 0 0 0 3px oklch(from var(--liwe3-error-500) l c h / 0.2);
+      }
+   }
+
+   label,
+   legend {
+      color: var(--liwe3-error-600);
+   }
+
+   .form-group.floating {
+
+      .form-input:focus+label,
+      .form-input:not(:placeholder-shown)+label {
+         color: var(--liwe3-error-500);
+      }
+   }
+}
+
+/* ===================================
+   BUTTON BASE STYLES & VARIANTS
+   ================================== */
+
+/* Base button styles - applied to all buttons */
+button,
+input[type="submit"],
+input[type="button"] {
+   border-radius: var(--liwe3-border-radius);
+   transition: all 0.3s ease;
+   color: var(--liwe3-text-inverse);
+   border: 1px solid;
+
+   --button-bg: var(--liwe3-mode1-500);
+   --button-bg-hover: var(--liwe3-mode1-600);
+   --button-border: var(--liwe3-mode1-500);
+   --button-border-hover: var(--liwe3-mode1-600);
+
+   background-color: var(--button-bg);
+   border-color: var(--button-border);
+   box-shadow: 0 4px 12px oklch(from var(--button-bg) l c h / 0.3);
+
+   &:hover {
+      background-color: var(--button-bg-hover);
+      border-color: var(--button-border-hover);
+      box-shadow: 0 6px 20px oklch(from var(--button-bg) l c h / 0.4);
+   }
+
+   &:active {
+      transform: translateY(1px);
+      filter: brightness(0.95);
+   }
+}
+
+button.mode1,
+input[type="submit"].mode1,
+input[type="button"].mode1,
+.mode1 button,
+.mode1 input[type="submit"],
+.mode1 input[type="button"],
+.form-container button,
+.form-container input[type="submit"],
+.form-container input[type="button"] {
+   --button-bg: var(--liwe3-mode1-500);
+   --button-bg-hover: var(--liwe3-mode1-600);
+   --button-border: var(--liwe3-mode1-500);
+   --button-border-hover: var(--liwe3-mode1-600);
+}
+
+button.mode2,
+input[type="submit"].mode2,
+input[type="button"].mode2,
+.mode2 button,
+.mode2 input[type="submit"],
+.mode2 input[type="button"],
+.form-container.mode2 button,
+.form-container.mode2 input[type="submit"],
+.form-container.mode2 input[type="button"] {
+   --button-bg: var(--liwe3-mode2-500);
+   --button-bg-hover: var(--liwe3-mode2-600);
+   --button-border: var(--liwe3-mode2-500);
+   --button-border-hover: var(--liwe3-mode2-600);
+}
+
+button.mode3,
+input[type="submit"].mode3,
+input[type="button"].mode3,
+.mode3 button,
+.mode3 input[type="submit"],
+.mode3 input[type="button"],
+.form-container.mode3 button,
+.form-container.mode3 input[type="submit"],
+.form-container.mode3 input[type="button"] {
+   --button-bg: var(--liwe3-mode3-500);
+   --button-bg-hover: var(--liwe3-mode3-600);
+   --button-border: var(--liwe3-mode3-500);
+   --button-border-hover: var(--liwe3-mode3-600);
+}
+
+button.mode4,
+input[type="submit"].mode4,
+input[type="button"].mode4,
+.mode4 button,
+.mode4 input[type="submit"],
+.mode4 input[type="button"],
+.form-container.mode4 button,
+.form-container.mode4 input[type="submit"],
+.form-container.mode4 input[type="button"] {
+   --button-bg: var(--liwe3-mode4-500);
+   --button-bg-hover: var(--liwe3-mode4-600);
+   --button-border: var(--liwe3-mode4-500);
+   --button-border-hover: var(--liwe3-mode4-600);
+}
+
+button.error,
+input[type="submit"].error,
+input[type="button"].error,
+.error button,
+.error input[type="submit"],
+.error input[type="button"],
+.form-container.error button,
+.form-container.error input[type="submit"],
+.form-container.error input[type="button"] {
+   --button-bg: var(--liwe3-error);
+   --button-bg-hover: var(--liwe3-error-dark);
+   --button-border: var(--liwe3-error-dark);
+   --button-border-hover: var(--liwe3-error);
+}
+
+button.success,
+input[type="submit"].success,
+input[type="button"].success,
+.success button,
+.success input[type="submit"],
+.success input[type="button"],
+.form-container.success button,
+.form-container.success input[type="submit"],
+.form-container.success input[type="button"] {
+   --button-bg: var(--liwe3-success);
+   --button-bg-hover: var(--liwe3-success-dark);
+   --button-border: var(--liwe3-success-dark);
+   --button-border-hover: var(--liwe3-success);
+}
+
+button.warning,
+input[type="submit"].warning,
+input[type="button"].warning,
+.warning button,
+.warning input[type="submit"],
+.warning input[type="button"],
+.form-container.warning button,
+.form-container.warning input[type="submit"],
+.form-container.warning input[type="button"] {
+   --button-bg: var(--liwe3-warning);
+   --button-bg-hover: var(--liwe3-warning-dark);
+   --button-border: var(--liwe3-warning-dark);
+   --button-border-hover: var(--liwe3-warning);
+}
+
+/* Outlined button variants */
+button.outline,
+input[type="submit"].outline,
+input[type="button"].outline {
+
+   --button-outline-bg: transparent;
+   --button-outline-border: var(--liwe3-mode1-500);
+   --button-outline-color: var(--liwe3-mode1-500);
+
+   background-color: var(--button-outline-bg);
+   color: var(--button-outline-color);
+   border: 2px solid var(--button-outline-border);
+   box-shadow: none;
+
+   &:hover {
+      transform: translateY(1px);
+      filter: brightness(0.95);
+   }
+}
+
+.form-container input[type="button"].mode2.outline,
+.form-container input[type="submit"].mode2.outline,
+.form-container button.mode2.outline,
+button.mode2.outline {
+
+   --button-outline-bg: transparent;
+   --button-outline-border: var(--liwe3-mode2-500);
+   --button-outline-color: var(--liwe3-mode2-500);
+}
+
+.form-container input[type="button"].mode3.outline,
+.form-container input[type="submit"].mode3.outline,
+.form-container button.mode3.outline,
+button.mode3.outline {
+
+   --button-outline-bg: transparent;
+   --button-outline-border: var(--liwe3-mode3-500);
+   --button-outline-color: var(--liwe3-mode3-500);
+}
+
+.form-container input[type="button"].mode4.outline,
+.form-container input[type="submit"].mode4.outline,
+.form-container button.mode4.outline,
+button.mode4.outline {
+   --button-outline-bg: transparent;
+   --button-outline-border: var(--liwe3-mode4-500);
+   --button-outline-color: var(--liwe3-mode4-500);
+}
+
+/* Themed radio items */
+.radio-item {
+   & .mode1 {
+      background: oklch(from var(--liwe3-mode1-500) calc(l - 0.3) calc(c * 0.8) h);
+      border-color: var(--liwe3-mode1-600);
+      color: var(--liwe3-mode1-300);
+   }
+
+   & .mode2 {
+      background: oklch(from var(--liwe3-mode2-500) calc(l - 0.3) calc(c * 0.8) h);
+      border-color: var(--liwe3-mode2-600);
+      color: var(--liwe3-mode2-300);
+   }
+
+   & .mode3 {
+      background: oklch(from var(--liwe3-mode3-500) calc(l - 0.3) calc(c * 0.8) h);
+      border-color: var(--liwe3-mode3-600);
+      color: var(--liwe3-mode3-300);
+   }
+
+   & .mode4 {
+      background: oklch(from var(--liwe3-mode4-500) calc(l - 0.3) calc(c * 0.8) h);
+      border-color: var(--liwe3-mode4-600);
+      color: var(--liwe3-mode4-300);
+   }
+
+   &:hover {
+      background: var(--liwe3-hover-overlay);
+   }
+}
+
+.file-upload-label:hover {
+   background: oklch(from var(--liwe3-mode1-500) calc(l - 0.4) calc(c * 0.5) h);
+}
+
+.form-data-display {
+   background: var(--liwe3-surface-mode2);
+}
+
+.form-data {
+   & .title {
+      color: var(--liwe3-text-mode1);
+   }
+
+   & .content {
+      color: var(--liwe3-text-mode2);
+   }
+}
+
+/* ===================================
+   TABLE STYLING
+   ================================== */
+table {
+   width: 100%;
+   border-collapse: collapse;
+   border-spacing: 0;
+   font-size: 0.875rem;
+   line-height: 1.5;
+   background-color: var(--table-background-color, var(--liwe3-surface-raised));
+   border: 1px solid var(--table-border-default, var(--liwe3-border-default));
+   border-radius: var(--liwe3-border-radius);
+   overflow: hidden;
+   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+   th,
+   td {
+      border: 1px solid var(--table-border-subtle, var(--liwe3-border-subtle));
+      position: relative;
+      padding: 0.75rem 1rem;
+      vertical-align: top;
+   }
+
+   th {
+      background-color: var(--th-background-color, var(--liwe3-surface-mode2));
+      color: var(--table-text-color, var(--liwe3-text-mode1));
+      font-weight: 600;
+      text-align: left;
+      border-bottom: 2px solid var(--liwe3-border-default);
+   }
+
+   td {
+      color: var(--table-text-color, var(--liwe3-text-mode1));
+   }
+
+   tbody tr {
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      cursor: pointer;
+
+      &:hover {
+         background-color: var(--table-hover-overlay, var(--liwe3-hover-overlay));
+         transform: translateY(-1px);
+         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+   }
+
+   tr:last-child td {
+      border-bottom: none;
+   }
+
+   tr:nth-child(even) {
+      background-color: oklch(from var(--table-background-color, var(--liwe3-surface-mode1)) calc(l - 0.02) c h);
+   }
+}
+
+/* Mode-specific table styles */
+.mode1,
+.mode2,
+.mode3,
+.mode4 {
+   & table {
+      border-color: var(--liwe3-current-mode-light);
+      box-shadow: 0 2px 8px oklch(from var(--liwe3-current-mode) l c h / 0.1);
+
+      & th {
+         background-color: oklch(from var(--liwe3-current-mode) calc(l + 0.3) calc(c * 0.4) h);
+         /* approx mode-100 */
+         color: oklch(from var(--liwe3-current-mode) calc(l - 0.3) calc(c * 1.1) h);
+         /* approx mode-800 */
+         border-color: oklch(from var(--liwe3-current-mode) calc(l + 0.25) calc(c * 0.6) h);
+         /* approx mode-200 */
+         border-bottom-color: var(--liwe3-current-mode-light);
+      }
+
+      & td {
+         border-color: oklch(from var(--liwe3-current-mode) calc(l + 0.25) calc(c * 0.6) h);
+         /* approx mode-200 */
+      }
+
+      & tbody tr:hover {
+         background-color: oklch(from var(--liwe3-current-mode) l c h / 0.12);
+         box-shadow: 0 3px 12px oklch(from var(--liwe3-current-mode) l c h / 0.15);
+      }
+   }
+
+   /* Responsive table behavior */
+   @media (max-width: 768px) {
+      table {
+         font-size: 0.8125rem;
+
+         & th,
+         & td {
+            padding: 0.5rem 0.75rem;
+         }
+      }
+   }
+}

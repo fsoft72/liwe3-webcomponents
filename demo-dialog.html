@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Dialog Component Demo - @liwe3/webcomponents</title>
+
+		<!-- Theme CSS Files -->
+		<link rel="stylesheet" href="theme/variables.css">
+		<link rel="stylesheet" href="theme/theme.css">
+		<link rel="stylesheet" href="theme/typography.css">
+		<link rel="stylesheet" href="theme/layout.css">
+		<link rel="stylesheet" href="theme/form.css">
+
+		<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: Ubuntu, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			padding: 40px 20px;
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+
+		header {
+			text-align: center;
+			color: white;
+			margin-bottom: 60px;
+		}
+
+		h1 {
+			font-size: 48px;
+			font-weight: 700;
+			margin-bottom: 10px;
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+		}
+
+		.subtitle {
+			font-size: 18px;
+			opacity: 0.9;
+		}
+
+		.demo-section {
+			background: white;
+			border-radius: 16px;
+			padding: 40px;
+			margin-bottom: 30px;
+			box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+		}
+
+		.section-title {
+			font-size: 24px;
+			font-weight: 600;
+			margin-bottom: 20px;
+			color: #333;
+			border-bottom: 2px solid #667eea;
+			padding-bottom: 10px;
+		}
+
+		.button-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+			gap: 15px;
+			margin-top: 20px;
+		}
+
+		button {
+			padding: 14px 24px;
+			font-size: 16px;
+			font-weight: 500;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+		}
+
+		button:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+		}
+
+		button:active {
+			transform: translateY(0);
+		}
+
+		.btn-primary {
+			background: #667eea;
+			color: white;
+		}
+
+		.btn-danger {
+			background: #dc3545;
+			color: white;
+		}
+
+		.btn-warning {
+			background: #ffc107;
+			color: #333;
+		}
+
+		.btn-success {
+			background: #28a745;
+			color: white;
+		}
+
+		.btn-info {
+			background: #17a2b8;
+			color: white;
+		}
+
+		.btn-custom {
+			background: #6c757d;
+			color: white;
+		}
+
+		.description {
+			color: #666;
+			line-height: 1.6;
+			margin-bottom: 20px;
+		}
+
+		.code-block {
+			background: #f8f9fa;
+			border: 1px solid #dee2e6;
+			border-radius: 8px;
+			padding: 20px;
+			margin-top: 20px;
+			font-family: "Courier New", monospace;
+			font-size: 14px;
+			overflow-x: auto;
+		}
+
+		.code-block pre {
+			margin: 0;
+			white-space: pre-wrap;
+		}
+
+		@media (max-width: 768px) {
+			h1 {
+				font-size: 32px;
+			}
+
+			.demo-section {
+				padding: 24px;
+			}
+
+			.button-grid {
+				grid-template-columns: 1fr;
+			}
+		}
+		</style>
+	</head>
+	<body>
+		<div class="container">
+			<header>
+				<h1>💬 Dialog Demo</h1>
+				<p class="subtitle">A customizable dialog with HTML body and action buttons</p>
+			</header>
+
+			<div class="demo-section">
+				<h2 class="section-title">Basic Dialog</h2>
+				<p class="description">
+					Click the button below to see a simple dialog with default settings.
+				</p>
+				<div class="button-grid">
+					<button class="btn-primary" onclick="showBasicDialog()">Show Basic Dialog</button>
+				</div>
+			</div>
+
+			<div class="demo-section">
+				<h2 class="section-title">Delete Confirmation</h2>
+				<p class="description">
+					A common use case: confirming a destructive action with styled buttons.
+				</p>
+				<div class="button-grid">
+					<button class="btn-danger" onclick="showDeleteDialog()">Delete File</button>
+					<button class="btn-danger" onclick="showDeleteAccountDialog()">Delete Account</button>
+				</div>
+			</div>
+
+			<div class="demo-section">
+				<h2 class="section-title">Save Changes Confirmation</h2>
+				<p class="description">
+					Ask users if they want to save changes before leaving, with three options.
+				</p>
+				<div class="button-grid">
+					<button class="btn-warning" onclick="showSaveChangesDialog()">Unsaved Changes</button>
+				</div>
+			</div>
+
+			<div class="demo-section">
+				<h2 class="section-title">HTML Content</h2>
+				<p class="description">
+					Dialogs support rich HTML content including lists, formatting, and more.
+				</p>
+				<div class="button-grid">
+					<button class="btn-info" onclick="showHtmlContentDialog()">Show HTML Content</button>
+					<button class="btn-success" onclick="showTermsDialog()">Terms & Conditions</button>
+				</div>
+			</div>
+
+			<div class="demo-section">
+				<h2 class="section-title">Long Scrollable Content</h2>
+				<p class="description">
+					When content is long, the body becomes scrollable while buttons remain sticky at the bottom.
+				</p>
+				<div class="button-grid">
+					<button class="btn-info" onclick="showLongContentDialog()">Show Long Content</button>
+				</div>
+			</div>
+
+			<div class="demo-section">
+				<h2 class="section-title">Modal vs Non-Modal</h2>
+				<p class="description">
+					Modal dialogs dim the background and prevent interaction outside. Non-modal dialogs allow clicking outside.
+				</p>
+				<div class="button-grid">
+					<button class="btn-primary" onclick="showModalDialog()">Modal Dialog (default)</button>
+					<button class="btn-custom" onclick="showNonModalDialog()">Non-Modal Dialog</button>
+				</div>
+			</div>
+
+			<div class="demo-section">
+				<h2 class="section-title">Keyboard & Click Behavior</h2>
+				<p class="description">
+					Control whether Esc key and clicking outside can close the dialog.
+				</p>
+				<div class="button-grid">
+					<button class="btn-primary" onclick="showEscCloseDialog()">Esc to Close (default)</button>
+					<button class="btn-warning" onclick="showNoEscDialog()">No Esc Close</button>
+					<button class="btn-info" onclick="showClickCloseDialog()">Click Outside to Close</button>
+					<button class="btn-danger" onclick="showNoClickCloseDialog()">No Click Outside</button>
+				</div>
+			</div>
+
+			<div class="demo-section">
+				<h2 class="section-title">Button Layouts</h2>
+				<p class="description">
+					Different button configurations: no buttons, one button, two buttons, or multiple buttons.
+				</p>
+				<div class="button-grid">
+					<button class="btn-primary" onclick="showNoButtonsDialog()">No Buttons (Close only)</button>
+					<button class="btn-info" onclick="showOneButtonDialog()">One Custom Button</button>
+					<button class="btn-success" onclick="showTwoButtonsDialog()">Two Buttons</button>
+					<button class="btn-warning" onclick="showManyButtonsDialog()">Multiple Buttons</button>
+				</div>
+			</div>
+
+			<div class="demo-section">
+				<h2 class="section-title">Stacked Dialogs</h2>
+				<p class="description">
+					Multiple dialogs can be opened at the same time and will stack on top of each other.
+				</p>
+				<div class="button-grid">
+					<button class="btn-primary" onclick="showStackedDialogs()">Show Stacked Dialogs</button>
+				</div>
+			</div>
+
+			<div class="demo-section">
+				<h2 class="section-title">Custom Styled Buttons</h2>
+				<p class="description">
+					Buttons can have custom background colors to match your design system.
+				</p>
+				<div class="button-grid">
+					<button class="btn-custom" onclick="showCustomButtonsDialog()">Custom Button Colors</button>
+				</div>
+			</div>
+
+			<div class="demo-section">
+				<h2 class="section-title">Appearance Animations</h2>
+				<p class="description">
+					Control how the dialog appears on screen with different animation effects.
+				</p>
+				<div class="button-grid">
+					<button class="btn-primary" onclick="showNoAnimationDialog()">No Animation (default)</button>
+					<button class="btn-info" onclick="showFadeDialog()">Fade Animation</button>
+					<button class="btn-success" onclick="showSlideDialog()">Slide from Top</button>
+				</div>
+			</div>
+
+			<div class="demo-section">
+				<h2 class="section-title">Form in Dialog</h2>
+				<p class="description">
+					You can include forms and interactive elements in the dialog body.
+				</p>
+				<div class="button-grid">
+					<button class="btn-success" onclick="showFormDialog()">Show Form Dialog</button>
+				</div>
+			</div>
+
+			<div class="demo-section">
+				<h2 class="section-title">Usage Example</h2>
+				<div class="code-block">
+					<pre>// Import the dialogAdd function
+import { dialogAdd } from '@liwe3/webcomponents';
+
+// Show a dialog
+const dialog = dialogAdd({
+  title: 'Delete File',
+  body: '&lt;p&gt;Are you sure you want to delete this file?&lt;/p&gt;&lt;p&gt;This action cannot be undone.&lt;/p&gt;',
+  buttons: [
+    {
+      label: 'Delete',
+      backgroundColor: '#dc3545',
+      onclick: () => {
+        console.log('File deleted');
+        dialog.close(); // Close the dialog after action
+      }
+    },
+    {
+      label: 'Cancel',
+      onclick: () => {
+        console.log('Cancelled');
+        dialog.close();
+      }
+    }
+  ],
+  // Note: When custom buttons are provided, the default "Close" button is not shown
+  modal: true, // Dim background (default: true)
+  escToClose: true, // Allow Esc key to close (default: true)
+  clickToClose: true, // Allow clicking outside to close (default: true)
+  fxAppear: 'fade', // Animation: 'none', 'fade', or 'slide' (default: 'none')
+  onClose: () => console.log('Dialog closed')
+});</pre>
+				</div>
+			</div>
+		</div>
+
+		<!-- Import the Dialog component -->
+		<script type="module">
+		import { dialogAdd } from './dist/Dialog.js';
+
+		// Basic dialog
+		window.showBasicDialog = () => {
+			dialogAdd( {
+				title: 'Dialog',
+				body: '<p>This is a basic dialog with default settings.</p>',
+			} );
+		};
+
+		// Delete file dialog
+		window.showDeleteDialog = () => {
+			const dialog = dialogAdd( {
+				title: 'Delete File',
+				body: '<p>Are you sure you want to delete <strong>document.pdf</strong>?</p><p>This action cannot be undone.</p>',
+				buttons: [
+					{
+						label: 'Delete',
+						backgroundColor: '#dc3545',
+						onclick: () => {
+							alert( 'File deleted!' );
+							dialog.close();
+						},
+					},
+					{
+						label: 'Cancel',
+						onclick: () => {
+							console.log( 'Cancelled' );
+							dialog.close();
+						},
+					},
+				],
+			} );
+		};
+
+		// Delete account dialog
+		window.showDeleteAccountDialog = () => {
+			const dialog = dialogAdd( {
+				title: 'Delete Account',
+				body: `
+          <p><strong>Warning:</strong> This will permanently delete your account.</p>
+          <p>All your data will be lost including:</p>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li>Your profile and settings</li>
+            <li>All your projects and files</li>
+            <li>Payment history</li>
+            <li>Shared content and collaborations</li>
+          </ul>
+          <p>Are you absolutely sure?</p>
+        `,
+				buttons: [
+					{
+						label: 'Delete My Account',
+						backgroundColor: '#dc3545',
+						onclick: () => {
+							alert( 'Account deletion initiated' );
+							dialog.close();
+						},
+					},
+				],
+			} );
+		};
+
+		// Save changes dialog
+		window.showSaveChangesDialog = () => {
+			const dialog = dialogAdd( {
+				title: 'Unsaved Changes',
+				body: '<p>You have unsaved changes. Do you want to save them before leaving?</p>',
+				buttons: [
+					{
+						label: 'Save',
+						backgroundColor: '#28a745',
+						onclick: () => {
+							alert( 'Changes saved!' );
+							dialog.close();
+						},
+					},
+					{
+						label: "Don't save",
+						onclick: () => {
+							console.log( "Don't save" );
+							dialog.close();
+						},
+					},
+					{
+						label: 'Cancel',
+						onclick: () => {
+							dialog.close();
+						},
+					},
+				],
+			} );
+		};
+
+		// HTML content dialog
+		window.showHtmlContentDialog = () => {
+			dialogAdd( {
+				title: 'Rich HTML Content',
+				body: `
+          <h3 style="margin-top: 0;">Features</h3>
+          <ul style="margin: 10px 0; padding-left: 20px;">
+            <li><strong>Bold text</strong> and <em>italic text</em></li>
+            <li>Lists and formatting</li>
+            <li>Links: <a href="#" onclick="event.preventDefault(); alert('Link clicked!');">Click me</a></li>
+            <li>Images and more</li>
+          </ul>
+          <p style="color: #666; font-style: italic;">You can use any HTML content in the dialog body!</p>
+        `,
+			} );
+		};
+
+		// Terms dialog
+		window.showTermsDialog = () => {
+			const dialog = dialogAdd( {
+				title: 'Terms & Conditions',
+				body: `
+          <h3 style="margin-top: 0;">Terms of Service</h3>
+          <p>By using this service, you agree to the following terms:</p>
+          <ol style="margin: 10px 0; padding-left: 20px; line-height: 1.8;">
+            <li>You will use the service responsibly</li>
+            <li>You will not share your account credentials</li>
+            <li>You acknowledge that data may be stored securely</li>
+            <li>You agree to receive service updates</li>
+          </ol>
+          <p style="margin-top: 15px;"><strong>Do you accept these terms?</strong></p>
+        `,
+				buttons: [
+					{
+						label: 'Accept',
+						backgroundColor: '#28a745',
+						onClick: () => {
+							alert( 'Terms accepted!' );
+							dialog.close();
+						},
+					},
+					{
+						label: 'Decline',
+						onClick: () => {
+							alert( 'Terms declined' );
+							dialog.close();
+						},
+					},
+				],
+			} );
+		};
+
+		// Long content dialog
+		window.showLongContentDialog = () => {
+			const longContent = `
+        <h3 style="margin-top: 0;">Privacy Policy</h3>
+        <p>This is a very long content to demonstrate scrolling behavior. The buttons will remain sticky at the bottom.</p>
+        ${
+				Array( 20 ).fill( 0 ).map( ( _, i ) => `
+          <h4>Section ${i + 1}</h4>
+          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+        ` ).join( '' )
+			}
+        <p><strong>End of document</strong></p>
+      `;
+
+			const dialog = dialogAdd( {
+				title: 'Scrollable Content',
+				body: longContent,
+				buttons: [
+					{
+						label: 'I have read this',
+						backgroundColor: '#28a745',
+						onClick: () => {
+							alert( 'Thank you for reading!' );
+							dialog.close();
+						},
+					},
+				],
+			} );
+		};
+
+		// Modal dialog
+		window.showModalDialog = () => {
+			dialogAdd( {
+				title: 'Modal Dialog',
+				body:
+					'<p>This is a modal dialog. The background is dimmed and you cannot interact with elements behind it.</p><p>You can close this by clicking outside or pressing Esc.</p>',
+				modal: true,
+			} );
+		};
+
+		// Non-modal dialog
+		window.showNonModalDialog = () => {
+			dialogAdd( {
+				title: 'Non-Modal Dialog',
+				body:
+					'<p>This is a non-modal dialog. The background is not dimmed.</p><p>However, you can still close it by clicking outside or pressing Esc (try it!).</p>',
+				modal: false,
+			} );
+		};
+
+		// Esc close dialog
+		window.showEscCloseDialog = () => {
+			dialogAdd( {
+				title: 'Press Esc to Close',
+				body: '<p>This dialog can be closed by pressing the Esc key.</p><p>Try it now!</p>',
+				escToClose: true,
+			} );
+		};
+
+		// No Esc dialog
+		window.showNoEscDialog = () => {
+			dialogAdd( {
+				title: 'Esc Disabled',
+				body: '<p>This dialog cannot be closed with the Esc key.</p><p>You must click the Close button.</p>',
+				escToClose: false,
+				clickToClose: false,
+			} );
+		};
+
+		// Click close dialog
+		window.showClickCloseDialog = () => {
+			dialogAdd( {
+				title: 'Click Outside to Close',
+				body: '<p>This dialog can be closed by clicking outside of it.</p><p>Try clicking on the dimmed background!</p>',
+				clickToClose: true,
+			} );
+		};
+
+		// No click close dialog
+		window.showNoClickCloseDialog = () => {
+			dialogAdd( {
+				title: 'Click Outside Disabled',
+				body: '<p>This dialog cannot be closed by clicking outside.</p><p>You must use the Close button or press Esc.</p>',
+				clickToClose: false,
+				escToClose: true,
+			} );
+		};
+
+		// No buttons dialog
+		window.showNoButtonsDialog = () => {
+			dialogAdd( {
+				title: 'Information',
+				body: '<p>This dialog has no custom buttons, only the default Close button.</p>',
+			} );
+		};
+
+		// One button dialog
+		window.showOneButtonDialog = () => {
+			const dialog = dialogAdd( {
+				title: 'Single Action',
+				body: '<p>This dialog has one custom button. It will appear on the left side.</p>',
+				buttons: [
+					{
+						label: 'Confirm',
+						backgroundColor: '#28a745',
+						onClick: () => {
+							alert( 'Confirmed!' );
+							dialog.close();
+						},
+					},
+				],
+			} );
+		};
+
+		// Two buttons dialog
+		window.showTwoButtonsDialog = () => {
+			const dialog = dialogAdd( {
+				title: 'Two Actions',
+				body: '<p>This dialog has two buttons. The first appears on the left, the second on the right.</p>',
+				buttons: [
+					{
+						label: 'Secondary Action',
+						onClick: () => {
+							alert( 'Secondary action clicked' );
+							dialog.close();
+						},
+					},
+					{
+						label: 'Primary Action',
+						backgroundColor: '#667eea',
+						onClick: () => {
+							alert( 'Primary action clicked' );
+							dialog.close();
+						},
+					},
+				],
+			} );
+		};
+
+		// Many buttons dialog
+		window.showManyButtonsDialog = () => {
+			const dialog = dialogAdd( {
+				title: 'Multiple Actions',
+				body: '<p>This dialog has multiple buttons. The first button is on the left, the rest are on the right.</p>',
+				buttons: [
+					{
+						label: 'Left Button',
+						backgroundColor: '#6c757d',
+						onClick: () => {
+							alert( 'Left button clicked' );
+							dialog.close();
+						},
+					},
+					{
+						label: 'Action 1',
+						onClick: () => {
+							alert( 'Action 1 clicked' );
+							dialog.close();
+						},
+					},
+					{
+						label: 'Action 2',
+						onClick: () => {
+							alert( 'Action 2 clicked' );
+							dialog.close();
+						},
+					},
+					{
+						label: 'Primary',
+						backgroundColor: '#28a745',
+						onClick: () => {
+							alert( 'Primary clicked' );
+							dialog.close();
+						},
+					},
+				],
+			} );
+		};
+
+		// Stacked dialogs
+		window.showStackedDialogs = () => {
+			dialogAdd( {
+				title: 'First Dialog',
+				body: '<p>This is the first dialog. Click the button below to open a second dialog on top.</p>',
+				buttons: [
+					{
+						label: 'Open Second Dialog',
+						backgroundColor: '#667eea',
+						onClick: () => {
+							dialogAdd( {
+								title: 'Second Dialog',
+								body: '<p>This is the second dialog stacked on top of the first one.</p><p>Click below to open a third!</p>',
+								buttons: [
+									{
+										label: 'Open Third Dialog',
+										backgroundColor: '#28a745',
+										onClick: () => {
+											dialogAdd( {
+												title: 'Third Dialog',
+												body: '<p>This is the third dialog! Close them one by one.</p>',
+											} );
+										},
+									},
+								],
+							} );
+						},
+					},
+				],
+			} );
+		};
+
+		// Custom buttons dialog
+		window.showCustomButtonsDialog = () => {
+			const dialog = dialogAdd( {
+				title: 'Custom Button Colors',
+				body: '<p>Buttons can have custom background colors to match your design system.</p>',
+				buttons: [
+					{
+						label: 'Purple',
+						backgroundColor: '#667eea',
+						onClick: () => {
+							alert( 'Purple clicked' );
+							dialog.close();
+						},
+					},
+					{
+						label: 'Orange',
+						backgroundColor: '#f59e0b',
+						onClick: () => {
+							alert( 'Orange clicked' );
+							dialog.close();
+						},
+					},
+					{
+						label: 'Pink',
+						backgroundColor: '#ec4899',
+						onClick: () => {
+							alert( 'Pink clicked' );
+							dialog.close();
+						},
+					},
+					{
+						label: 'Green',
+						backgroundColor: '#10b981',
+						onClick: () => {
+							alert( 'Green clicked' );
+							dialog.close();
+						},
+					},
+				],
+			} );
+		};
+
+		// Form dialog
+		window.showFormDialog = () => {
+			const dialog = dialogAdd( {
+				title: 'Contact Form',
+				body: `
+          <form id="contactForm" style="margin-top: 10px;">
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: 500;">Name:</label>
+              <input type="text" id="name" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" placeholder="Enter your name">
+            </div>
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: 500;">Email:</label>
+              <input type="email" id="email" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;" placeholder="Enter your email">
+            </div>
+            <div style="margin-bottom: 15px;">
+              <label style="display: block; margin-bottom: 5px; font-weight: 500;">Message:</label>
+              <textarea id="message" rows="4" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; resize: vertical;" placeholder="Enter your message"></textarea>
+            </div>
+          </form>
+        `,
+				buttons: [
+					{
+						label: 'Submit',
+						backgroundColor: '#28a745',
+						onClick: () => {
+							// Access form elements from shadow DOM
+							const name = dialog.shadowRoot.getElementById( 'name' ).value;
+							const email = dialog.shadowRoot.getElementById( 'email' ).value;
+							const message = dialog.shadowRoot.getElementById( 'message' ).value;
+
+							if ( name && email && message ) {
+								alert( `Form submitted!\n\nName: ${name}\nEmail: ${email}\nMessage: ${message}` );
+								dialog.close();
+							} else {
+								alert( 'Please fill in all fields' );
+							}
+						},
+					},
+				],
+			} );
+		};
+
+		// No animation dialog
+		window.showNoAnimationDialog = () => {
+			dialogAdd( {
+				title: 'No Animation',
+				body:
+					'<p>This dialog appears instantly without any animation effect.</p><p>This is the default behavior when <code>fxAppear</code> is set to <code>"none"</code> or not specified.</p>',
+				fxAppear: 'none',
+			} );
+		};
+
+		// Fade animation dialog
+		window.showFadeDialog = () => {
+			dialogAdd( {
+				title: 'Fade Animation',
+				body: '<p>This dialog fades in smoothly when it appears.</p><p>The <code>fxAppear</code> property is set to <code>"fade"</code>.</p>',
+				fxAppear: 'fade',
+			} );
+		};
+
+		// Slide animation dialog
+		window.showSlideDialog = () => {
+			dialogAdd( {
+				title: 'Slide Animation',
+				body: '<p>This dialog slides down from the top of the screen.</p><p>The <code>fxAppear</code> property is set to <code>"slide"</code>.</p>',
+				fxAppear: 'slide',
+			} );
+		};
+		</script>
+	</body>
+</html>

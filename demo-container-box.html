@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ContainerBox Component Demo - @liwe3/webcomponents</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 60px;
+    }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .subtitle {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    .demo-section {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #333;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+    }
+
+    .description {
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .demo-container {
+      margin-top: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .demo-item {
+      padding: 20px;
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      min-height: 200px;
+    }
+
+    .card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 14px;
+      opacity: 0.9;
+      line-height: 1.5;
+    }
+
+    .image-box {
+      width: 100%;
+      height: 100%;
+      background: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .image-box:hover {
+      transform: scale(1.02);
+    }
+
+    .image-box img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 8px;
+    }
+
+    .placeholder-image {
+      font-size: 48px;
+      color: #999;
+    }
+
+    .output-area {
+      margin-top: 20px;
+      padding: 20px;
+      background: #e9ecef;
+      border-radius: 8px;
+      min-height: 60px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+    }
+
+    .output-title {
+      font-weight: 600;
+      color: #495057;
+      margin-bottom: 10px;
+    }
+
+    .output-content {
+      color: #212529;
+      white-space: pre-wrap;
+    }
+
+    .feature-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .feature-list li {
+      padding: 10px 0;
+      color: #666;
+      display: flex;
+      align-items: center;
+    }
+
+    .feature-list li::before {
+      content: '✓';
+      color: #28a745;
+      font-weight: bold;
+      margin-right: 10px;
+      font-size: 18px;
+    }
+
+    .code-block {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 14px;
+      overflow-x: auto;
+    }
+
+    .code-block pre {
+      margin: 0;
+      white-space: pre-wrap;
+    }
+
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
+      background: #667eea;
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: #5568d3;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 32px;
+      }
+
+      .demo-section {
+        padding: 24px;
+      }
+
+      .demo-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>📦 ContainerBox Component Demo</h1>
+      <p class="subtitle">A container with hover-activated menu in configurable positions</p>
+    </header>
+
+    <div class="demo-section">
+      <h2 class="section-title">Features</h2>
+      <ul class="feature-list">
+        <li>Wraps any HTML content (divs, images, custom elements)</li>
+        <li>Shows menu button on hover (or always visible)</li>
+        <li>Configurable menu position (4 corners)</li>
+        <li>Integrates with PopoverMenu component</li>
+        <li>Clicks pass through to wrapped content</li>
+        <li>Customizable with CSS variables</li>
+        <li>TypeScript support with full type definitions</li>
+      </ul>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Example 1: Basic Card with Menu</h2>
+      <p class="description">
+        Hover over the card to see the menu button appear in the bottom-left corner (default position).
+      </p>
+      <div class="demo-container">
+        <div class="demo-item">
+          <liwe3-container-box id="box1">
+            <div class="card">
+              <h3>Welcome Card</h3>
+              <p>This is a card wrapped in a ContainerBox. Hover over it to see the menu button appear. Click on menu items to see actions.</p>
+            </div>
+          </liwe3-container-box>
+        </div>
+      </div>
+      <div class="output-area">
+        <div class="output-title">Output Console:</div>
+        <div class="output-content" id="output1">Hover over the card and click menu items...</div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Example 2: All Four Corner Positions</h2>
+      <p class="description">
+        Demonstrates menu button in all four corner positions.
+      </p>
+      <div class="demo-container">
+        <div class="demo-item">
+          <liwe3-container-box id="box2-tl">
+            <div class="card">
+              <h3>Top Left</h3>
+              <p>Menu button appears in the top-left corner when you hover.</p>
+            </div>
+          </liwe3-container-box>
+        </div>
+        <div class="demo-item">
+          <liwe3-container-box id="box2-tr">
+            <div class="card">
+              <h3>Top Right</h3>
+              <p>Menu button appears in the top-right corner when you hover.</p>
+            </div>
+          </liwe3-container-box>
+        </div>
+        <div class="demo-item">
+          <liwe3-container-box id="box2-bl">
+            <div class="card">
+              <h3>Bottom Left</h3>
+              <p>Menu button appears in the bottom-left corner when you hover.</p>
+            </div>
+          </liwe3-container-box>
+        </div>
+        <div class="demo-item">
+          <liwe3-container-box id="box2-br">
+            <div class="card">
+              <h3>Bottom Right</h3>
+              <p>Menu button appears in the bottom-right corner when you hover.</p>
+            </div>
+          </liwe3-container-box>
+        </div>
+      </div>
+      <div class="output-area">
+        <div class="output-title">Output Console:</div>
+        <div class="output-content" id="output2">Click menu items to see output...</div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Example 3: Always Visible Menu</h2>
+      <p class="description">
+        Menu button is always visible, not just on hover.
+      </p>
+      <div class="demo-container">
+        <div class="demo-item">
+          <liwe3-container-box id="box3">
+            <div class="card">
+              <h3>Always Visible</h3>
+              <p>The menu button is always visible on this container, no hover required.</p>
+            </div>
+          </liwe3-container-box>
+        </div>
+      </div>
+      <div class="output-area">
+        <div class="output-title">Output Console:</div>
+        <div class="output-content" id="output3">Menu is always visible...</div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Example 4: Image Container with Actions</h2>
+      <p class="description">
+        ContainerBox wrapping an image with various image-related actions. Try clicking on the image itself.
+      </p>
+      <div class="demo-container">
+        <div class="demo-item">
+          <liwe3-container-box id="box4">
+            <div class="image-box" onclick="handleImageClick()">
+              <div class="placeholder-image">🖼️</div>
+            </div>
+          </liwe3-container-box>
+        </div>
+      </div>
+      <div class="output-area">
+        <div class="output-title">Output Console:</div>
+        <div class="output-content" id="output4">Click on the image or use the menu...</div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Example 5: Dynamic Configuration</h2>
+      <p class="description">
+        Use the controls below to dynamically change the menu position and visibility.
+      </p>
+      <div class="demo-container">
+        <div class="demo-item">
+          <liwe3-container-box id="box5">
+            <div class="card">
+              <h3>Configurable Box</h3>
+              <p>Use the buttons below to change the menu position and visibility settings dynamically.</p>
+            </div>
+          </liwe3-container-box>
+        </div>
+      </div>
+      <div class="controls">
+        <button class="btn" onclick="setPosition('top-left')">Top Left</button>
+        <button class="btn" onclick="setPosition('top-right')">Top Right</button>
+        <button class="btn" onclick="setPosition('bottom-left')">Bottom Left</button>
+        <button class="btn" onclick="setPosition('bottom-right')">Bottom Right</button>
+        <button class="btn btn-secondary" onclick="toggleAlwaysVisible()">Toggle Always Visible</button>
+      </div>
+      <div class="output-area">
+        <div class="output-title">Output Console:</div>
+        <div class="output-content" id="output5">Use controls to modify the box...</div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Example 6: Multiple Items with Submenus</h2>
+      <p class="description">
+        Container with nested submenu items, demonstrating the full power of PopoverMenu integration.
+      </p>
+      <div class="demo-container">
+        <div class="demo-item">
+          <liwe3-container-box id="box6">
+            <div class="card">
+              <h3>Rich Menu</h3>
+              <p>This container has a menu with nested submenus for more complex actions.</p>
+            </div>
+          </liwe3-container-box>
+        </div>
+      </div>
+      <div class="output-area">
+        <div class="output-title">Output Console:</div>
+        <div class="output-content" id="output6">Explore the nested menu...</div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Usage Example</h2>
+      <div class="code-block">
+        <pre>// Import the ContainerBox component
+import { ContainerBoxElement } from '@liwe3/webcomponents';
+
+// Get the container element
+const box = document.querySelector('liwe3-container-box');
+
+// Set menu items
+box.setMenuItems([
+  {
+    label: 'Edit',
+    onclick: () => console.log('Edit clicked')
+  },
+  {
+    label: 'Delete',
+    onclick: () => console.log('Delete clicked')
+  },
+  { label: '---sep' },
+  {
+    label: 'More',
+    items: [
+      {
+        label: 'Share',
+        onclick: () => console.log('Share clicked')
+      },
+      {
+        label: 'Duplicate',
+        onclick: () => console.log('Duplicate clicked')
+      }
+    ]
+  }
+]);
+
+// Set menu position
+box.setMenuPosition('top-right');
+
+// Make menu always visible
+box.setAlwaysShowMenu(true);</pre>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">CSS Customization</h2>
+      <div class="code-block">
+        <pre>/* Available CSS variables for customization */
+liwe3-container-box {
+  --container-box-menu-bg: #fff;
+  --container-box-menu-border: #ddd;
+  --container-box-menu-radius: 4px;
+  --container-box-menu-padding: 6px 10px;
+  --container-box-menu-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  --container-box-menu-color: #333;
+  --container-box-menu-hover-bg: #f5f5f5;
+  --container-box-menu-offset: 8px;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- Import the ContainerBox component -->
+  <script type="module">
+    import { ContainerBoxElement } from './dist/ContainerBox.js';
+    import { PopoverMenuElement } from './dist/PopoverMenu.js';
+
+    const log = (outputId, message) => {
+      const output = document.getElementById(outputId);
+      const timestamp = new Date().toLocaleTimeString();
+      output.textContent = `[${timestamp}] ${message}`;
+    };
+
+    // Example 1: Basic Card with Menu
+    const box1 = document.getElementById('box1');
+    box1.setMenuItems([
+      { label: 'Edit', onclick: () => log('output1', 'Edit clicked') },
+      { label: 'Copy', onclick: () => log('output1', 'Copy clicked') },
+      { label: 'Delete', onclick: () => log('output1', 'Delete clicked') }
+    ]);
+
+    // Example 2: All Four Corner Positions
+    const box2tl = document.getElementById('box2-tl');
+    box2tl.setMenuPosition('top-left');
+    box2tl.setMenuItems([
+      { label: 'Action 1', onclick: () => log('output2', 'Top-Left: Action 1') },
+      { label: 'Action 2', onclick: () => log('output2', 'Top-Left: Action 2') }
+    ]);
+
+    const box2tr = document.getElementById('box2-tr');
+    box2tr.setMenuPosition('top-right');
+    box2tr.setMenuItems([
+      { label: 'Action 1', onclick: () => log('output2', 'Top-Right: Action 1') },
+      { label: 'Action 2', onclick: () => log('output2', 'Top-Right: Action 2') }
+    ]);
+
+    const box2bl = document.getElementById('box2-bl');
+    box2bl.setMenuPosition('bottom-left');
+    box2bl.setMenuItems([
+      { label: 'Action 1', onclick: () => log('output2', 'Bottom-Left: Action 1') },
+      { label: 'Action 2', onclick: () => log('output2', 'Bottom-Left: Action 2') }
+    ]);
+
+    const box2br = document.getElementById('box2-br');
+    box2br.setMenuPosition('bottom-right');
+    box2br.setMenuItems([
+      { label: 'Action 1', onclick: () => log('output2', 'Bottom-Right: Action 1') },
+      { label: 'Action 2', onclick: () => log('output2', 'Bottom-Right: Action 2') }
+    ]);
+
+    // Example 3: Always Visible Menu
+    const box3 = document.getElementById('box3');
+    box3.setAlwaysShowMenu(true);
+    box3.setMenuItems([
+      { label: 'Settings', onclick: () => log('output3', 'Settings clicked') },
+      { label: 'Info', onclick: () => log('output3', 'Info clicked') }
+    ]);
+
+    // Example 4: Image Container with Actions
+    const box4 = document.getElementById('box4');
+    box4.setMenuPosition('top-right');
+    box4.setMenuItems([
+      { label: 'View Full Size', onclick: () => log('output4', 'View Full Size clicked') },
+      { label: 'Download', onclick: () => log('output4', 'Download clicked') },
+      { label: '---sep' },
+      { label: 'Edit', onclick: () => log('output4', 'Edit clicked') },
+      { label: 'Delete', onclick: () => log('output4', 'Delete clicked') }
+    ]);
+
+    window.handleImageClick = () => {
+      log('output4', 'Image clicked directly!');
+    };
+
+    // Example 5: Dynamic Configuration
+    const box5 = document.getElementById('box5');
+    box5.setMenuItems([
+      { label: 'Option 1', onclick: () => log('output5', 'Option 1 clicked') },
+      { label: 'Option 2', onclick: () => log('output5', 'Option 2 clicked') }
+    ]);
+
+    window.setPosition = (position) => {
+      box5.setMenuPosition(position);
+      log('output5', `Menu position changed to: ${position}`);
+    };
+
+    window.toggleAlwaysVisible = () => {
+      const current = box5.getAlwaysShowMenu();
+      box5.setAlwaysShowMenu(!current);
+      log('output5', `Always visible: ${!current}`);
+    };
+
+    // Example 6: Multiple Items with Submenus
+    const box6 = document.getElementById('box6');
+    box6.setMenuPosition('top-right');
+    box6.setMenuItems([
+      { label: 'Edit', onclick: () => log('output6', 'Edit clicked') },
+      { label: 'Copy', onclick: () => log('output6', 'Copy clicked') },
+      { label: '---sep' },
+      {
+        label: 'Export',
+        items: [
+          { label: 'Export as PDF', onclick: () => log('output6', 'Export as PDF') },
+          { label: 'Export as PNG', onclick: () => log('output6', 'Export as PNG') },
+          { label: 'Export as SVG', onclick: () => log('output6', 'Export as SVG') }
+        ]
+      },
+      {
+        label: 'Share',
+        items: [
+          { label: 'Email', onclick: () => log('output6', 'Share via Email') },
+          { label: 'Social Media', onclick: () => log('output6', 'Share on Social Media') },
+          {
+            label: 'More Options',
+            items: [
+              { label: 'Copy Link', onclick: () => log('output6', 'Copy Link') },
+              { label: 'Generate QR', onclick: () => log('output6', 'Generate QR Code') }
+            ]
+          }
+        ]
+      },
+      { label: '---sep' },
+      { label: 'Delete', onclick: () => log('output6', 'Delete clicked') }
+    ]);
+  </script>
+</body>
+</html>

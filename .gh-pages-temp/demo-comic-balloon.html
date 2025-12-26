@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comic Balloon Component Demo - @liwe3/webcomponents</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 60px;
+    }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .subtitle {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    .demo-section {
+      background: white;
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #333;
+      border-bottom: 2px solid #667eea;
+      padding-bottom: 10px;
+    }
+
+    .balloon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 40px;
+      margin-top: 30px;
+    }
+
+    .balloon-wrapper {
+      position: relative;
+      min-height: 400px;
+      padding: 40px;
+      background: #f8f9fa;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .balloon-label {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: #667eea;
+      color: white;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    comic-balloon {
+      --balloon-bg: white;
+      --balloon-border: #000;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      background: #667eea;
+      color: white;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .event-log {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 20px;
+    }
+
+    .event-log pre {
+      margin: 5px 0;
+      color: #4ec9b0;
+    }
+
+    .event-log .timestamp {
+      color: #808080;
+    }
+
+    .back-link {
+      display: inline-block;
+      color: white;
+      text-decoration: none;
+      padding: 10px 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateX(-5px);
+    }
+
+    .interactive-section {
+      background: #f0f0f0;
+      padding: 30px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .comic-scene {
+      background: white;
+      padding: 60px;
+      border-radius: 12px;
+      min-height: 600px;
+      position: relative;
+      border: 2px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">← Back to demos</a>
+
+    <header>
+      <h1>🗨️ Comic Balloon Component</h1>
+      <p class="subtitle">Interactive speech bubbles with draggable handlers</p>
+    </header>
+
+    <div class="demo-section">
+      <h2 class="section-title">Balloon Types</h2>
+      <p style="margin-bottom: 20px; color: #666;">
+        Four distinct visual styles for different communication types. Click the text to edit, drag the arrow to reposition.
+      </p>
+      <div class="balloon-grid">
+        <div class="balloon-wrapper">
+          <div class="balloon-label">Talk</div>
+          <comic-balloon id="talk-balloon" type="talk" text="Hello! I'm a talk balloon. Drag my arrow!"></comic-balloon>
+        </div>
+        <div class="balloon-wrapper">
+          <div class="balloon-label">Cloud (Thought)</div>
+          <comic-balloon id="cloud-balloon" type="cloud" text="I'm thinking... this is a thought bubble!"></comic-balloon>
+        </div>
+        <div class="balloon-wrapper">
+          <div class="balloon-label">Whisper</div>
+          <comic-balloon id="whisper-balloon" type="whisper" text="Psst... whisper balloon here..."></comic-balloon>
+        </div>
+        <div class="balloon-wrapper">
+          <div class="balloon-label">Rectangle (Narration)</div>
+          <comic-balloon id="rect-balloon" type="rectangle" text="Meanwhile, in another dimension..."></comic-balloon>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Interactive Controls</h2>
+      <div class="controls">
+        <button onclick="changeType('talk')">Set to Talk</button>
+        <button onclick="changeType('cloud')">Set to Cloud</button>
+        <button onclick="changeType('whisper')">Set to Whisper</button>
+        <button onclick="changeType('rectangle')">Set to Rectangle</button>
+        <button onclick="resetHandler()">Reset Handler Position</button>
+        <button onclick="exportHTML()">Export HTML</button>
+        <button onclick="clearLog()">Clear Log</button>
+      </div>
+
+      <div class="interactive-section">
+        <comic-balloon id="interactive-balloon" type="talk" text="Control me with the buttons above!" style="margin: 40px; width: 350px;"></comic-balloon>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Comic Scene Example</h2>
+      <p style="margin-bottom: 20px; color: #666;">
+        Create your own comic scene by editing and repositioning the balloons.
+      </p>
+      <div class="comic-scene">
+        <comic-balloon 
+          type="talk" 
+          text="Hey there! Nice day, isn't it?" 
+          style="position: absolute; top: 80px; left: 80px; width: 280px;">
+        </comic-balloon>
+        <comic-balloon 
+          type="cloud" 
+          text="I wonder what they're thinking..." 
+          style="position: absolute; top: 80px; right: 80px; width: 280px;">
+        </comic-balloon>
+        <comic-balloon 
+          type="rectangle" 
+          text="And so the adventure begins..." 
+          style="position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); width: 350px;">
+        </comic-balloon>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <h2 class="section-title">Event Log</h2>
+      <p style="margin-bottom: 10px; color: #666;">
+        Monitor content changes and handler movements in real-time.
+      </p>
+      <div id="eventLog" class="event-log">
+        <pre>Waiting for events...</pre>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { defineComicBalloon, BalloonType } from './dist/ComicBalloon.js';
+    
+    defineComicBalloon();
+
+    const eventLog = document.getElementById('eventLog');
+    let eventCount = 0;
+
+    function logEvent(type, detail) {
+      eventCount++;
+      const timestamp = new Date().toLocaleTimeString();
+      const logEntry = document.createElement('pre');
+      logEntry.innerHTML = `<span class="timestamp">[${timestamp}]</span> ${type}: ${JSON.stringify(detail, null, 2)}`;
+      
+      if (eventLog.children.length === 1 && eventLog.children[0].textContent === 'Waiting for events...') {
+        eventLog.innerHTML = '';
+      }
+      
+      eventLog.insertBefore(logEntry, eventLog.firstChild);
+      
+      if (eventLog.children.length > 20) {
+        eventLog.removeChild(eventLog.lastChild);
+      }
+    }
+
+    document.querySelectorAll('comic-balloon').forEach(balloon => {
+      balloon.addEventListener('balloon-content-change', (e) => {
+        logEvent('Content Change', {
+          balloonType: e.detail.balloonType,
+          newContent: e.detail.newContent
+        });
+      });
+
+      balloon.addEventListener('handler-move', (e) => {
+        logEvent('Handler Move', {
+          balloonType: e.detail.balloonType,
+          position: e.detail.finalPosition
+        });
+      });
+
+      balloon.addEventListener('balloon-resize', (e) => {
+        logEvent('Balloon Resize', {
+          balloonType: e.detail.balloonType,
+          width: e.detail.width,
+          height: e.detail.height
+        });
+      });
+    });
+
+    window.changeType = (type) => {
+      const balloon = document.getElementById('interactive-balloon');
+      balloon.setAttribute('type', type);
+      logEvent('Type Changed', { newType: type });
+    };
+
+    window.resetHandler = () => {
+      const balloon = document.getElementById('interactive-balloon');
+      balloon.updateHandlerPosition({ x: 50, y: 100 });
+      logEvent('Handler Reset', { position: { x: 50, y: 100 } });
+    };
+
+    window.exportHTML = () => {
+      const balloon = document.getElementById('interactive-balloon');
+      const html = balloon.getHTML();
+      console.log('Exported HTML:', html);
+      logEvent('HTML Exported', { length: html.length });
+      
+      navigator.clipboard.writeText(html).then(() => {
+        alert('HTML copied to clipboard!');
+      }).catch(err => {
+        console.error('Failed to copy:', err);
+      });
+    };
+
+    window.clearLog = () => {
+      eventLog.innerHTML = '<pre>Log cleared. Waiting for events...</pre>';
+      eventCount = 0;
+    };
+
+    console.log('Comic Balloon demo loaded successfully!');
+    console.log('Available balloon types:', Object.values(BalloonType));
+  </script>
+</body>
+</html>

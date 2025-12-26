@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Drawer Component Demo - @liwe3/webcomponents</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .subtitle {
+      font-size: 18px;
+      opacity: 0.9;
+    }
+
+    .demo-section {
+      background: white;
+      border-radius: 16px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .demo-section h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 15px;
+      color: #1f2937;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .demo-section p {
+      color: #6b7280;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .demo-item {
+      padding: 20px;
+      background: #f9fafb;
+      border-radius: 12px;
+      border: 2px solid #e5e7eb;
+    }
+
+    .demo-item h3 {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #374151;
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: #5568d3;
+      transform: translateY(-1px);
+    }
+
+    .btn.secondary {
+      background: #6b7280;
+    }
+
+    .btn.secondary:hover {
+      background: #4b5563;
+    }
+
+    .btn.danger {
+      background: #ef4444;
+    }
+
+    .btn.danger:hover {
+      background: #dc2626;
+    }
+
+    .drawer-content {
+      line-height: 1.6;
+    }
+
+    .drawer-content h4 {
+      margin-bottom: 10px;
+      color: #1f2937;
+    }
+
+    .drawer-content p {
+      margin-bottom: 15px;
+      color: #6b7280;
+    }
+
+    .drawer-content ul {
+      margin-left: 20px;
+      color: #6b7280;
+    }
+
+    .drawer-content ul li {
+      margin-bottom: 8px;
+    }
+
+    .layout-demo {
+      display: flex;
+      gap: 20px;
+      min-height: 400px;
+    }
+
+    .layout-demo.vertical {
+      flex-direction: column;
+    }
+
+    .main-content {
+      flex: 1;
+      background: #f3f4f6;
+      border-radius: 12px;
+      padding: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6b7280;
+      font-size: 18px;
+      text-align: center;
+    }
+
+    .code-block {
+      background: #1f2937;
+      color: #e5e7eb;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 13px;
+      overflow-x: auto;
+      margin-top: 15px;
+    }
+
+    .code-block pre {
+      margin: 0;
+    }
+
+    .event-log {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 15px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 12px;
+      color: #374151;
+    }
+
+    .event-log .event {
+      padding: 4px 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .event-log .event:last-child {
+      border-bottom: none;
+    }
+
+    .event-log .event-name {
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    .event-log .event-time {
+      color: #9ca3af;
+      font-size: 11px;
+    }
+
+    /* Custom drawer styling for demos */
+    liwe3-drawer {
+      --drawer-bg: #ffffff;
+      --drawer-border: #e5e7eb;
+      --drawer-text: #1f2937;
+      --drawer-icon-bg: #f3f4f6;
+      --drawer-icon-hover: #e5e7eb;
+      --drawer-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-link {
+      display: inline-block;
+      color: white;
+      text-decoration: none;
+      margin-bottom: 20px;
+      font-size: 16px;
+      transition: opacity 0.2s;
+    }
+
+    .back-link:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <a href="index.html" class="back-link">← Back to Demos</a>
+    
+    <header>
+      <h1>🚪 Drawer Component</h1>
+      <p class="subtitle">Expandable, shrinkable, and closable container with smooth animations</p>
+    </header>
+
+    <!-- Basic Usage -->
+    <section class="demo-section">
+      <h2>📦 Basic Usage</h2>
+      <p>Simple horizontal drawer with default settings. Click the hamburger icon to shrink/expand.</p>
+      
+      <liwe3-drawer id="basic-drawer" title="Basic Drawer" direction="horizontal">
+        <div class="drawer-content">
+          <h4>Welcome to the Drawer!</h4>
+          <p>This is a basic drawer component that can be expanded or shrunk.</p>
+          <p>Try clicking the hamburger icon (☰) to toggle between states.</p>
+        </div>
+      </liwe3-drawer>
+
+      <div class="code-block">
+        <pre>&lt;liwe3-drawer title="Basic Drawer" direction="horizontal"&gt;
+  &lt;div&gt;Your content here&lt;/div&gt;
+&lt;/liwe3-drawer&gt;</pre>
+      </div>
+    </section>
+
+    <!-- Horizontal Layout Demo -->
+    <section class="demo-section">
+      <h2>↔️ Horizontal Layout Demo</h2>
+      <p>Drawer positioned on the left side of a layout. Perfect for sidebars!</p>
+      
+      <div class="controls">
+        <button class="btn" onclick="document.getElementById('left-drawer').expand()">Expand</button>
+        <button class="btn secondary" onclick="document.getElementById('left-drawer').shrink()">Shrink</button>
+        <button class="btn secondary" onclick="document.getElementById('left-drawer').toggle()">Toggle</button>
+      </div>
+
+      <div class="layout-demo">
+        <liwe3-drawer 
+          id="left-drawer" 
+          title="Navigation" 
+          direction="horizontal"
+          icon="📁">
+          <div class="drawer-content">
+            <h4>Navigation Menu</h4>
+            <ul>
+              <li>Dashboard</li>
+              <li>Projects</li>
+              <li>Settings</li>
+              <li>Profile</li>
+              <li>Help</li>
+            </ul>
+          </div>
+        </liwe3-drawer>
+        <div class="main-content">
+          <div>
+            <p><strong>Main Content Area</strong></p>
+            <p>This area remains visible when the drawer shrinks</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Vertical Layout Demo -->
+    <section class="demo-section">
+      <h2>↕️ Vertical Layout Demo</h2>
+      <p>Drawer with vertical expansion. Great for panels and collapsible sections!</p>
+      
+      <div class="controls">
+        <button class="btn" onclick="document.getElementById('top-drawer').expand()">Expand</button>
+        <button class="btn secondary" onclick="document.getElementById('top-drawer').shrink()">Shrink</button>
+        <button class="btn secondary" onclick="document.getElementById('top-drawer').toggle()">Toggle</button>
+      </div>
+
+      <div class="layout-demo vertical">
+        <liwe3-drawer 
+          id="top-drawer" 
+          title="Properties Panel" 
+          direction="vertical"
+          icon="⚙️"
+          show-title-when-shrunk="true">
+          <div class="drawer-content">
+            <h4>Component Properties</h4>
+            <p><strong>Width:</strong> 300px</p>
+            <p><strong>Height:</strong> auto</p>
+            <p><strong>Background:</strong> #ffffff</p>
+            <p><strong>Border:</strong> 1px solid #e5e7eb</p>
+          </div>
+        </liwe3-drawer>
+        <div class="main-content">
+          <div>
+            <p><strong>Main Content Area</strong></p>
+            <p>Content below the vertical drawer</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Customization Demo -->
+    <section class="demo-section">
+      <h2>🎨 Customization Options</h2>
+      <p>Customize animation duration, icons, and behavior.</p>
+      
+      <div class="demo-grid">
+        <div class="demo-item">
+          <h3>Fast Animation (150ms)</h3>
+          <liwe3-drawer 
+            id="fast-drawer"
+            title="Fast Drawer" 
+            direction="horizontal"
+            duration="150"
+            icon="⚡">
+            <div class="drawer-content">
+              <p>This drawer animates quickly with a 150ms duration.</p>
+            </div>
+          </liwe3-drawer>
+        </div>
+
+        <div class="demo-item">
+          <h3>Slow Animation (600ms)</h3>
+          <liwe3-drawer 
+            id="slow-drawer"
+            title="Slow Drawer" 
+            direction="horizontal"
+            duration="600"
+            icon="🐌">
+            <div class="drawer-content">
+              <p>This drawer animates slowly with a 600ms duration.</p>
+            </div>
+          </liwe3-drawer>
+        </div>
+
+        <div class="demo-item">
+          <h3>Custom Icon</h3>
+          <liwe3-drawer 
+            id="custom-icon-drawer"
+            title="Custom Icon" 
+            direction="horizontal"
+            icon="🎯">
+            <div class="drawer-content">
+              <p>You can use any emoji or text as the toggle icon!</p>
+            </div>
+          </liwe3-drawer>
+        </div>
+
+        <div class="demo-item">
+          <h3>Keep Title When Shrunk</h3>
+          <liwe3-drawer 
+            id="keep-title-drawer"
+            title="Always Visible" 
+            direction="vertical"
+            show-title-when-shrunk="true"
+            icon="📌">
+            <div class="drawer-content">
+              <p>The title remains visible even when shrunk (useful for vertical drawers).</p>
+            </div>
+          </liwe3-drawer>
+        </div>
+      </div>
+    </section>
+
+    <!-- Closable Drawer Demo -->
+    <section class="demo-section">
+      <h2>❌ Closable Drawer</h2>
+      <p>Drawers can be configured to be closable. When closed, they shrink and then remove themselves from the DOM.</p>
+      
+      <div class="controls">
+        <button class="btn" onclick="recreateClosableDrawer()">Recreate Drawer</button>
+      </div>
+
+      <div id="closable-container">
+        <liwe3-drawer 
+          id="closable-drawer"
+          title="Closable Drawer" 
+          direction="horizontal"
+          closable="true"
+          icon="📄">
+          <div class="drawer-content">
+            <h4>This drawer can be closed</h4>
+            <p>Click the × button to close it. It will shrink and then be removed from the DOM.</p>
+            <p>You can recreate it using the button above.</p>
+          </div>
+        </liwe3-drawer>
+      </div>
+    </section>
+
+    <!-- Events Demo -->
+    <section class="demo-section">
+      <h2>🎯 Events & API</h2>
+      <p>Monitor drawer state changes with custom events.</p>
+      
+      <div class="controls">
+        <button class="btn" onclick="document.getElementById('event-drawer').expand()">Expand</button>
+        <button class="btn secondary" onclick="document.getElementById('event-drawer').shrink()">Shrink</button>
+        <button class="btn secondary" onclick="document.getElementById('event-drawer').toggle()">Toggle</button>
+        <button class="btn danger" onclick="clearEventLog()">Clear Log</button>
+      </div>
+
+      <liwe3-drawer 
+        id="event-drawer"
+        title="Event Drawer" 
+        direction="horizontal"
+        icon="📡">
+        <div class="drawer-content">
+          <h4>Monitor Events</h4>
+          <p>Interact with this drawer to see events being dispatched.</p>
+          <p>Available events:</p>
+          <ul>
+            <li><code>drawer-state-change</code></li>
+            <li><code>drawer-expanded</code></li>
+            <li><code>drawer-shrunk</code></li>
+            <li><code>drawer-closed</code></li>
+          </ul>
+        </div>
+      </liwe3-drawer>
+
+      <h3 style="margin-top: 20px; margin-bottom: 10px; font-size: 16px;">Event Log:</h3>
+      <div class="event-log" id="event-log">
+        <div class="event">
+          <span class="event-time">Ready</span> - 
+          <span>Waiting for events...</span>
+        </div>
+      </div>
+
+      <div class="code-block">
+        <pre>// Listen to drawer events
+drawer.addEventListener('drawer-state-change', (e) => {
+  console.log('State changed:', e.detail);
+});
+
+drawer.addEventListener('drawer-expanded', () => {
+  console.log('Drawer expanded');
+});
+
+drawer.addEventListener('drawer-shrunk', () => {
+  console.log('Drawer shrunk');
+});
+
+// Programmatic control
+drawer.expand();
+drawer.shrink();
+drawer.toggle();
+drawer.close();
+
+// Access state
+console.log(drawer.state); // 'expanded', 'shrunk', or 'closed'</pre>
+      </div>
+    </section>
+
+    <!-- CSS Variables -->
+    <section class="demo-section">
+      <h2>🎨 CSS Variables</h2>
+      <p>Customize the drawer appearance using CSS custom properties:</p>
+      
+      <div class="code-block">
+        <pre>liwe3-drawer {
+  --drawer-duration: 300ms;
+  --drawer-bg: #ffffff;
+  --drawer-border: #e5e7eb;
+  --drawer-text: #1f2937;
+  --drawer-icon-bg: #f3f4f6;
+  --drawer-icon-hover: #e5e7eb;
+  --drawer-button-hover: #f9fafb;
+  --drawer-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}</pre>
+      </div>
+    </section>
+  </div>
+
+  <script type="module">
+    import '../dist/Drawer.js';
+
+    // Event logging
+    const eventDrawer = document.getElementById('event-drawer');
+    const eventLog = document.getElementById('event-log');
+
+    function logEvent(eventName, detail = null) {
+      const time = new Date().toLocaleTimeString();
+      const eventDiv = document.createElement('div');
+      eventDiv.className = 'event';
+      eventDiv.innerHTML = `
+        <span class="event-time">${time}</span> - 
+        <span class="event-name">${eventName}</span>
+        ${detail ? `: <span>${JSON.stringify(detail)}</span>` : ''}
+      `;
+      eventLog.appendChild(eventDiv);
+      eventLog.scrollTop = eventLog.scrollHeight;
+    }
+
+    eventDrawer.addEventListener('drawer-state-change', (e) => {
+      logEvent('drawer-state-change', e.detail);
+    });
+
+    eventDrawer.addEventListener('drawer-expanded', () => {
+      logEvent('drawer-expanded');
+    });
+
+    eventDrawer.addEventListener('drawer-shrunk', () => {
+      logEvent('drawer-shrunk');
+    });
+
+    eventDrawer.addEventListener('drawer-closed', () => {
+      logEvent('drawer-closed');
+    });
+
+    window.clearEventLog = () => {
+      eventLog.innerHTML = '<div class="event"><span class="event-time">Cleared</span> - <span>Log cleared</span></div>';
+    };
+
+    // Closable drawer recreation
+    window.recreateClosableDrawer = () => {
+      const container = document.getElementById('closable-container');
+      container.innerHTML = `
+        <liwe3-drawer 
+          id="closable-drawer"
+          title="Closable Drawer" 
+          direction="horizontal"
+          closable="true"
+          icon="📄">
+          <div class="drawer-content">
+            <h4>This drawer can be closed</h4>
+            <p>Click the × button to close it. It will shrink and then be removed from the DOM.</p>
+            <p>You can recreate it using the button above.</p>
+          </div>
+        </liwe3-drawer>
+      `;
+    };
+  </script>
+</body>
+</html>

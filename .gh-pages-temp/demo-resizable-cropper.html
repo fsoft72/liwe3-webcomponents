@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>ResizableCropper Demo - @liwe3/webcomponents</title>
+		<style>
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+			padding: 20px;
+			background-color: #f5f5f5;
+			color: #333;
+		}
+
+		h1,
+		h2 {
+			color: #2c3e50;
+		}
+
+		.demo-section {
+			background: white;
+			padding: 20px;
+			border-radius: 8px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			margin-bottom: 30px;
+		}
+
+		.controls {
+			margin-bottom: 15px;
+			padding: 10px;
+			background: #f0f0f0;
+			border-radius: 4px;
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+			align-items: center;
+		}
+
+		.controls label {
+			display: flex;
+			gap: 5px;
+			align-items: center;
+		}
+
+		.controls input[type="number"] {
+			width: 80px;
+			padding: 5px;
+		}
+
+		.controls input[type="checkbox"] {
+			margin-left: 5px;
+		}
+
+		.demo-container {
+			padding: 40px;
+			background: #fafafa;
+			border: 1px dashed #ccc;
+			border-radius: 4px;
+			min-height: 400px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.info-panel {
+			margin-top: 15px;
+			padding: 10px;
+			background: #e8f4f8;
+			border-left: 4px solid #007bff;
+			border-radius: 4px;
+			font-family: monospace;
+			font-size: 0.9em;
+		}
+
+		.info-panel div {
+			margin: 5px 0;
+		}
+
+		liwe3-resizable-cropper img {
+			display: block;
+		}
+
+		button {
+			padding: 8px 16px;
+			background: #007bff;
+			color: white;
+			border: none;
+			border-radius: 4px;
+			cursor: pointer;
+			font-size: 14px;
+		}
+
+		button:hover {
+			background: #0056b3;
+		}
+
+		button:disabled {
+			background: #ccc;
+			cursor: not-allowed;
+		}
+
+		.grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+			gap: 20px;
+		}
+
+		.card {
+			border: 1px solid #eee;
+			border-radius: 4px;
+			overflow: hidden;
+		}
+
+		.card-header {
+			padding: 10px;
+			background: #fafafa;
+			border-bottom: 1px solid #eee;
+			font-weight: bold;
+			font-size: 0.9em;
+		}
+
+		.card-body {
+			padding: 20px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			min-height: 200px;
+			background: #fafafa;
+		}
+		</style>
+	</head>
+
+	<body>
+		<h1>ResizableCropper Component</h1>
+		<p>
+			A simplified container for resizing and cropping images. Use the <strong>corner handle</strong> to scale, <strong>side handles</strong> to crop, and <strong>drag the
+				image</strong> to reposition it.
+		</p>
+
+		<div class="demo-section">
+			<h2>Interactive Demo</h2>
+			<div class="controls">
+				<label>
+					Width:
+					<input type="number" id="width-input" value="300" min="50" max="800">
+				</label>
+				<label>
+					Height:
+					<input type="number" id="height-input" value="200" min="50" max="600">
+				</label>
+				<label>
+					Min Width:
+					<input type="number" id="min-width-input" value="50" min="10" max="500">
+				</label>
+				<label>
+					Min Height:
+					<input type="number" id="min-height-input" value="50" min="10" max="500">
+				</label>
+				<label>
+					Aspect Ratio:
+					<select id="aspect-ratio-select">
+						<option value="">None</option>
+						<option value="16/9">16:9</option>
+						<option value="4/3">4:3</option>
+						<option value="1/1">1:1 (Square)</option>
+						<option value="3/2">3:2</option>
+					</select>
+				</label>
+				<label>
+					<input type="checkbox" id="allow-resize-checkbox" checked>
+					Allow Resize
+				</label>
+				<label>
+					<input type="checkbox" id="allow-rotate-checkbox" checked>
+					Allow Rotate
+				</label>
+				<label>
+					<input type="checkbox" id="allow-crop-checkbox" checked>
+					Allow Crop
+				</label>
+				<label>
+					<input type="checkbox" id="allow-drag-checkbox" checked>
+					Allow Drag
+				</label>
+				<label>
+					<input type="checkbox" id="disabled-checkbox">
+					Disabled
+				</label>
+				<button id="reset-btn">Reset</button>
+			</div>
+
+			<div class="demo-container">
+				<liwe3-resizable-cropper id="demo1" width="300" height="200" min-width="50" min-height="50">
+					<img src="https://picsum.photos/800/600?random=1" alt="Demo Image">
+				</liwe3-resizable-cropper>
+			</div>
+
+			<div class="info-panel" id="info-panel">
+				<div><strong>Component State:</strong></div>
+				<div>Wrapper Width: <span id="info-width">300</span>px</div>
+				<div>Wrapper Height: <span id="info-height">200</span>px</div>
+				<div>Wrapper Left: <span id="info-wrapper-left">0</span>px</div>
+				<div>Wrapper Top: <span id="info-wrapper-top">0</span>px</div>
+				<div>Content Width: <span id="info-content-width">-</span>px</div>
+				<div>Content Height: <span id="info-content-height">-</span>px</div>
+				<div>Content Left: <span id="info-left">0</span>px</div>
+				<div>Content Top: <span id="info-top">0</span>px</div>
+				<div>Zoom: <span id="info-zoom">1.00</span>x</div>
+				<div>Last Action: <span id="info-action">-</span></div>
+			</div>
+
+			<div class="controls" style="margin-top: 15px">
+				<button id="get-values-btn">Get Values</button>
+				<button id="set-values-btn">Set Example Values</button>
+				<button id="restore-values-btn" disabled>Restore Saved Values</button>
+				<button id="save-state-btn">Save State</button>
+				<button id="restore-state-btn" disabled>Restore Saved State</button>
+			</div>
+			<pre id="values-output" style="background: #f0f0f0; padding: 10px; border-radius: 4px; font-size: 12px; display: none"></pre>
+		</div>
+
+		<div class="demo-section">
+			<h2>Different Aspect Ratios</h2>
+			<div class="grid">
+				<div class="card">
+					<div class="card-header">Free Resize (No Aspect Ratio)</div>
+					<div class="card-body">
+						<liwe3-resizable-cropper width="200" height="150">
+							<img src="https://picsum.photos/600/400?random=2" alt="Demo Image">
+						</liwe3-resizable-cropper>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header">16:9 Aspect Ratio</div>
+					<div class="card-body">
+						<liwe3-resizable-cropper width="240" height="135" aspect-ratio="16/9">
+							<img src="https://picsum.photos/600/400?random=3" alt="Demo Image">
+						</liwe3-resizable-cropper>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header">1:1 (Square) Aspect Ratio</div>
+					<div class="card-body">
+						<liwe3-resizable-cropper width="180" height="180" aspect-ratio="1/1">
+							<img src="https://picsum.photos/600/400?random=4" alt="Demo Image">
+						</liwe3-resizable-cropper>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="demo-section">
+			<h2>Control Options</h2>
+			<div class="grid">
+				<div class="card">
+					<div class="card-header">Resize Only (No Crop)</div>
+					<div class="card-body">
+						<liwe3-resizable-cropper width="200" height="150" allow-crop="false">
+							<img src="https://picsum.photos/600/400?random=5" alt="Demo Image">
+						</liwe3-resizable-cropper>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header">Crop Only (No Resize)</div>
+					<div class="card-body">
+						<liwe3-resizable-cropper width="200" height="150" allow-resize="false">
+							<img src="https://picsum.photos/600/400?random=6" alt="Demo Image">
+						</liwe3-resizable-cropper>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header">Pan Only (No Resize/Crop)</div>
+					<div class="card-body">
+						<liwe3-resizable-cropper width="200" height="150" allow-resize="false" allow-crop="false">
+							<img src="https://picsum.photos/600/400?random=7" alt="Demo Image">
+						</liwe3-resizable-cropper>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="demo-section">
+			<h2>Usage Instructions</h2>
+			<ul>
+				<li>
+					<strong>Scale (Resize Everything):</strong> Drag the <strong>round corner handle (bottom-right)</strong> to resize both the <strong>wrapper and image
+						together</strong>. Everything scales proportionally.
+				</li>
+				<li>
+					<strong>Crop (Resize Visible Area):</strong> Drag the <strong>bottom or right bar handles</strong> to resize only the <strong>wrapper (visible area)</strong>.
+					The image stays the same size but you see more or less of it.
+				</li>
+				<li>
+					<strong>Pan (Move Image):</strong> Click and drag <strong>directly on the image</strong> to move it around within the cropped area. Only works when the image is
+					larger than the visible area.
+				</li>
+				<li><strong>Aspect Ratio:</strong> When set, both scaling and cropping operations maintain the specified ratio.</li>
+				<li><strong>Min Width/Height:</strong> Prevents the wrapper from being resized below these values.</li>
+				<li><strong>Allow Resize:</strong> Toggles the visibility of the scale handle (corner). Default: true.</li>
+				<li><strong>Allow Crop:</strong> Toggles the visibility of the crop handles (sides). Default: true.</li>
+				<li><strong>Disabled:</strong> When enabled, all handles disappear and interactions are disabled.</li>
+			</ul>
+			<p><strong>Workflow:</strong> Use the corner handle to scale everything, use the side handles to crop, and drag the image to position it perfectly!</p>
+		</div>
+
+		<div class="demo-section">
+			<h2>Events & Methods</h2>
+			<h3>Events</h3>
+			<p>The component dispatches custom events:</p>
+			<ul>
+				<li><code>rcw:scale-start</code> - Fired when scaling begins</li>
+				<li><code>rcw:crop-start</code> - Fired when cropping begins</li>
+				<li><code>rcw:pan-start</code> - Fired when panning/dragging the image begins</li>
+				<li><code>rcw:change</code> - Fired during and after drag operations with current state</li>
+				<li><code>change</code> - Fired with complete values (wrapperWidth, wrapperHeight, contentWidth, contentHeight, contentLeft, contentTop, zoom)</li>
+			</ul>
+
+			<h3>Methods</h3>
+			<p>Public API methods:</p>
+			<ul>
+				<li><code>getValues()</code> - Returns an object with all current values including zoom level</li>
+				<li><code>setValues(values)</code> - Sets the component state to reproduce size, zoom and pan</li>
+			</ul>
+
+			<p>Try the buttons above to test <code>getValues()</code> and <code>setValues()</code>!</p>
+			<p>Check the browser console to see event logs.</p>
+		</div>
+
+		<script type="module">
+		import '../dist/ResizableCropper.js';
+
+		const demo1 = document.getElementById( 'demo1' );
+		const widthInput = document.getElementById( 'width-input' );
+		const heightInput = document.getElementById( 'height-input' );
+		const minWidthInput = document.getElementById( 'min-width-input' );
+		const minHeightInput = document.getElementById( 'min-height-input' );
+		const aspectRatioSelect = document.getElementById( 'aspect-ratio-select' );
+		const allowResizeCheckbox = document.getElementById( 'allow-resize-checkbox' );
+		const allowRotateCheckbox = document.getElementById( 'allow-rotate-checkbox' );
+		const allowCropCheckbox = document.getElementById( 'allow-crop-checkbox' );
+		const allowDragCheckbox = document.getElementById( 'allow-drag-checkbox' );
+		const disabledCheckbox = document.getElementById( 'disabled-checkbox' );
+		const resetBtn = document.getElementById( 'reset-btn' );
+
+		const infoWidth = document.getElementById( 'info-width' );
+		const infoHeight = document.getElementById( 'info-height' );
+		const infoContentWidth = document.getElementById( 'info-content-width' );
+		const infoContentHeight = document.getElementById( 'info-content-height' );
+		const infoWrapperLeft = document.getElementById( 'info-wrapper-left' );
+		const infoWrapperTop = document.getElementById( 'info-wrapper-top' );
+		const infoLeft = document.getElementById( 'info-left' );
+		const infoTop = document.getElementById( 'info-top' );
+		const infoZoom = document.getElementById( 'info-zoom' );
+		const infoAction = document.getElementById( 'info-action' );
+
+		const getValuesBtn = document.getElementById( 'get-values-btn' );
+		const setValuesBtn = document.getElementById( 'set-values-btn' );
+		const restoreValuesBtn = document.getElementById( 'restore-values-btn' );
+		const saveStateBtn = document.getElementById( 'save-state-btn' );
+		const restoreStateBtn = document.getElementById( 'restore-state-btn' );
+		const valuesOutput = document.getElementById( 'values-output' );
+
+		let savedValues = null;
+		let savedState = null;
+
+		// Update info panel
+		function updateInfo( detail ) {
+			infoWidth.textContent = Math.round( detail.width );
+			infoHeight.textContent = Math.round( detail.height );
+			infoLeft.textContent = Math.round( detail.contentLeft );
+			infoTop.textContent = Math.round( detail.contentTop );
+			infoAction.textContent = detail.action;
+
+			// Get content dimensions and zoom
+			const values = demo1.getValues();
+			infoWrapperLeft.textContent = Math.round( values.wrapperLeft ?? 0 );
+			infoWrapperTop.textContent = Math.round( values.wrapperTop ?? 0 );
+			infoContentWidth.textContent = Math.round( values.contentWidth );
+			infoContentHeight.textContent = Math.round( values.contentHeight );
+			infoZoom.textContent = values.zoom.toFixed( 2 );
+		}
+
+		// Listen to the new change event
+		demo1.addEventListener( 'change', ( e ) => {
+			console.log( 'change event:', e.detail );
+		} );
+
+		// Listen to component events
+		demo1.addEventListener( 'rcw:change', ( e ) => {
+			console.log( 'rcw:change', e.detail );
+			updateInfo( e.detail );
+			// Update input fields to reflect current state
+			widthInput.value = Math.round( e.detail.width );
+			heightInput.value = Math.round( e.detail.height );
+		} );
+
+		demo1.addEventListener( 'rcw:scale-start', ( e ) => {
+			console.log( 'rcw:scale-start', e.detail );
+		} );
+
+		demo1.addEventListener( 'rcw:crop-start', ( e ) => {
+			console.log( 'rcw:crop-start', e.detail );
+		} );
+
+		demo1.addEventListener( 'rcw:pan-start', ( e ) => {
+			console.log( 'rcw:pan-start', e.detail );
+		} );
+
+		// Control inputs
+		widthInput.addEventListener( 'change', ( e ) => {
+			demo1.width = parseInt( e.target.value );
+		} );
+
+		heightInput.addEventListener( 'change', ( e ) => {
+			demo1.height = parseInt( e.target.value );
+		} );
+
+		minWidthInput.addEventListener( 'change', ( e ) => {
+			demo1.minWidth = parseInt( e.target.value );
+		} );
+
+		minHeightInput.addEventListener( 'change', ( e ) => {
+			demo1.minHeight = parseInt( e.target.value );
+		} );
+
+		aspectRatioSelect.addEventListener( 'change', ( e ) => {
+			demo1.aspectRatio = e.target.value || null;
+		} );
+
+		allowResizeCheckbox.addEventListener( 'change', ( e ) => {
+			demo1.allowResize = e.target.checked;
+		} );
+
+		allowRotateCheckbox.addEventListener( 'change', ( e ) => {
+			demo1.allowRotate = e.target.checked;
+		} );
+
+		allowCropCheckbox.addEventListener( 'change', ( e ) => {
+			demo1.allowCrop = e.target.checked;
+		} );
+
+		allowDragCheckbox.addEventListener( 'change', ( e ) => {
+			demo1.allowDrag = e.target.checked;
+		} );
+
+		disabledCheckbox.addEventListener( 'change', ( e ) => {
+			demo1.disabled = e.target.checked;
+		} );
+
+		// Get values button
+		getValuesBtn.addEventListener( 'click', () => {
+			savedValues = demo1.getValues();
+			valuesOutput.textContent = JSON.stringify( savedValues, null, 2 );
+			valuesOutput.style.display = 'block';
+			restoreValuesBtn.disabled = false;
+			console.log( 'Current values:', savedValues );
+		} );
+
+		// Set example values button
+		setValuesBtn.addEventListener( 'click', () => {
+			demo1.setValues( {
+				wrapperWidth: 250,
+				wrapperHeight: 180,
+				zoom: 1.5,
+				contentLeft: -50,
+				contentTop: -30,
+			} );
+			console.log( 'Set example values' );
+		} );
+
+		// Restore saved values button
+		restoreValuesBtn.addEventListener( 'click', () => {
+			if ( savedValues ) {
+				demo1.setValues( savedValues );
+				console.log( 'Restored values:', savedValues );
+			}
+		} );
+
+		// Save state button
+		saveStateBtn.addEventListener( 'click', () => {
+			savedState = demo1.getState();
+			valuesOutput.textContent = JSON.stringify( savedState, null, 2 );
+			valuesOutput.style.display = 'block';
+			restoreStateBtn.disabled = false;
+			console.log( 'Saved state:', savedState );
+		} );
+
+		// Restore saved state button
+		restoreStateBtn.addEventListener( 'click', () => {
+			if ( savedState ) {
+				demo1.setState( savedState );
+				console.log( 'Restored state:', savedState );
+			}
+		} );
+
+		resetBtn.addEventListener( 'click', () => {
+			demo1.width = 300;
+			demo1.height = 200;
+			demo1.minWidth = 50;
+			demo1.minHeight = 50;
+			demo1.aspectRatio = null;
+			demo1.allowResize = true;
+			demo1.allowRotate = true;
+			demo1.allowCrop = true;
+			demo1.allowDrag = true;
+			demo1.disabled = false;
+
+			widthInput.value = 300;
+			heightInput.value = 200;
+			minWidthInput.value = 50;
+			minHeightInput.value = 50;
+			aspectRatioSelect.value = '';
+			allowResizeCheckbox.checked = true;
+			allowRotateCheckbox.checked = true;
+			allowCropCheckbox.checked = true;
+			allowDragCheckbox.checked = true;
+			disabledCheckbox.checked = false;
+			restoreStateBtn.disabled = true;
+			savedState = null;
+
+			// Reset content position by recreating the image
+			const img = demo1.querySelector( 'img' );
+			if ( img ) {
+				img.style.left = '0px';
+				img.style.top = '0px';
+			}
+
+			updateInfo( { width: 300, height: 200, contentLeft: 0, contentTop: 0, action: 'reset' } );
+		} );
+		</script>
+	</body>
+</html>
