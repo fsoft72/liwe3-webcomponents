@@ -113,11 +113,11 @@
     "text-editor",
     "liwe3"
   ],
-  "author": "Liwe3",
+  "author": "Fabio Rotondo",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/liwe3/webcomponents.git"
+    "url": "https://github.com/fsoft72/liwe3-webcomponents.git"
   },
   "devDependencies": {
     "typescript": "^5.9.2",
