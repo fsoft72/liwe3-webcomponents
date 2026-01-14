@@ -21,6 +21,6 @@
   },
   "packageManager": "pnpm@10.26.0",
   "devDependencies": {
-    "turbo": "^2.6.3"
+    "turbo": "^2.7.4"
   }
 }

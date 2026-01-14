@@ -25,6 +25,7 @@ export class AITextEditorElement extends HTMLElement {
   private editorStatus!: HTMLElement;
 
   private typingTimer: number | null = null;
+  private suggestionAbortController: AbortController | null = null;
   private fullSuggestion: string | null = null;
   private suggestionParagraphs: string[] = [];
   private currentParagraphIndex: number = 0;
@@ -46,6 +47,18 @@ export class AITextEditorElement extends HTMLElement {
     this.attachShadow({ mode: 'open' });
     this.render();
     this.init();
+  }
+
+  disconnectedCallback(): void {
+    if (this.typingTimer) {
+      clearTimeout(this.typingTimer);
+      this.typingTimer = null;
+    }
+
+    if (this.suggestionAbortController) {
+      this.suggestionAbortController.abort();
+      this.suggestionAbortController = null;
+    }
   }
 
   /**
@@ -325,11 +338,14 @@ export class AITextEditorElement extends HTMLElement {
 
     if (this.typingTimer) {
       clearTimeout(this.typingTimer);
+      this.typingTimer = null;
     }
 
     if (!this.apiKey) return;
 
     this.typingTimer = window.setTimeout(() => {
+      this.typingTimer = null;
+      if (!this.isConnected) return;
       this.requestSuggestion();
     }, this.suggestionDelay);
   }
@@ -354,6 +370,7 @@ export class AITextEditorElement extends HTMLElement {
    */
   private async requestSuggestion(): Promise<void> {
     if (!this.apiKey) return;
+    if (!this.isConnected) return;
 
     const currentText = this.editor.value;
     if (!currentText.trim()) return;
@@ -378,10 +395,14 @@ export class AITextEditorElement extends HTMLElement {
       return; // aborted by listener via event.preventDefault()
     }
 
+    this.suggestionAbortController?.abort();
+    const abortController = new AbortController();
+    this.suggestionAbortController = abortController;
+
     this.showLoading();
 
     try {
-      const suggestion = await this.callOpenAI(textUpToCursor);
+      const suggestion = await this.callOpenAI(textUpToCursor, abortController.signal);
       this.hideLoading();
 
       if (suggestion) {
@@ -389,19 +410,24 @@ export class AITextEditorElement extends HTMLElement {
       }
     } catch (error) {
       this.hideLoading();
+      if ((error as { name?: string })?.name === 'AbortError') return;
       this.showError('Failed to get AI suggestion: ' + (error as Error).message);
       this.dispatchEvent(new CustomEvent('oncompletionerror', {
         detail: { error: (error as Error).message },
         bubbles: true,
         composed: true
       }));
+    } finally {
+      if (this.suggestionAbortController === abortController) {
+        this.suggestionAbortController = null;
+      }
     }
   }
 
   /**
    * Calls the OpenAI API for text completion
    */
-  private async callOpenAI(text: string): Promise<string> {
+  private async callOpenAI(text: string, signal?: AbortSignal): Promise<string> {
     const parts: string[] = [];
     if (this.context && this.context.trim()) {
       parts.push(`Context:\n${this.context.trim()}`);
@@ -437,7 +463,8 @@ export class AITextEditorElement extends HTMLElement {
     const response = await fetch(this.apiEndpoint, {
       method: 'POST',
       headers: headers,
-      body: JSON.stringify(requestBody)
+      body: JSON.stringify(requestBody),
+      signal
     });
 
     if (!response.ok) {
