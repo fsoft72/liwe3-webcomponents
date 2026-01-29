@@ -1,83 +1,111 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartSelect Demo</title>
-    <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background: #f5f5f5;
-        }
-        .section {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        h2 { margin-top: 0; }
-        .log-container {
-            background: #333;
-            color: #fff;
-            padding: 10px;
-            border-radius: 4px;
-            height: 150px;
-            overflow-y: auto;
-            font-family: monospace;
-            font-size: 12px;
-        }
-        .log-entry { margin-bottom: 4px; border-bottom: 1px solid #444; padding-bottom: 2px; }
-    </style>
-</head>
-<body>
-    <h1>SmartSelect Demo</h1>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>SmartSelect Demo</title>
+		<style>
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 20px;
+			background: #f5f5f5;
+		}
+		.section {
+			background: white;
+			padding: 20px;
+			border-radius: 8px;
+			margin-bottom: 20px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+		}
+		h2 {
+			margin-top: 0;
+		}
+		.log-container {
+			background: #333;
+			color: #fff;
+			padding: 10px;
+			border-radius: 4px;
+			height: 150px;
+			overflow-y: auto;
+			font-family: monospace;
+			font-size: 12px;
+		}
+		.log-entry {
+			margin-bottom: 4px;
+			border-bottom: 1px solid #444;
+			padding-bottom: 2px;
+		}
+		</style>
+		<link rel="stylesheet" href="../demos/theme/variables.css" />
+		<link rel="stylesheet" href="../demos/theme/theme.css" />
+		<link rel="stylesheet" href="../demos/theme/typography.css" />
+		<link rel="stylesheet" href="../demos/theme/layout.css" />
+		<link rel="stylesheet" href="../demos/theme/form.css" />
+	</head>
+	<body>
+		<h1>SmartSelect Demo</h1>
 
-    <div class="section">
-        <h2>Single Select with Images</h2>
-        <liwe3-select id="singleSelect" placeholder="Select a user..."></liwe3-select>
-    </div>
+		<div class="section">
+			<h2>Multiple Select with Tags</h2>
+			<liwe3-select id="tagSelect" multiple searchable placeholder="Select a tag..."></liwe3-select>
+		</div>
 
-    <div class="section">
-        <h2>Multi Select with Images & Search</h2>
-        <liwe3-select id="multiSelect" multiple searchable placeholder="Select team members..."></liwe3-select>
-    </div>
+		<div class="section">
+			<h2>Single Select with Images</h2>
+			<liwe3-select id="singleSelect" placeholder="Select a user..."></liwe3-select>
+		</div>
 
-    <div class="section">
-        <h2>Event Log</h2>
-        <div id="eventLog" class="log-container"></div>
-    </div>
+		<div class="section">
+			<h2>Multi Select with Images & Search</h2>
+			<liwe3-select id="multiSelect" multiple searchable placeholder="Select team members..."></liwe3-select>
+		</div>
 
-    <script type="module">
-        import { defineSmartSelect } from '../dist/SmartSelect.js';
+		<div class="section">
+			<h2>Event Log</h2>
+			<div id="eventLog" class="log-container"></div>
+		</div>
 
-        const users = [
-            { value: '1', label: 'Alice Johnson', image: 'https://i.pravatar.cc/150?u=1' },
-            { value: '2', label: 'Bob Smith', image: 'https://i.pravatar.cc/150?u=2' },
-            { value: '3', label: 'Charlie Brown', image: 'https://i.pravatar.cc/150?u=3' },
-            { value: '4', label: 'Diana Prince', image: 'https://i.pravatar.cc/150?u=4' },
-            { value: '5', label: 'Evan Wright', image: 'https://i.pravatar.cc/150?u=5' },
-        ];
+		<script type="module">
+		import { defineSmartSelect } from '../dist/SmartSelect.js';
 
-        const singleSelect = document.getElementById('singleSelect');
-        singleSelect.options = users;
-        singleSelect.addEventListener('change', (e) => log(`Single Select Change: ${e.detail.value}`));
+		const users = [
+			{ value: '1', label: 'Alice Johnson', image: 'https://i.pravatar.cc/150?u=1' },
+			{ value: '2', label: 'Bob Smith', image: 'https://i.pravatar.cc/150?u=2' },
+			{ value: '3', label: 'Charlie Brown', image: 'https://i.pravatar.cc/150?u=3' },
+			{ value: '4', label: 'Diana Prince', image: 'https://i.pravatar.cc/150?u=4' },
+			{ value: '5', label: 'Evan Wright', image: 'https://i.pravatar.cc/150?u=5' },
+		];
 
-        const multiSelect = document.getElementById('multiSelect');
-        multiSelect.options = users;
-        multiSelect.addEventListener('change', (e) => log(`Multi Select Change: ${JSON.stringify(e.detail.value)}`));
-        multiSelect.addEventListener('search', (e) => log(`Search: ${e.detail.query}`));
+		const tags = [
+			{ value: 'tag1', label: 'Tag One' },
+			{ value: 'tag2', label: 'Tag Two' },
+			{ value: 'tag3', label: 'Tag Three' },
+			{ value: 'tag4', label: 'Tag Four' },
+			{ value: 'tag5', label: 'Tag Five' },
+		];
 
-        function log(msg) {
-            const logEl = document.getElementById('eventLog');
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            entry.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
-            logEl.prepend(entry);
-        }
-    </script>
-</body>
+		const tagsSelect = document.getElementById( 'singleSelect' );
+		tagsSelect.options = tags;
+		tagsSelect.addEventListener( 'change', ( e ) => log( `Single Select Change: ${e.detail.value}` ) );
+
+		const singleSelect = document.getElementById( 'singleSelect' );
+		singleSelect.options = users;
+		singleSelect.addEventListener( 'change', ( e ) => log( `Single Select Change: ${e.detail.value}` ) );
+
+		const multiSelect = document.getElementById( 'tagSelect' );
+		multiSelect.options = tags;
+		multiSelect.addEventListener( 'change', ( e ) => log( `Multi Select Tags Change: ${JSON.stringify( e.detail.value )}` ) );
+		multiSelect.addEventListener( 'search', ( e ) => log( `Tags Search: ${e.detail.query}` ) );
+
+		function log( msg ) {
+			const logEl = document.getElementById( 'eventLog' );
+			const entry = document.createElement( 'div' );
+			entry.className = 'log-entry';
+			entry.textContent = `[${new Date().toLocaleTimeString()}] ${msg}`;
+			logEl.prepend( entry );
+		}
+		</script>
+	</body>
 </html>
