@@ -21,6 +21,7 @@ Import the components directly in your Svelte files:
   import { 
     SmartSelect, 
     AITextEditor,
+    AIMarkdownEditor,
     ChunkUploader,
     ContainerBox,
     DateSelector,
@@ -33,6 +34,7 @@ Import the components directly in your Svelte files:
 
 <SmartSelect ... />
 <AITextEditor ... />
+<AIMarkdownEditor ... />
 ```
 
 ## Available Wrappers
@@ -41,6 +43,7 @@ Import the components directly in your Svelte files:
 |-----------|-------------|
 | [SmartSelect](./SmartSelect.md) | Wrapper for `<liwe3-select>` |
 | [AITextEditor](./AITextEditor.md) | Wrapper for `<liwe3-ai-text-editor>` |
+| [AIMarkdownEditor](./AIMarkdownEditor.md) | Wrapper for `<liwe3-ai-markdown-editor>` |
 | [ChunkUploader](./ChunkUploader.md) | Wrapper for `<liwe3-chunk-uploader>` |
 | [ContainerBox](./ContainerBox.md) | Wrapper for `<liwe3-container-box>` |
 | [DateSelector](./DateSelector.md) | Wrapper for `<liwe3-date-selector>` |

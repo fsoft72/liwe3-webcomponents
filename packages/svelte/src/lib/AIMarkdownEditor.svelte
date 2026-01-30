@@ -1,179 +1,193 @@
 <script lang="ts">
-  import { onMount } from "svelte";
-  import type { AIMarkdownEditorElement } from "@liwe3/webcomponents";
+import { onMount } from 'svelte';
+import type { AIMarkdownEditorElement } from '@liwe3/webcomponents';
 
-  interface Props {
-    value?: string;
-    apiKey?: string;
-    suggestionDelay?: number;
-    systemPrompt?: string;
-    apiEndpoint?: string;
-    modelName?: string;
-    context?: string;
+interface Props {
+	value? : string;
+	apiKey? : string;
+	suggestionDelay? : number;
+	systemPrompt? : string;
+	apiEndpoint? : string;
+	modelName? : string;
+	context? : string;
+	showSettings? : boolean;
 
-    onbeforesuggestion?: (data: any) => boolean;
-    onchange?: (value: string) => void;
-  }
+	onbeforesuggestion? : ( data : any ) => boolean;
+	onchange? : ( value : string ) => void;
+}
 
-  let {
-    value = $bindable(""),
-    apiKey = "",
-    suggestionDelay = 3000,
-    systemPrompt = $bindable(
-      "You are a helpful writing assistant. Continue the user's text naturally and coherently. Provide 1-3 sentences that would logically follow their writing. Keep the same tone and style. Do not repeat what they've already written."
-    ),
-    apiEndpoint = "https://api.openai.com/v1/chat/completions",
-    modelName = "gpt-3.5-turbo",
-    context = "",
+let {
+	value = $bindable( '' ),
+	apiKey = '',
+	suggestionDelay = 3000,
+	systemPrompt = $bindable(
+		"You are a helpful writing assistant. Continue the user's text naturally and coherently. Provide 1-3 sentences that would logically follow their writing. Keep the same tone and style. Do not repeat what they've already written.",
+	),
+	apiEndpoint = 'https://api.openai.com/v1/chat/completions',
+	modelName = 'gpt-3.5-turbo',
+	context = '',
+	showSettings = true,
 
-    onbeforesuggestion,
-    onchange,
-  }: Props = $props();
+	onbeforesuggestion,
+	onchange,
+} : Props = $props();
 
-  let elementRef: AIMarkdownEditorElement;
-  let isReady = $state(false);
+let elementRef : AIMarkdownEditorElement;
+let isReady = $state( false );
 
-  // Sync props to web component - only when ready
-  $effect(() => {
-    if (!isReady || !elementRef) return;
-    
-    if (apiKey) elementRef.setApiKey(apiKey);
-    elementRef.setSuggestionDelay(suggestionDelay / 1000);
-    elementRef.setSystemPrompt(systemPrompt);
-    elementRef.setApiEndpoint(apiEndpoint);
-    elementRef.setModelName(modelName);
-    if (context) elementRef.setContext(context);
-  });
+// Sync props to web component - only when ready
+$effect( () => {
+	if ( !isReady || !elementRef ) return;
 
-  // Sync value to web component - only when ready
-  $effect(() => {
-    if (!isReady || !elementRef) return;
-    
-    const currentText = elementRef.getText();
-    if (currentText !== value) {
-      elementRef.setText(value);
-    }
-  });
+	if ( apiKey ) elementRef.setApiKey( apiKey );
+	elementRef.setSuggestionDelay( suggestionDelay / 1000 );
+	elementRef.setSystemPrompt( systemPrompt );
+	elementRef.setApiEndpoint( apiEndpoint );
+	elementRef.setModelName( modelName );
+	if ( context ) elementRef.setContext( context );
+	elementRef.setShowSettings( showSettings );
+} );
 
-  onMount(async () => {
-    // Dynamically import and register the web component
-    const { defineAIMarkdownEditor } = await import("@liwe3/webcomponents/ai-markdown-editor");
-    defineAIMarkdownEditor();
+// Sync value to web component - only when ready
+$effect( () => {
+	if ( !isReady || !elementRef ) return;
 
-    // Wait for element to be ready (next tick)
-    await new Promise(resolve => setTimeout(resolve, 0));
+	const currentText = elementRef.getText();
+	if ( currentText !== value ) {
+		elementRef.setText( value );
+	}
+} );
 
-    // Listen for changes from the web component
-    const handleChange = (event: CustomEvent) => {
-      const newValue = event.detail.value;
-      if (newValue !== value) {
-        value = newValue;
-        onchange?.(newValue);
-      }
-    };
+onMount( async () => {
+	// Dynamically import and register the web component
+	const { defineAIMarkdownEditor } = await import( '@liwe3/webcomponents/ai-markdown-editor' );
+	defineAIMarkdownEditor();
 
-    // Forward beforeSuggestion event and allow parent to cancel
-    const handleBeforeSuggestion = (event: CustomEvent) => {
-      const cancel = onbeforesuggestion
-        ? onbeforesuggestion(event.detail)
-        : false;
+	// Wait for element to be ready (next tick)
+	await new Promise( ( resolve ) => setTimeout( resolve, 0 ) );
 
-      // propagate cancellation back to the underlying web component
-      if (cancel) event.preventDefault();
-    };
+	// Listen for changes from the web component
+	const handleChange = ( event : CustomEvent ) => {
+		const newValue = event.detail.value;
+		if ( newValue !== value ) {
+			value = newValue;
+			onchange?.( newValue );
+		}
+	};
 
-    elementRef.addEventListener("change", handleChange);
-    elementRef.addEventListener(
-      "beforeSuggestion",
-      handleBeforeSuggestion as EventListener
-    );
+	// Forward beforeSuggestion event and allow parent to cancel
+	const handleBeforeSuggestion = ( event : CustomEvent ) => {
+		const cancel = onbeforesuggestion
+			? onbeforesuggestion( event.detail )
+			: false;
 
-    // Mark as ready to enable $effects
-    isReady = true;
+		// propagate cancellation back to the underlying web component
+		if ( cancel ) event.preventDefault();
+	};
 
-    // Cleanup
-    return () => {
-      elementRef?.removeEventListener("change", handleChange);
-      elementRef?.removeEventListener(
-        "beforeSuggestion",
-        handleBeforeSuggestion as EventListener
-      );
-    };
-  });
+	elementRef.addEventListener( 'change', handleChange as EventListener );
+	elementRef.addEventListener(
+		'beforeSuggestion',
+		handleBeforeSuggestion as EventListener,
+	);
 
-  // Public methods to expose web component functionality
-  export const setText = (text: string) => {
-    value = text;
-    if (isReady && elementRef) {
-      elementRef.setText(text);
-    }
-  };
+	// Mark as ready to enable $effects
+	isReady = true;
 
-  export const getText = (): string => {
-    return elementRef?.getText() || "";
-  };
+	// Cleanup
+	return () => {
+		elementRef?.removeEventListener( 'change', handleChange as EventListener );
+		elementRef?.removeEventListener(
+			'beforeSuggestion',
+			handleBeforeSuggestion as EventListener,
+		);
+	};
+} );
 
-  export const setContext = (ctx: string) => {
-    context = ctx;
-    if (isReady && elementRef) {
-      elementRef.setContext(ctx);
-    }
-  };
+// Public methods to expose web component functionality
+export const setText = ( text : string ) => {
+	value = text;
+	if ( isReady && elementRef ) {
+		elementRef.setText( text );
+	}
+};
 
-  export const getContext = (): string => {
-    return elementRef?.getContext() || context;
-  };
+export const getText = () : string => {
+	return elementRef?.getText() || '';
+};
 
-  export const setSystemPrompt = (prompt: string) => {
-    systemPrompt = prompt;
-    if (isReady && elementRef) {
-      elementRef.setSystemPrompt(prompt);
-    }
-  };
+export const setContext = ( ctx : string ) => {
+	context = ctx;
+	if ( isReady && elementRef ) {
+		elementRef.setContext( ctx );
+	}
+};
 
-  export const getSystemPrompt = (): string => {
-    return elementRef?.getSystemPrompt() || systemPrompt;
-  };
+export const getContext = () : string => {
+	return elementRef?.getContext() || context;
+};
 
-  export const setApiKey = (key: string) => {
-    if (isReady && elementRef) {
-      elementRef.setApiKey(key);
-    }
-  };
+export const setSystemPrompt = ( prompt : string ) => {
+	systemPrompt = prompt;
+	if ( isReady && elementRef ) {
+		elementRef.setSystemPrompt( prompt );
+	}
+};
 
-  export const getApiKey = (): string => {
-    return elementRef?.getApiKey() || "";
-  };
+export const getSystemPrompt = () : string => {
+	return elementRef?.getSystemPrompt() || systemPrompt;
+};
 
-  export const setSuggestionDelay = (seconds: number) => {
-    if (isReady && elementRef) {
-      elementRef.setSuggestionDelay(seconds);
-    }
-  };
+export const setApiKey = ( key : string ) => {
+	if ( isReady && elementRef ) {
+		elementRef.setApiKey( key );
+	}
+};
 
-  export const getSuggestionDelay = (): number => {
-    return elementRef?.getSuggestionDelay() || suggestionDelay;
-  };
+export const getApiKey = () : string => {
+	return elementRef?.getApiKey() || '';
+};
 
-  export const setApiEndpoint = (endpoint: string) => {
-    if (isReady && elementRef) {
-      elementRef.setApiEndpoint(endpoint);
-    }
-  };
+export const setSuggestionDelay = ( seconds : number ) => {
+	if ( isReady && elementRef ) {
+		elementRef.setSuggestionDelay( seconds );
+	}
+};
 
-  export const getApiEndpoint = (): string => {
-    return elementRef?.getApiEndpoint() || apiEndpoint;
-  };
+export const getSuggestionDelay = () : number => {
+	return elementRef?.getSuggestionDelay() || suggestionDelay;
+};
 
-  export const setModelName = (model: string) => {
-    if (isReady && elementRef) {
-      elementRef.setModelName(model);
-    }
-  };
+export const setApiEndpoint = ( endpoint : string ) => {
+	if ( isReady && elementRef ) {
+		elementRef.setApiEndpoint( endpoint );
+	}
+};
 
-  export const getModelName = (): string => {
-    return elementRef?.getModelName() || modelName;
-  };
+export const getApiEndpoint = () : string => {
+	return elementRef?.getApiEndpoint() || apiEndpoint;
+};
+
+export const setModelName = ( model : string ) => {
+	if ( isReady && elementRef ) {
+		elementRef.setModelName( model );
+	}
+};
+
+export const getModelName = () : string => {
+	return elementRef?.getModelName() || modelName;
+};
+
+export const setShowSettings = ( show : boolean ) => {
+	showSettings = show;
+	if ( isReady && elementRef ) {
+		elementRef.setShowSettings( show );
+	}
+};
+
+export const getShowSettings = () : boolean => {
+	return elementRef?.getShowSettings() || showSettings;
+};
 </script>
 
 <liwe3-ai-markdown-editor bind:this={elementRef}></liwe3-ai-markdown-editor>
