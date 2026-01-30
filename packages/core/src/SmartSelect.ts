@@ -12,6 +12,7 @@ export type SelectOption = {
 export class SmartSelectElement extends HTMLElement {
 	declare shadowRoot : ShadowRoot;
 	private isOpen : boolean = false;
+	private _openUpward : boolean = false;
 	private selectedOptions : SelectOption[] = [];
 	private filteredOptions : SelectOption[] = [];
 	private focusedIndex : number = -1;
@@ -133,6 +134,19 @@ export class SmartSelectElement extends HTMLElement {
 		if ( this.options.length > 0 ) {
 			this.filteredOptions = [ ...this.options ];
 		}
+
+		// Determine open direction based on available space (only when first opening)
+		const trigger = this.shadowRoot.querySelector( '.select-trigger' ) as HTMLElement;
+		if ( trigger ) {
+			const triggerRect = trigger.getBoundingClientRect();
+			const viewportHeight = window.innerHeight;
+			const dropdownMaxHeight = 200;
+			const dropdownPadding = 10;
+			const spaceBelow = viewportHeight - triggerRect.bottom;
+			const spaceAbove = triggerRect.top;
+			this._openUpward = spaceBelow < dropdownMaxHeight + dropdownPadding && spaceAbove > spaceBelow;
+		}
+
 		this.render();
 
 		// Update dropdown position based on viewport
@@ -156,6 +170,7 @@ export class SmartSelectElement extends HTMLElement {
 	 */
 	close () : void {
 		this.isOpen = false;
+		this._openUpward = false;
 		this.focusedIndex = -1;
 		this.searchValue = '';
 
@@ -290,7 +305,7 @@ export class SmartSelectElement extends HTMLElement {
 	/**
 	 * Calculates the optimal dropdown position based on viewport constraints
 	 */
-	private _calculateDropdownPosition () : { top : number; left : number; width : number; maxHeight : number } | null {
+	private _calculateDropdownPosition () : { top? : number; bottom? : number; left : number; width : number; maxHeight : number } | null {
 		const trigger = this.shadowRoot.querySelector( '.select-trigger' ) as HTMLElement;
 		if ( !trigger ) return null;
 
@@ -305,32 +320,37 @@ export class SmartSelectElement extends HTMLElement {
 		const spaceBelow = viewportHeight - triggerRect.bottom;
 		const spaceAbove = triggerRect.top;
 
-		// Determine if dropdown should open upward
-		const shouldOpenUpward = spaceBelow < dropdownMaxHeight + dropdownPadding && spaceAbove > spaceBelow;
-
 		// Calculate dimensions
 		const width = triggerRect.width;
 		const left = Math.max( 0, Math.min( triggerRect.left, viewportWidth - width ) );
 
-		let top : number;
 		let maxHeight : number;
 
-		if ( shouldOpenUpward ) {
-			// Position above the trigger
+		// Use the stored open direction decision
+		if ( this._openUpward ) {
+			// Position above the trigger using bottom anchor
 			maxHeight = Math.min( dropdownMaxHeight, spaceAbove - dropdownPadding );
-			top = triggerRect.top - maxHeight - margin;
-		} else {
-			// Position below the trigger
-			maxHeight = Math.min( dropdownMaxHeight, spaceBelow - dropdownPadding );
-			top = triggerRect.bottom + margin;
-		}
+			// bottom is distance from viewport bottom to trigger top
+			const bottom = viewportHeight - triggerRect.top + margin;
 
-		return {
-			top: Math.max( 0, top ),
-			left,
-			width,
-			maxHeight: Math.max( 100, maxHeight ), // Ensure minimum height
-		};
+			return {
+				bottom,
+				left,
+				width,
+				maxHeight: Math.max( 100, maxHeight ),
+			};
+		} else {
+			// Position below the trigger using top anchor
+			maxHeight = Math.min( dropdownMaxHeight, spaceBelow - dropdownPadding );
+			const top = triggerRect.bottom + margin;
+
+			return {
+				top,
+				left,
+				width,
+				maxHeight: Math.max( 100, maxHeight ),
+			};
+		}
 	}
 
 	/**
@@ -344,8 +364,17 @@ export class SmartSelectElement extends HTMLElement {
 			const position = this._calculateDropdownPosition();
 			if ( !position ) return;
 
+			// Clear both top and bottom first
+			dropdown.style.top = '';
+			dropdown.style.bottom = '';
+
 			// Apply calculated position as inline styles
-			dropdown.style.top = `${position.top}px`;
+			if ( position.top !== undefined ) {
+				dropdown.style.top = `${position.top}px`;
+			}
+			if ( position.bottom !== undefined ) {
+				dropdown.style.bottom = `${position.bottom}px`;
+			}
 			dropdown.style.left = `${position.left}px`;
 			dropdown.style.width = `${position.width}px`;
 			dropdown.style.maxHeight = `${position.maxHeight}px`;
@@ -824,6 +853,12 @@ export class SmartSelectElement extends HTMLElement {
 					searchInput.setSelectionRange( searchInput.value.length, searchInput.value.length );
 				}
 			} );
+		}
+
+		// Update dropdown position after render when open
+		// This is crucial for search filtering which recreates the dropdown
+		if ( this.isOpen ) {
+			this._updateDropdownPosition();
 		}
 	}
 }
