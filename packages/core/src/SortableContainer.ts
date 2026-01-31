@@ -329,20 +329,38 @@ export class SortableContainerElement extends HTMLElement {
 
         ::slotted(.sortable-wrapper) {
           user-select: none;
-          transition: transform 0.15s ease, opacity 0.15s ease;
+          transition: transform 0.2s cubic-bezier(0.2, 0, 0, 1),
+                      opacity 0.2s ease,
+                      margin 0.2s cubic-bezier(0.2, 0, 0, 1);
+          will-change: transform;
         }
 
         ::slotted(.sortable-wrapper.dragging) {
           opacity: 0.3 !important;
+          transition: opacity 0.15s ease !important;
         }
 
         ::slotted(.drop-placeholder) {
-          background: var(--sortable-indicator-color, rgba(102, 126, 234, 0.3));
+          background: var(--sortable-indicator-color, rgba(102, 126, 234, 0.15));
           border: 2px dashed var(--sortable-indicator-border-color, #667eea);
           border-radius: var(--sortable-indicator-radius, 8px);
           box-sizing: border-box;
           flex-shrink: 0;
-          transition: height 0.15s ease, width 0.15s ease;
+          transition: height 0.2s cubic-bezier(0.2, 0, 0, 1),
+                      width 0.2s cubic-bezier(0.2, 0, 0, 1),
+                      opacity 0.15s ease;
+          animation: placeholder-appear 0.15s ease-out;
+        }
+
+        @keyframes placeholder-appear {
+          from {
+            opacity: 0;
+            transform: scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1);
+          }
         }
 
         .drag-clone {
@@ -573,12 +591,14 @@ export class SortableContainerElement extends HTMLElement {
 		placeholder.className = 'drop-placeholder';
 
 		// Apply inline styles since placeholder is in light DOM
-		placeholder.style.border = '2px dashed var(--sortable-indicator-color, #007bff)';
-		placeholder.style.borderRadius = 'var(--sortable-indicator-radius, 4px)';
-		placeholder.style.backgroundColor = 'rgba(0, 123, 255, 0.1)';
+		placeholder.style.border = '2px dashed var(--sortable-indicator-color, #667eea)';
+		placeholder.style.borderRadius = 'var(--sortable-indicator-radius, 8px)';
+		placeholder.style.backgroundColor = 'rgba(102, 126, 234, 0.15)';
 		placeholder.style.boxSizing = 'border-box';
 		placeholder.style.flexShrink = '0';
 		placeholder.style.pointerEvents = 'none';
+		placeholder.style.transition = 'opacity 0.15s ease';
+		placeholder.style.animation = 'none'; // Prevent re-animating on move
 
 		if ( isHorizontal ) {
 			placeholder.style.width = `${rect.width}px`;
