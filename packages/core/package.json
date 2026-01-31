@@ -1,130 +1,130 @@
 {
-  "name": "@liwe3/webcomponents",
-  "version": "1.1.11",
-  "description": "A collection of reusable web components including SmartSelect and AITextEditor, ChunkUploader and more",
-  "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
-    },
-    "./smart-select": {
-      "types": "./dist/SmartSelect.d.ts",
-      "import": "./dist/SmartSelect.js",
-      "default": "./dist/SmartSelect.js"
-    },
-    "./ai-text-editor": {
-      "types": "./dist/AITextEditor.d.ts",
-      "import": "./dist/AITextEditor.js",
-      "default": "./dist/AITextEditor.js"
-    },
-    "./toast": {
-      "types": "./dist/Toast.d.ts",
-      "import": "./dist/Toast.js",
-      "default": "./dist/Toast.js"
-    },
-    "./dialog": {
-      "types": "./dist/Dialog.d.ts",
-      "import": "./dist/Dialog.js",
-      "default": "./dist/Dialog.js"
-    },
-    "./popover-menu": {
-      "types": "./dist/PopoverMenu.d.ts",
-      "import": "./dist/PopoverMenu.js",
-      "default": "./dist/PopoverMenu.js"
-    },
-    "./date-selector": {
-      "types": "./dist/DateSelector.d.ts",
-      "import": "./dist/DateSelector.js",
-      "default": "./dist/DateSelector.js"
-    },
-    "./tree-view": {
-      "types": "./dist/TreeView.d.ts",
-      "import": "./dist/TreeView.js",
-      "default": "./dist/TreeView.js"
-    },
-    "./container-box": {
-      "types": "./dist/ContainerBox.d.ts",
-      "import": "./dist/ContainerBox.js",
-      "default": "./dist/ContainerBox.js"
-    },
-    "./drawer": {
-      "types": "./dist/Drawer.d.ts",
-      "import": "./dist/Drawer.js",
-      "default": "./dist/Drawer.js"
-    },
-    "./image-view": {
-      "types": "./dist/ImageView.d.ts",
-      "import": "./dist/ImageView.js",
-      "default": "./dist/ImageView.js"
-    },
-    "./chunk-uploader": {
-      "types": "./dist/ChunkUploader.d.ts",
-      "import": "./dist/ChunkUploader.js",
-      "default": "./dist/ChunkUploader.js"
-    },
-    "./button-toolbar": {
-      "types": "./dist/ButtonToolbar.d.ts",
-      "import": "./dist/ButtonToolbar.js",
-      "default": "./dist/ButtonToolbar.js"
-    },
-    "./ai-markdown-editor": {
-      "types": "./dist/AIMarkdownEditor.d.ts",
-      "import": "./dist/AIMarkdownEditor.js",
-      "default": "./dist/AIMarkdownEditor.js"
-    },
-    "./markdown-preview": {
-      "types": "./dist/MarkdownPreview.d.ts",
-      "import": "./dist/MarkdownPreview.js",
-      "default": "./dist/MarkdownPreview.js"
-    },
-    "./checklist": {
-      "types": "./dist/CheckList.d.ts",
-      "import": "./dist/CheckList.js",
-      "default": "./dist/CheckList.js"
-    },
-    "./resizable-cropper": {
-      "types": "./dist/ResizableCropper.d.ts",
-      "import": "./dist/ResizableCropper.js",
-      "default": "./dist/ResizableCropper.js"
-    }
-  },
-  "files": [
-    "dist",
-    "src",
-    "README.md",
-    "LICENSE"
-  ],
-  "scripts": {
-    "dev": "vite build --watch",
-    "build": "tsc && vite build",
-    "prepublishOnly": "pnpm run build"
-  },
-  "keywords": [
-    "web-components",
-    "custom-elements",
-    "select",
-    "dropdown",
-    "ai-editor",
-    "text-editor",
-    "liwe3"
-  ],
-  "author": "Fabio Rotondo",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/fsoft72/liwe3-webcomponents.git"
-  },
-  "devDependencies": {
-    "typescript": "^5.9.2",
-    "vite": "^7.1.5"
-  },
-  "publishConfig": {
-    "access": "public"
-  },
-  "packageManager": "pnpm@10.16.0"
+	"name": "@liwe3/webcomponents",
+	"version": "1.1.12",
+	"description": "A collection of reusable web components including SmartSelect and AITextEditor, ChunkUploader and more",
+	"type": "module",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"default": "./dist/index.js"
+		},
+		"./smart-select": {
+			"types": "./dist/SmartSelect.d.ts",
+			"import": "./dist/SmartSelect.js",
+			"default": "./dist/SmartSelect.js"
+		},
+		"./ai-text-editor": {
+			"types": "./dist/AITextEditor.d.ts",
+			"import": "./dist/AITextEditor.js",
+			"default": "./dist/AITextEditor.js"
+		},
+		"./toast": {
+			"types": "./dist/Toast.d.ts",
+			"import": "./dist/Toast.js",
+			"default": "./dist/Toast.js"
+		},
+		"./dialog": {
+			"types": "./dist/Dialog.d.ts",
+			"import": "./dist/Dialog.js",
+			"default": "./dist/Dialog.js"
+		},
+		"./popover-menu": {
+			"types": "./dist/PopoverMenu.d.ts",
+			"import": "./dist/PopoverMenu.js",
+			"default": "./dist/PopoverMenu.js"
+		},
+		"./date-selector": {
+			"types": "./dist/DateSelector.d.ts",
+			"import": "./dist/DateSelector.js",
+			"default": "./dist/DateSelector.js"
+		},
+		"./tree-view": {
+			"types": "./dist/TreeView.d.ts",
+			"import": "./dist/TreeView.js",
+			"default": "./dist/TreeView.js"
+		},
+		"./container-box": {
+			"types": "./dist/ContainerBox.d.ts",
+			"import": "./dist/ContainerBox.js",
+			"default": "./dist/ContainerBox.js"
+		},
+		"./drawer": {
+			"types": "./dist/Drawer.d.ts",
+			"import": "./dist/Drawer.js",
+			"default": "./dist/Drawer.js"
+		},
+		"./image-view": {
+			"types": "./dist/ImageView.d.ts",
+			"import": "./dist/ImageView.js",
+			"default": "./dist/ImageView.js"
+		},
+		"./chunk-uploader": {
+			"types": "./dist/ChunkUploader.d.ts",
+			"import": "./dist/ChunkUploader.js",
+			"default": "./dist/ChunkUploader.js"
+		},
+		"./button-toolbar": {
+			"types": "./dist/ButtonToolbar.d.ts",
+			"import": "./dist/ButtonToolbar.js",
+			"default": "./dist/ButtonToolbar.js"
+		},
+		"./ai-markdown-editor": {
+			"types": "./dist/AIMarkdownEditor.d.ts",
+			"import": "./dist/AIMarkdownEditor.js",
+			"default": "./dist/AIMarkdownEditor.js"
+		},
+		"./markdown-preview": {
+			"types": "./dist/MarkdownPreview.d.ts",
+			"import": "./dist/MarkdownPreview.js",
+			"default": "./dist/MarkdownPreview.js"
+		},
+		"./checklist": {
+			"types": "./dist/CheckList.d.ts",
+			"import": "./dist/CheckList.js",
+			"default": "./dist/CheckList.js"
+		},
+		"./resizable-cropper": {
+			"types": "./dist/ResizableCropper.d.ts",
+			"import": "./dist/ResizableCropper.js",
+			"default": "./dist/ResizableCropper.js"
+		}
+	},
+	"files": [
+		"dist",
+		"src",
+		"README.md",
+		"LICENSE"
+	],
+	"scripts": {
+		"dev": "vite build --watch",
+		"build": "tsc && vite build",
+		"prepublishOnly": "pnpm run build"
+	},
+	"keywords": [
+		"web-components",
+		"custom-elements",
+		"select",
+		"dropdown",
+		"ai-editor",
+		"text-editor",
+		"liwe3"
+	],
+	"author": "Fabio Rotondo",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/fsoft72/liwe3-webcomponents.git"
+	},
+	"devDependencies": {
+		"typescript": "^5.9.2",
+		"vite": "^7.1.5"
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"packageManager": "pnpm@10.16.0"
 }

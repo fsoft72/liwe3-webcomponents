@@ -5,6 +5,7 @@ let editorValue = $state<string>( '' );
 let apiKey = $state<string>( '' );
 let apiKeyInput = $state<string>( '' );
 let suggestionDelay = $state<number>( 1 );
+let showSettings = $state<boolean>( true );
 
 // Editor instance reference (for calling methods)
 let editorInstance : any;
@@ -44,6 +45,22 @@ Try it out!`;
 	<h1>AIMarkdownEditor Component Demo</h1>
 	<p class="subtitle">Markdown editor with AI-powered continuation suggestions</p>
 
+	<!-- Controls Section -->
+	<section class="demo-section">
+		<h2>Controls</h2>
+		<div class="controls-box">
+			<div class="control-row">
+				<label class="checkbox-label">
+					<input type="checkbox" bind:checked={showSettings}>
+					Show Settings Button
+				</label>
+				<span class="status-badge" class:visible={showSettings} class:hidden={!showSettings}>
+					Settings: {showSettings ? 'Visible' : 'Hidden'}
+				</span>
+			</div>
+		</div>
+	</section>
+
 	<!-- Editor Demo -->
 	<section class="demo-section">
 		<div class="editor-header">
@@ -59,6 +76,7 @@ Try it out!`;
 				onchange={handleEditorChange}
 				{apiKey}
 				suggestionDelay={suggestionDelay * 1000}
+				{showSettings}
 			/>
 		</div>
 
@@ -68,6 +86,7 @@ Try it out!`;
 				<li><strong>Tab</strong> - Accept the current AI suggestion</li>
 				<li><strong>Escape</strong> - Dismiss the suggestion</li>
 				<li><strong>Toolbar</strong> - Use buttons to format text or toggle preview</li>
+				<li><strong>Settings</strong> - Click the gear icon to configure API settings (when visible)</li>
 			</ul>
 		</div>
 	</section>
@@ -124,126 +143,50 @@ h3 {
 	border-bottom: none;
 }
 
-.settings-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 1rem;
-}
-
-.toggle-btn {
-	padding: 0.5rem 1rem;
-	background: #4facfe;
-	color: white;
-	border: none;
-	border-radius: 4px;
-	cursor: pointer;
-	font-size: 0.9rem;
-	transition: background 0.2s;
-}
-
-.toggle-btn:hover {
-	background: #3a8fd9;
-}
-
-.settings-box {
+.controls-box {
 	background: #f8f9fa;
 	padding: 1.5rem;
 	border-radius: 8px;
 	border: 1px solid #e0e0e0;
-	margin-bottom: 1rem;
 }
 
-.setting-item {
-	margin-bottom: 1.5rem;
+.control-row {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	flex-wrap: wrap;
 }
 
-.setting-item:last-child {
-	margin-bottom: 0;
-}
-
-.setting-item label {
-	display: block;
-	font-weight: 600;
-	margin-bottom: 0.5rem;
+.checkbox-label {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	cursor: pointer;
+	font-weight: 500;
 	color: #333;
 }
 
-.input-group {
-	display: flex;
-	gap: 0.5rem;
-}
-
-.api-key-input {
-	flex: 1;
-	padding: 0.5rem;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	font-size: 0.9rem;
-	font-family: "Monaco", "Menlo", monospace;
-}
-
-.save-btn {
-	padding: 0.5rem 1.5rem;
-	background: #28a745;
-	color: white;
-	border: none;
-	border-radius: 4px;
+.checkbox-label input[type="checkbox"] {
+	width: 18px;
+	height: 18px;
 	cursor: pointer;
-	font-size: 0.9rem;
-	transition: background 0.2s;
 }
 
-.save-btn:hover {
-	background: #218838;
-}
-
-.delay-input {
-	width: 100px;
-	padding: 0.5rem;
-	border: 1px solid #ccc;
+.status-badge {
+	padding: 0.5rem 1rem;
 	border-radius: 4px;
 	font-size: 0.9rem;
+	font-weight: 500;
 }
 
-.hint {
-	display: block;
-	margin-top: 0.5rem;
-	color: #666;
-	font-size: 0.85rem;
+.status-badge.visible {
+	background: #d4edda;
+	color: #155724;
 }
 
-.hint a {
-	color: #4facfe;
-	text-decoration: none;
-}
-
-.hint a:hover {
-	text-decoration: underline;
-}
-
-.status-bar {
-	display: flex;
-	justify-content: space-between;
-	padding: 1rem;
-	background: white;
-	border: 1px solid #e0e0e0;
-	border-radius: 6px;
-	font-size: 0.9rem;
-}
-
-.status-item {
-	color: #666;
-}
-
-.status-ok {
-	color: #28a745;
-	font-weight: 600;
-}
-
-.status-missing {
-	color: #dc3545;
-	font-weight: 600;
+.status-badge.hidden {
+	background: #f8d7da;
+	color: #721c24;
 }
 
 .editor-header {

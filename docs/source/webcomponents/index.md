@@ -57,6 +57,20 @@ A text editor with AI-powered text continuation suggestions using OpenAI-compati
 
 ---
 
+### [AIMarkdownEditor](./AIMarkdownEditor.md)
+A markdown editor with AI-powered text continuation suggestions. Combines the AITextEditor with a formatting toolbar and preview mode.
+
+**Tag Name:** `<liwe3-ai-markdown-editor>`
+
+**Key Features:**
+- All AITextEditor features plus markdown support
+- Formatting toolbar (bold, italic, underline, lists)
+- Toggle between edit and preview modes
+- Built-in settings modal for AI configuration
+- `showSettings` property to hide/show the settings button
+
+---
+
 ### [ChunkUploader](./ChunkUploader.md)
 A file uploader component that supports chunked uploads for large files.
 
