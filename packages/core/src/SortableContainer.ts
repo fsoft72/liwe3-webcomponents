@@ -27,6 +27,7 @@ export class SortableContainerElement extends HTMLElement {
 	private draggedClone : HTMLElement | null = null;
 	private dropPlaceholder : HTMLElement | null = null;
 	private currentDropTarget : { element : HTMLElement; position : 'before' | 'after' } | null = null;
+	private dragStartPosition : { x : number; y : number } | null = null;
 	private handleWrappers : Map<HTMLElement, HTMLElement> = new Map();
 	private slotObserver : MutationObserver | null = null;
 
@@ -519,6 +520,13 @@ export class SortableContainerElement extends HTMLElement {
 		this.draggedElement = element;
 		element.classList.add( 'dragging' );
 
+		// Store initial drag position for axis locking
+		const rect = element.getBoundingClientRect();
+		this.dragStartPosition = {
+			x: rect.left + rect.width / 2,
+			y: rect.top + rect.height / 2,
+		};
+
 		// Create a clone for the visual drag effect
 		this.createDragClone( element, clientX, clientY );
 
@@ -600,11 +608,17 @@ export class SortableContainerElement extends HTMLElement {
 	 * Update drag position and show appropriate drop indicator
 	 */
 	private updateDrag ( clientX : number, clientY : number ) : void {
-		// Update clone position
-		if ( this.draggedClone ) {
+		// Update clone position with axis locking
+		if ( this.draggedClone && this.dragStartPosition ) {
 			const rect = this.draggedElement!.getBoundingClientRect();
-			this.draggedClone.style.left = `${clientX - rect.width / 2}px`;
-			this.draggedClone.style.top = `${clientY - rect.height / 2}px`;
+			const isHorizontal = this.config.direction === 'h';
+
+			// Lock X for vertical sorting, lock Y for horizontal sorting
+			const cloneX = isHorizontal ? clientX - rect.width / 2 : this.dragStartPosition.x - rect.width / 2;
+			const cloneY = isHorizontal ? this.dragStartPosition.y - rect.height / 2 : clientY - rect.height / 2;
+
+			this.draggedClone.style.left = `${cloneX}px`;
+			this.draggedClone.style.top = `${cloneY}px`;
 		}
 
 		// Update placeholder position
@@ -701,6 +715,7 @@ export class SortableContainerElement extends HTMLElement {
 		// Cleanup
 		this.draggedElement.classList.remove( 'dragging' );
 		this.draggedElement = null;
+		this.dragStartPosition = null;
 
 		if ( this.draggedClone ) {
 			this.draggedClone.remove();
