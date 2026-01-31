@@ -4,8 +4,31 @@
  */
 
 // Re-export types from the core package
-export type { SelectOption, AITextEditorConfig, ToastType, ToastButton, ToastConfig, ToastElement, DialogButton, DialogConfig, DialogElement, PopoverMenuItem,
-  PopoverMenuConfig, DateRange, TreeNode, UploadedFile, ChunkUploaderConfig, CheckListItem, ButtonToolbarItem, ButtonToolbarGroup, ResizableCropperValues } from '@liwe3/webcomponents';
+export type {
+	SelectOption,
+	AITextEditorConfig,
+	ToastType,
+	ToastButton,
+	ToastConfig,
+	ToastElement,
+	DialogButton,
+	DialogConfig,
+	DialogElement,
+	PopoverMenuItem,
+	PopoverMenuConfig,
+	DateRange,
+	TreeNode,
+	UploadedFile,
+	ChunkUploaderConfig,
+	CheckListItem,
+	ButtonToolbarItem,
+	ButtonToolbarGroup,
+	ResizableCropperValues,
+	SortDirection,
+	HandlePosition,
+	SortableContainerConfig,
+	ReorgEventDetail,
+} from '@liwe3/webcomponents';
 
 // Export Svelte components
 export { default as SmartSelect } from './SmartSelect.svelte';
@@ -38,3 +61,6 @@ export { default as Dialogs, dialogAdd } from './Dialogs.svelte';
 
 // Export ResizableCropper
 export { default as ResizableCropper } from './ResizableCropper.svelte';
+
+// Export SortableContainer
+export { default as SortableContainer } from './SortableContainer.svelte';

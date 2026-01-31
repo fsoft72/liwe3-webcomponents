@@ -124,7 +124,12 @@ export class SortableContainerElement extends HTMLElement {
 				} );
 				mutation.removedNodes.forEach( ( node ) => {
 					if ( node instanceof HTMLElement ) {
-						this.unwrapChild( node );
+						// Only unwrap if the node is truly being removed from the DOM,
+						// not just moved into a wrapper
+						const wrapper = this.handleWrappers.get( node );
+						if ( wrapper && !wrapper.contains( node ) ) {
+							this.unwrapChild( node );
+						}
 					}
 				} );
 			} );
@@ -145,8 +150,9 @@ export class SortableContainerElement extends HTMLElement {
 
 	/**
 	 * Wrap all children with handle wrappers
+	 * Public method to allow frameworks to trigger wrapping after their children are rendered
 	 */
-	private wrapAllChildren () : void {
+	wrapAllChildren () : void {
 		const children = Array.from( this.children ) as HTMLElement[];
 		children.forEach( ( child ) => this.wrapChild( child ) );
 	}
@@ -769,3 +775,5 @@ export const defineSortableContainer = ( tagName : string = 'liwe3-sortable-cont
 		customElements.define( tagName, SortableContainerElement );
 	}
 };
+
+defineSortableContainer();
