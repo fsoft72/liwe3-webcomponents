@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>SortableContainer Component Demo - @liwe3/webcomponents</title>
+		<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			padding: 40px 20px;
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+		}
+
+		header {
+			text-align: center;
+			color: white;
+			margin-bottom: 60px;
+		}
+
+		h1 {
+			font-size: 48px;
+			font-weight: 700;
+			margin-bottom: 10px;
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+		}
+
+		.subtitle {
+			font-size: 18px;
+			opacity: 0.9;
+		}
+
+		.demo-section {
+			background: white;
+			border-radius: 16px;
+			padding: 40px;
+			margin-bottom: 30px;
+			box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+		}
+
+		.section-title {
+			font-size: 24px;
+			font-weight: 600;
+			margin-bottom: 20px;
+			color: #333;
+			border-bottom: 2px solid #667eea;
+			padding-bottom: 10px;
+		}
+
+		.description {
+			color: #666;
+			line-height: 1.6;
+			margin-bottom: 20px;
+		}
+
+		.demo-container {
+			margin-top: 30px;
+		}
+
+		/* Sortable items styling */
+		.sortable-item {
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			color: white;
+			padding: 20px 30px;
+			border-radius: 12px;
+			font-weight: 500;
+			font-size: 16px;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+			transition: transform 0.15s ease, box-shadow 0.15s ease;
+		}
+
+		.sortable-item:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+		}
+
+		.sortable-item.horizontal {
+			min-width: 120px;
+			text-align: center;
+		}
+
+		/* Card items for complex content */
+		.card-item {
+			background: white;
+			border: 2px solid #e0e0e0;
+			border-radius: 12px;
+			padding: 20px;
+			transition: transform 0.15s ease, box-shadow 0.15s ease;
+		}
+
+		.card-item:hover {
+			border-color: #667eea;
+			box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+		}
+
+		.card-item h4 {
+			color: #333;
+			margin-bottom: 8px;
+		}
+
+		.card-item p {
+			color: #666;
+			font-size: 14px;
+			line-height: 1.5;
+		}
+
+		.card-item .card-icon {
+			font-size: 32px;
+			margin-bottom: 12px;
+		}
+
+		/* Image items */
+		.image-item {
+			background: white;
+			border-radius: 12px;
+			overflow: hidden;
+			box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+			transition: transform 0.15s ease, box-shadow 0.15s ease;
+		}
+
+		.image-item:hover {
+			transform: scale(1.02);
+			box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+		}
+
+		.image-item img {
+			width: 150px;
+			height: 100px;
+			object-fit: cover;
+			display: block;
+		}
+
+		.image-item .image-label {
+			padding: 12px;
+			text-align: center;
+			font-weight: 500;
+			color: #333;
+			background: #f8f9fa;
+		}
+
+		/* Event log */
+		.event-log {
+			background: #1a1a2e;
+			color: #16c79a;
+			padding: 20px;
+			border-radius: 8px;
+			font-family: "Monaco", "Menlo", "Ubuntu Mono", monospace;
+			font-size: 14px;
+			max-height: 200px;
+			overflow-y: auto;
+			margin-top: 20px;
+		}
+
+		.event-log .log-entry {
+			padding: 4px 0;
+			border-bottom: 1px solid #2d2d44;
+		}
+
+		.event-log .log-entry:last-child {
+			border-bottom: none;
+		}
+
+		.event-log .timestamp {
+			color: #7f8c8d;
+			margin-right: 10px;
+		}
+
+		/* Controls */
+		.controls {
+			display: flex;
+			gap: 10px;
+			margin-bottom: 20px;
+			flex-wrap: wrap;
+		}
+
+		.controls button {
+			padding: 10px 20px;
+			border: none;
+			border-radius: 8px;
+			cursor: pointer;
+			font-weight: 500;
+			transition: all 0.2s ease;
+		}
+
+		.controls button.primary {
+			background: #667eea;
+			color: white;
+		}
+
+		.controls button.primary:hover {
+			background: #5568d3;
+		}
+
+		.controls button.secondary {
+			background: #e0e0e0;
+			color: #333;
+		}
+
+		.controls button.secondary:hover {
+			background: #d0d0d0;
+		}
+
+		/* Two column layout */
+		.two-columns {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+			gap: 40px;
+		}
+
+		@media (max-width: 768px) {
+			.two-columns {
+				grid-template-columns: 1fr;
+			}
+		}
+
+		.back-link {
+			display: inline-block;
+			margin-bottom: 20px;
+			color: white;
+			text-decoration: none;
+			font-size: 16px;
+			opacity: 0.9;
+			transition: opacity 0.2s;
+		}
+
+		.back-link:hover {
+			opacity: 1;
+			text-decoration: underline;
+		}
+		</style>
+	</head>
+
+	<body>
+		<div class="container">
+			<a href="index.html" class="back-link">← Back to all demos</a>
+
+			<header>
+				<h1>SortableContainer</h1>
+				<p class="subtitle">Drag and drop to reorder elements using the drag handle</p>
+			</header>
+
+			<!-- Basic Vertical Sorting -->
+			<section class="demo-section">
+				<h2 class="section-title">Vertical Sorting (Default)</h2>
+				<p class="description">
+					Drag items using the <strong>handle on the right side</strong>. The drop indicator shows where the item will be placed.
+					The <code>reorg</code> event fires after each reorder with the new order of IDs.
+				</p>
+
+				<div class="demo-container">
+					<liwe3-sortable-container id="vertical-demo" direction="v">
+						<div class="sortable-item" id="item-1">📦 Item 1 - Use the handle to drag me!</div>
+						<div class="sortable-item" id="item-2">🎯 Item 2 - Reorder me!</div>
+						<div class="sortable-item" id="item-3">⭐ Item 3 - Move me around!</div>
+						<div class="sortable-item" id="item-4">🚀 Item 4 - I'm sortable!</div>
+						<div class="sortable-item" id="item-5">💡 Item 5 - Last but not least!</div>
+					</liwe3-sortable-container>
+
+					<div class="event-log" id="vertical-log">
+						<div class="log-entry">
+							<span class="timestamp">[Ready]</span>
+							Use the drag handle on the right to reorder items.
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Handle Position Start -->
+			<section class="demo-section">
+				<h2 class="section-title">Handle on Left Side</h2>
+				<p class="description">
+					Set <code>handle-position="start"</code> to place the drag handle on the left side (for vertical direction).
+				</p>
+
+				<div class="demo-container">
+					<liwe3-sortable-container id="handle-start-demo" direction="v" handle-position="start">
+						<div class="sortable-item" id="left-1">🔶 Handle on the left</div>
+						<div class="sortable-item" id="left-2">🔷 Drag from left side</div>
+						<div class="sortable-item" id="left-3">🔴 Easy to reach</div>
+						<div class="sortable-item" id="left-4">🟢 For left-handed users</div>
+					</liwe3-sortable-container>
+
+					<div class="event-log" id="handle-start-log">
+						<div class="log-entry">
+							<span class="timestamp">[Ready]</span>
+							Drag handle is on the left side.
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Horizontal Sorting -->
+			<section class="demo-section">
+				<h2 class="section-title">Horizontal Sorting</h2>
+				<p class="description">
+					Set <code>direction="h"</code> to enable horizontal sorting. The handle appears at the <strong>bottom</strong> by default.
+				</p>
+
+				<div class="demo-container">
+					<liwe3-sortable-container id="horizontal-demo" direction="h" style="--sortable-gap: 16px">
+						<div class="sortable-item horizontal" id="h-item-1">🔴</div>
+						<div class="sortable-item horizontal" id="h-item-2">🟠</div>
+						<div class="sortable-item horizontal" id="h-item-3">🟡</div>
+						<div class="sortable-item horizontal" id="h-item-4">🟢</div>
+						<div class="sortable-item horizontal" id="h-item-5">🔵</div>
+						<div class="sortable-item horizontal" id="h-item-6">🟣</div>
+					</liwe3-sortable-container>
+
+					<div class="event-log" id="horizontal-log">
+						<div class="log-entry">
+							<span class="timestamp">[Ready]</span>
+							Drag using the handle at the bottom of each item.
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Horizontal with Handle on Top -->
+			<section class="demo-section">
+				<h2 class="section-title">Horizontal with Handle on Top</h2>
+				<p class="description">
+					Set <code>handle-position="start"</code> with <code>direction="h"</code> to place handles at the top.
+				</p>
+
+				<div class="demo-container">
+					<liwe3-sortable-container id="horizontal-top-demo" direction="h" handle-position="start" style="--sortable-gap: 16px">
+						<div class="sortable-item horizontal" id="ht-item-1">🌸</div>
+						<div class="sortable-item horizontal" id="ht-item-2">🌺</div>
+						<div class="sortable-item horizontal" id="ht-item-3">🌻</div>
+						<div class="sortable-item horizontal" id="ht-item-4">🌷</div>
+						<div class="sortable-item horizontal" id="ht-item-5">🌹</div>
+					</liwe3-sortable-container>
+
+					<div class="event-log" id="horizontal-top-log">
+						<div class="log-entry">
+							<span class="timestamp">[Ready]</span>
+							Drag using the handle at the top of each item.
+						</div>
+					</div>
+				</div>
+			</section>
+					</div>
+				</div>
+			</section>
+
+			<!-- Cards Demo -->
+			<section class="demo-section">
+				<h2 class="section-title">Complex Content - Cards</h2>
+				<p class="description">
+					The SortableContainer works with any HTML content. Here's an example with card components.
+				</p>
+
+				<div class="demo-container">
+					<liwe3-sortable-container id="cards-demo" direction="v" style="--sortable-gap: 16px">
+						<div class="card-item" id="card-dashboard">
+							<div class="card-icon">📊</div>
+							<h4>Dashboard</h4>
+							<p>View your analytics and metrics at a glance with interactive charts.</p>
+						</div>
+						<div class="card-item" id="card-settings">
+							<div class="card-icon">⚙️</div>
+							<h4>Settings</h4>
+							<p>Configure your application preferences and account details.</p>
+						</div>
+						<div class="card-item" id="card-users">
+							<div class="card-icon">👥</div>
+							<h4>Users</h4>
+							<p>Manage team members, permissions, and user roles.</p>
+						</div>
+						<div class="card-item" id="card-reports">
+							<div class="card-icon">📈</div>
+							<h4>Reports</h4>
+							<p>Generate and export detailed reports for your business needs.</p>
+						</div>
+					</liwe3-sortable-container>
+
+					<div class="event-log" id="cards-log">
+						<div class="log-entry">
+							<span class="timestamp">[Ready]</span>
+							Reorder the cards by dragging.
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Image Gallery Demo -->
+			<section class="demo-section">
+				<h2 class="section-title">Image Gallery</h2>
+				<p class="description">
+					Horizontal sorting works great for image galleries. Drag images to reorder them.
+				</p>
+
+				<div class="demo-container">
+					<liwe3-sortable-container id="gallery-demo" direction="h" style="--sortable-gap: 12px">
+						<div class="image-item" id="img-mountain">
+							<img src="https://picsum.photos/seed/mountain/150/100" alt="Mountain">
+							<div class="image-label">Mountain</div>
+						</div>
+						<div class="image-item" id="img-beach">
+							<img src="https://picsum.photos/seed/beach/150/100" alt="Beach">
+							<div class="image-label">Beach</div>
+						</div>
+						<div class="image-item" id="img-forest">
+							<img src="https://picsum.photos/seed/forest/150/100" alt="Forest">
+							<div class="image-label">Forest</div>
+						</div>
+						<div class="image-item" id="img-city">
+							<img src="https://picsum.photos/seed/city/150/100" alt="City">
+							<div class="image-label">City</div>
+						</div>
+						<div class="image-item" id="img-desert">
+							<img src="https://picsum.photos/seed/desert/150/100" alt="Desert">
+							<div class="image-label">Desert</div>
+						</div>
+					</liwe3-sortable-container>
+
+					<div class="event-log" id="gallery-log">
+						<div class="log-entry">
+							<span class="timestamp">[Ready]</span>
+							Rearrange the gallery by dragging images.
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Custom ID Attribute -->
+			<section class="demo-section">
+				<h2 class="section-title">Custom ID Attribute</h2>
+				<p class="description">
+					Use the <code>id-name</code> attribute to specify a custom attribute for identifying elements. This example uses <code>data-item-id</code> instead of the
+					default <code>id</code>.
+				</p>
+
+				<div class="demo-container">
+					<liwe3-sortable-container id="custom-id-demo" direction="v" id-name="data-item-id" style="--sortable-gap: 12px">
+						<div class="sortable-item" data-item-id="custom-001">Custom ID: 001</div>
+						<div class="sortable-item" data-item-id="custom-002">Custom ID: 002</div>
+						<div class="sortable-item" data-item-id="custom-003">Custom ID: 003</div>
+						<div class="sortable-item" data-item-id="custom-004">Custom ID: 004</div>
+					</liwe3-sortable-container>
+
+					<div class="event-log" id="custom-id-log">
+						<div class="log-entry">
+							<span class="timestamp">[Ready]</span>
+							Events will show custom data-item-id values.
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- API Demo -->
+			<section class="demo-section">
+				<h2 class="section-title">Programmatic API</h2>
+				<p class="description">
+					Use the JavaScript API to get the current order, change direction, or toggle handle position dynamically.
+				</p>
+
+				<div class="controls">
+					<button class="primary" onclick="logCurrentOrder()">Get Current Order</button>
+					<button class="secondary" onclick="toggleDirection()">Toggle Direction</button>
+					<button class="secondary" onclick="toggleHandlePosition()">Toggle Handle Position</button>
+				</div>
+
+				<div class="demo-container">
+					<liwe3-sortable-container id="api-demo" direction="v" style="--sortable-gap: 12px">
+						<div class="sortable-item" id="api-item-a">Item A</div>
+						<div class="sortable-item" id="api-item-b">Item B</div>
+						<div class="sortable-item" id="api-item-c">Item C</div>
+						<div class="sortable-item" id="api-item-d">Item D</div>
+					</liwe3-sortable-container>
+
+					<div class="event-log" id="api-log">
+						<div class="log-entry">
+							<span class="timestamp">[Ready]</span>
+							Use the buttons above to interact with the API.
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- CSS Variables -->
+			<section class="demo-section">
+				<h2 class="section-title">Customization with CSS Variables</h2>
+				<p class="description">
+					Customize the appearance using CSS custom properties.
+				</p>
+
+				<div class="two-columns">
+					<div>
+						<h4 style="margin-bottom: 12px; color: #333">Available CSS Variables:</h4>
+						<ul style="color: #666; line-height: 2">
+							<li><code>--sortable-gap</code> - Gap between items (default: 8px)</li>
+							<li><code>--sortable-indicator-color</code> - Drop indicator color (default: #667eea)</li>
+							<li><code>--sortable-indicator-radius</code> - Drop indicator border radius (default: 4px)</li>
+							<li><code>--sortable-handle-size</code> - Handle width/height (default: 24px)</li>
+							<li><code>--sortable-handle-bg</code> - Handle background color</li>
+							<li><code>--sortable-handle-hover-bg</code> - Handle hover background</li>
+							<li><code>--sortable-handle-color</code> - Handle icon color</li>
+							<li><code>--sortable-handle-hover-color</code> - Handle icon hover color</li>
+							<li><code>--sortable-handle-radius</code> - Handle border radius (default: 4px)</li>
+						</ul>
+					</div>
+					<div>
+						<h4 style="margin-bottom: 12px; color: #333">Custom Styled Example:</h4>
+						<liwe3-sortable-container
+							direction="v"
+							style="--sortable-gap: 20px; --sortable-indicator-color: #e74c3c; --sortable-indicator-radius: 8px; --sortable-handle-bg: rgba(231, 76, 60, 0.2); --sortable-handle-hover-bg: rgba(231, 76, 60, 0.4); --sortable-handle-color: #c0392b; --sortable-handle-hover-color: #e74c3c;"
+						>
+							<div class="sortable-item" id="styled-1" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)">Red Theme Item 1</div>
+							<div class="sortable-item" id="styled-2" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)">Red Theme Item 2</div>
+							<div class="sortable-item" id="styled-3" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)">Red Theme Item 3</div>
+						</liwe3-sortable-container>
+					</div>
+				</div>
+			</section>
+		</div>
+
+		<script type="module">
+		import { defineSortableContainer } from '../dist/SortableContainer.js';
+
+		// Register the component
+		defineSortableContainer();
+
+		// Helper function to add log entry
+		function addLogEntry( logId, message ) {
+			const log = document.getElementById( logId );
+			const timestamp = new Date().toLocaleTimeString();
+			const entry = document.createElement( 'div' );
+			entry.className = 'log-entry';
+			entry.innerHTML = `<span class="timestamp">[${timestamp}]</span>${message}`;
+			log.insertBefore( entry, log.firstChild );
+
+			// Keep only last 10 entries
+			while ( log.children.length > 10 ) {
+				log.removeChild( log.lastChild );
+			}
+		}
+
+		// Set up event listeners for all demos
+		document.getElementById( 'vertical-demo' ).addEventListener( 'reorg', ( e ) => {
+			addLogEntry( 'vertical-log', `Reordered: [${e.detail.ids.join( ', ' )}]` );
+		} );
+
+		document.getElementById( 'handle-start-demo' ).addEventListener( 'reorg', ( e ) => {
+			addLogEntry( 'handle-start-log', `Reordered: [${e.detail.ids.join( ', ' )}]` );
+		} );
+
+		document.getElementById( 'horizontal-demo' ).addEventListener( 'reorg', ( e ) => {
+			addLogEntry( 'horizontal-log', `Reordered: [${e.detail.ids.join( ', ' )}]` );
+		} );
+
+		document.getElementById( 'horizontal-top-demo' ).addEventListener( 'reorg', ( e ) => {
+			addLogEntry( 'horizontal-top-log', `Reordered: [${e.detail.ids.join( ', ' )}]` );
+		} );
+
+		document.getElementById( 'cards-demo' ).addEventListener( 'reorg', ( e ) => {
+			addLogEntry( 'cards-log', `Cards reordered: [${e.detail.ids.join( ', ' )}]` );
+		} );
+
+		document.getElementById( 'gallery-demo' ).addEventListener( 'reorg', ( e ) => {
+			addLogEntry( 'gallery-log', `Gallery reordered: [${e.detail.ids.join( ', ' )}]` );
+		} );
+
+		document.getElementById( 'custom-id-demo' ).addEventListener( 'reorg', ( e ) => {
+			addLogEntry( 'custom-id-log', `Custom IDs: [${e.detail.ids.join( ', ' )}]` );
+		} );
+
+		document.getElementById( 'api-demo' ).addEventListener( 'reorg', ( e ) => {
+			addLogEntry( 'api-log', `Reordered: [${e.detail.ids.join( ', ' )}]` );
+		} );
+
+		// API demo functions
+		window.logCurrentOrder = function() {
+			const container = document.getElementById( 'api-demo' );
+			const order = container.getOrder();
+			addLogEntry( 'api-log', `Current order: [${order.join( ', ' )}]` );
+		};
+
+		window.toggleDirection = function() {
+			const container = document.getElementById( 'api-demo' );
+			const newDirection = container.direction === 'v' ? 'h' : 'v';
+			container.direction = newDirection;
+			addLogEntry( 'api-log', `Direction changed to: ${newDirection === 'v' ? 'vertical' : 'horizontal'}` );
+		};
+
+		window.toggleHandlePosition = function() {
+			const container = document.getElementById( 'api-demo' );
+			const newPosition = container.handlePosition === 'end' ? 'start' : 'end';
+			container.handlePosition = newPosition;
+			addLogEntry( 'api-log', `Handle position changed to: ${newPosition}` );
+		};
+		</script>
+	</body>
+</html>

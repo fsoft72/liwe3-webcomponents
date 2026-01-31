@@ -91,6 +91,11 @@
 			"types": "./dist/ResizableCropper.d.ts",
 			"import": "./dist/ResizableCropper.js",
 			"default": "./dist/ResizableCropper.js"
+		},
+		"./sortable-container": {
+			"types": "./dist/SortableContainer.d.ts",
+			"import": "./dist/SortableContainer.js",
+			"default": "./dist/SortableContainer.js"
 		}
 	},
 	"files": [

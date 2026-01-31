@@ -133,6 +133,16 @@ export {
 	type HandlerMoveEvent,
 } from './ComicBalloon';
 
+// Export SortableContainer
+export {
+	SortableContainerElement,
+	defineSortableContainer,
+	type SortDirection,
+	type HandlePosition,
+	type SortableContainerConfig,
+	type ReorgEventDetail,
+} from './SortableContainer';
+
 // Convenience function to register all components at once
 export const defineAllComponents = () : void => {
 	if ( typeof window !== 'undefined' ) {
@@ -152,5 +162,6 @@ export const defineAllComponents = () : void => {
 		import( './ButtonToolbar' ).then( ( { defineButtonToolbar } ) => defineButtonToolbar() );
 		import( './ResizableCropper' ).then( ( { defineResizableCropper } ) => defineResizableCropper() );
 		import( './ComicBalloon' ).then( ( { defineComicBalloon } ) => defineComicBalloon() );
+		import( './SortableContainer' ).then( ( { defineSortableContainer } ) => defineSortableContainer() );
 	}
 };
