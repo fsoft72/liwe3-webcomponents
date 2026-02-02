@@ -634,7 +634,7 @@ export class SmartSelectElement extends HTMLElement {
           cursor: pointer;
           min-height: 1.2rem;
           box-sizing: border-box;
-          color: var(--liwe3-color-300, #ccc);
+          color: var(--liwe3-color, #ccc);
           user-select: none;
         }
 
