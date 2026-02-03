@@ -615,7 +615,7 @@ export class SmartSelectElement extends HTMLElement {
         .select-trigger,
         input {
             width: 100%;
-            padding: 0.5rem 0.75rem;
+            padding: 0.75rem 1rem;
             transition: all 0.3s ease;
             font-family: inherit;
         }
@@ -630,7 +630,7 @@ export class SmartSelectElement extends HTMLElement {
           justify-content: space-between;
           border: var(--liwe3-border-width, 1px) solid var(--liwe3-background, #ccc);
           border-radius: var(--liwe3-border-radius, 4px);
-          background: var(--liwe3-background, white);
+          background: var(--liwe3-surface-raised, white);
           cursor: pointer;
           min-height: 1.2rem;
           box-sizing: border-box;
@@ -661,10 +661,10 @@ export class SmartSelectElement extends HTMLElement {
           align-items: center;
           gap: 4px;
           padding: 2px 8px;
-          background: var(--liwe3-color-mode1, #e9ecef);
+          background: var(--liwe3-surface-mode3, #e9ecef);
           border-radius: var(--tag-border-radius, 12px);
           font-size: 0.875em;
-          color: var(--liwe3-color, #495057);
+          color: var(--liwe3-text-mode3, #495057);
           user-select: none;
         }
 
@@ -719,13 +719,13 @@ export class SmartSelectElement extends HTMLElement {
           padding: 8px 12px;
           cursor: pointer;
           color: var(--liwe3-color, #333);
-          background: var(--liwe3-background, white);
+          background: var(--liwe3-surface-raised, white);
           transition: background-color 0.2s;
           user-select: none;
         }
 
         .option:hover {
-          background-color: var(--liwe3-mode1-500, #f8f9fa);
+          background-color: var(--liwe3-surface-mode3, #f8f9fa);
         }
 
         .option.focused {
@@ -734,8 +734,8 @@ export class SmartSelectElement extends HTMLElement {
         }
 
         .option.selected {
-          background-color: var(--liwe3-mode1-300, #e3f2fd);
-          color: var(--liwe3-color-mode4, #1976d2);
+          background-color: var(--liwe3-surface-mode3, #e3f2fd);
+          color: var(--liwe3-text-mode3, #1976d2);
         }
 
         .option-content {
