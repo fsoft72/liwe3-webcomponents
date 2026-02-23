@@ -448,6 +448,7 @@ export class SortableContainerElement extends HTMLElement {
 		document.removeEventListener( 'mouseup', this.handleMouseUp );
 		document.removeEventListener( 'touchmove', this.handleTouchMove );
 		document.removeEventListener( 'touchend', this.handleTouchEnd );
+		document.removeEventListener( 'touchcancel', this.handleTouchCancel );
 	}
 
 	/**
@@ -478,6 +479,7 @@ export class SortableContainerElement extends HTMLElement {
 			this.startDrag( draggableChild, touch.clientX, touch.clientY );
 			document.addEventListener( 'touchmove', this.handleTouchMove, { passive: false } );
 			document.addEventListener( 'touchend', this.handleTouchEnd );
+			document.addEventListener( 'touchcancel', this.handleTouchCancel );
 		}
 	};
 
@@ -521,8 +523,24 @@ export class SortableContainerElement extends HTMLElement {
 			const touch = e.changedTouches[0];
 			this.endDrag( touch.clientX, touch.clientY );
 		}
+		this.removeTouchDocumentListeners();
+	};
+
+	/**
+	 * Handle touch cancel event (e.g. incoming call, OS gesture, focus loss)
+	 */
+	private handleTouchCancel = () : void => {
+		this.cleanupActiveDrag();
+		this.removeTouchDocumentListeners();
+	};
+
+	/**
+	 * Remove all touch-related document listeners
+	 */
+	private removeTouchDocumentListeners () : void {
 		document.removeEventListener( 'touchmove', this.handleTouchMove );
 		document.removeEventListener( 'touchend', this.handleTouchEnd );
+		document.removeEventListener( 'touchcancel', this.handleTouchCancel );
 	};
 
 	/**
@@ -579,6 +597,9 @@ export class SortableContainerElement extends HTMLElement {
 	 * Start dragging an element
 	 */
 	private startDrag ( element : HTMLElement, clientX : number, clientY : number ) : void {
+		// Clean up any leaked drag state from a previous incomplete drag
+		this.cleanupActiveDrag();
+
 		this.draggedElement = element;
 		element.classList.add( 'dragging' );
 
