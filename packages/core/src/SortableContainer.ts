@@ -185,7 +185,19 @@ export class SortableContainerElement extends HTMLElement {
 	 * Wrap a single child with a handle wrapper
 	 */
 	private wrapChild ( child : HTMLElement ) : void {
-		if ( this.handleWrappers.has( child ) ) return;
+		// If this child was previously wrapped, check it's still inside its wrapper
+		const existingWrapper = this.handleWrappers.get( child );
+		if ( existingWrapper ) {
+			if ( existingWrapper.contains( child ) ) return; // still correctly wrapped
+			// Framework (Svelte, React, etc.) moved the child out of its wrapper.
+			// Clean up the orphaned wrapper before re-wrapping.
+			this.restoreChildStyles( child );
+			if ( existingWrapper.parentElement ) {
+				existingWrapper.remove();
+			}
+			this.handleWrappers.delete( child );
+			this.originalStyles.delete( child );
+		}
 		if ( child.classList.contains( 'sortable-wrapper' ) ) return;
 		if ( child.classList.contains( 'drop-placeholder' ) ) return;
 
@@ -784,23 +796,19 @@ export class SortableContainerElement extends HTMLElement {
 	}
 
 	/**
-	 * End the drag operation.
-	 * Unwraps all children before firing the reorg event so that framework
-	 * re-renders (Svelte, React, etc.) operate on plain content elements
-	 * rather than the internal wrappers, preventing orphaned handle divs.
+	 * End the drag operation
 	 */
 	private endDrag ( _clientX : number, _clientY : number ) : void {
 		if ( !this.draggedElement ) return;
 
-		let shouldFireEvent = false;
-
-		// Move the dragged wrapper to where the placeholder is
+		// Move the dragged element to where the placeholder is
 		if ( this.dropPlaceholder && this.dropPlaceholder.parentElement === this ) {
 			this.insertBefore( this.draggedElement, this.dropPlaceholder );
-			shouldFireEvent = true;
+			// Fire the reorg event
+			this.fireReorgEvent();
 		}
 
-		// Cleanup drag visual state
+		// Cleanup
 		this.draggedElement.classList.remove( 'dragging' );
 		this.draggedElement = null;
 		this.dragStartPosition = null;
@@ -811,20 +819,6 @@ export class SortableContainerElement extends HTMLElement {
 		}
 
 		this.removeDropPlaceholder();
-
-		// Unwrap children before firing the event so framework re-renders
-		// don't orphan wrappers, then re-wrap after the framework settles
-		if ( shouldFireEvent ) {
-			if ( this.slotObserver ) {
-				this.slotObserver.disconnect();
-			}
-			this.unwrapAllChildren();
-			this.fireReorgEvent();
-			this.wrapAllChildren();
-			if ( this.slotObserver ) {
-				this.slotObserver.observe( this, { childList: true } );
-			}
-		}
 	}
 
 	/**
