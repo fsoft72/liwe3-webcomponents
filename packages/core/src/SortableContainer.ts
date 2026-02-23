@@ -29,7 +29,9 @@ export class SortableContainerElement extends HTMLElement {
 	private currentDropTarget : { element : HTMLElement; position : 'before' | 'after' } | null = null;
 	private dragStartPosition : { x : number; y : number } | null = null;
 	private handleWrappers : Map<HTMLElement, HTMLElement> = new Map();
+	private originalStyles : Map<HTMLElement, { flex : string; minWidth : string }> = new Map();
 	private slotObserver : MutationObserver | null = null;
+	private wrapRAF : number = 0;
 
 	constructor () {
 		super();
@@ -64,10 +66,18 @@ export class SortableContainerElement extends HTMLElement {
 		this.setupDragListeners();
 		this.setupSlotObserver();
 		// Wrap existing children after initial render
-		requestAnimationFrame( () => this.wrapAllChildren() );
+		this.wrapRAF = requestAnimationFrame( () => {
+			if ( !this.isConnected ) return;
+			this.wrapAllChildren();
+		} );
 	}
 
 	disconnectedCallback () : void {
+		if ( this.wrapRAF ) {
+			cancelAnimationFrame( this.wrapRAF );
+			this.wrapRAF = 0;
+		}
+		this.cleanupActiveDrag();
 		this.cleanupDragListeners();
 		this.cleanupSlotObserver();
 		this.unwrapAllChildren();
@@ -158,15 +168,17 @@ export class SortableContainerElement extends HTMLElement {
 	}
 
 	/**
-	 * Unwrap all children
+	 * Unwrap all children, restoring their original styles
 	 */
 	private unwrapAllChildren () : void {
 		this.handleWrappers.forEach( ( wrapper, child ) => {
+			this.restoreChildStyles( child );
 			if ( wrapper.parentElement === this ) {
 				this.replaceChild( child, wrapper );
 			}
 		} );
 		this.handleWrappers.clear();
+		this.originalStyles.clear();
 	}
 
 	/**
@@ -228,13 +240,21 @@ export class SortableContainerElement extends HTMLElement {
 	}
 
 	/**
-	 * Unwrap a single child
+	 * Unwrap a single child, restoring it to the DOM and removing its wrapper
 	 */
 	private unwrapChild ( child : HTMLElement ) : void {
 		const wrapper = this.handleWrappers.get( child );
-		if ( wrapper ) {
-			this.handleWrappers.delete( child );
+		if ( !wrapper ) return;
+
+		this.restoreChildStyles( child );
+
+		// Move child back to wrapper's position and remove wrapper
+		if ( wrapper.parentElement === this ) {
+			this.insertBefore( child, wrapper );
+			wrapper.remove();
 		}
+
+		this.handleWrappers.delete( child );
 	}
 
 	/**
@@ -263,6 +283,9 @@ export class SortableContainerElement extends HTMLElement {
 
 		wrapper.style.flexDirection = isHorizontal ? 'column' : 'row';
 
+		// Save original styles before mutating
+		this.saveChildStyles( content );
+
 		// Make content take remaining space
 		content.style.flex = '1';
 		content.style.minWidth = '0';
@@ -286,6 +309,46 @@ export class SortableContainerElement extends HTMLElement {
 			handle.style.height = 'auto';
 			handle.style.minHeight = 'unset';
 		}
+	}
+
+	/**
+	 * Save the original inline styles of a child element before mutation
+	 */
+	private saveChildStyles ( child : HTMLElement ) : void {
+		if ( this.originalStyles.has( child ) ) return;
+		this.originalStyles.set( child, {
+			flex: child.style.flex,
+			minWidth: child.style.minWidth,
+		} );
+	}
+
+	/**
+	 * Restore the original inline styles of a child element
+	 */
+	private restoreChildStyles ( child : HTMLElement ) : void {
+		const saved = this.originalStyles.get( child );
+		if ( !saved ) return;
+		child.style.flex = saved.flex;
+		child.style.minWidth = saved.minWidth;
+		this.originalStyles.delete( child );
+	}
+
+	/**
+	 * Clean up any active drag state (clone, placeholder, dragged element)
+	 */
+	private cleanupActiveDrag () : void {
+		if ( this.draggedClone ) {
+			this.draggedClone.remove();
+			this.draggedClone = null;
+		}
+
+		if ( this.draggedElement ) {
+			this.draggedElement.classList.remove( 'dragging' );
+			this.draggedElement = null;
+		}
+
+		this.dragStartPosition = null;
+		this.removeDropPlaceholder();
 	}
 
 	/**
@@ -346,37 +409,6 @@ export class SortableContainerElement extends HTMLElement {
           transition: opacity 0.15s ease !important;
         }
 
-        ::slotted(.drop-placeholder) {
-          background: var(--sortable-indicator-color, rgba(102, 126, 234, 0.15));
-          border: 2px dashed var(--sortable-indicator-border-color, #667eea);
-          border-radius: var(--sortable-indicator-radius, 8px);
-          box-sizing: border-box;
-          flex-shrink: 0;
-          transition: height 0.2s cubic-bezier(0.2, 0, 0, 1),
-                      width 0.2s cubic-bezier(0.2, 0, 0, 1),
-                      opacity 0.15s ease;
-          animation: placeholder-appear 0.15s ease-out;
-        }
-
-        @keyframes placeholder-appear {
-          from {
-            opacity: 0;
-            transform: scale(0.95);
-          }
-          to {
-            opacity: 1;
-            transform: scale(1);
-          }
-        }
-
-        .drag-clone {
-          position: fixed;
-          pointer-events: none;
-          z-index: 1000;
-          opacity: 0.6;
-          transform: scale(1.02);
-          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        }
       </style>
       <div class="sortable-container">
         <slot></slot>
@@ -610,7 +642,6 @@ export class SortableContainerElement extends HTMLElement {
 		placeholder.style.flexShrink = '0';
 		placeholder.style.pointerEvents = 'none';
 		placeholder.style.transition = 'opacity 0.15s ease';
-		placeholder.style.animation = 'none'; // Prevent re-animating on move
 
 		if ( isHorizontal ) {
 			placeholder.style.width = `${rect.width}px`;

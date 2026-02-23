@@ -1,5 +1,17 @@
 # CHANGES.md
 
+## 2026-02-23 - SortableContainer: Fix incomplete unwrap, drag clone leak, dead CSS, style mutation
+
+### Fixed
+- **SortableContainer**: `unwrapChild` now actually restores the child to the DOM and removes the wrapper. Previously it only deleted the Map entry, leaving the wrapper as an orphan in the DOM.
+- **SortableContainer**: `disconnectedCallback` now cleans up active drag state (clone appended to `document.body`, placeholder, dragged element class) via new `cleanupActiveDrag` method. Previously, disconnecting mid-drag leaked the clone in `document.body`.
+- **SortableContainer**: Added `isConnected` guard to the `requestAnimationFrame` callback in `connectedCallback`. Previously, `wrapAllChildren` could run on a disconnected element if removed before the frame fired. Also cancels pending RAF in `disconnectedCallback`.
+- **SortableContainer**: Original child inline styles (`flex`, `minWidth`) are now saved before mutation in `updateWrapperLayout` and restored in `unwrapChild`/`unwrapAllChildren`. Previously these were overwritten permanently.
+- **SortableContainer**: Removed dead CSS rules from shadow DOM: `.drag-clone` (clone is in `document.body`, not shadow DOM), `::slotted(.drop-placeholder)` (fully overridden by inline styles), and `@keyframes placeholder-appear` (disabled by inline `animation: none`).
+
+### Changed
+- Updated core package version to 1.1.15
+
 ## 2026-02-23 - Critical Bug Fixes: Memory Leaks, Listener Cleanup, XSS
 
 ### Fixed
