@@ -1,5 +1,16 @@
 # CHANGES.md
 
+## 2026-02-23 - Critical Bug Fixes: Memory Leaks, Listener Cleanup, XSS
+
+### Fixed
+- **SmartSelect**: Added `disconnectedCallback` to remove global `document` click and `window` resize/scroll listeners. Previously, every instance removed from the DOM permanently leaked three global event listeners. Also removed duplicate keydown handler (was bound to both host and shadowRoot) and the fragile `_smartSelectHandled` hack.
+- **SortableContainer**: Removed unnecessary `.bind(this)` in `setupDragListeners` — the handlers are arrow function class properties and are already bound. Added `mousedown`/`touchstart` removal to `cleanupDragListeners` so listeners are properly cleaned up on disconnect.
+- **ContainerBox**: Stored bound handler references as class properties (`_boundMenuButtonClick`, `_boundContentClick`) so `cleanupEventListeners` actually removes the correct function references. Previously `.bind(this)` in both setup and cleanup created different function objects, making `removeEventListener` a no-op.
+- **Dialog**: Added HTML sanitization for dialog body content — strips `<script>`, `<iframe>`, `<object>`, `<embed>`, `<form>` tags and `on*` event handler attributes / `javascript:` URLs. Escaped title and button labels with `escapeHtml`. Fixed duplicate ESC key handlers by calling `removeKeyboardListeners()` before `setupKeyboardListeners()`.
+
+### Changed
+- Updated core package version to 1.1.13
+
 ## 2025-11-22 - ChunkUploader folder Reactivity Fix
 
 ### Fixed

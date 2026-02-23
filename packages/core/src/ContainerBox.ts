@@ -21,6 +21,10 @@ export class ContainerBoxElement extends HTMLElement {
   private popoverMenu: HTMLElement | null = null;
   private menuButton: HTMLElement | null = null;
 
+  // Stored bound references for proper listener cleanup
+  private _boundMenuButtonClick = this.handleMenuButtonClick.bind(this);
+  private _boundContentClick = this.handleContentClick.bind(this);
+
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
@@ -398,31 +402,30 @@ export class ContainerBoxElement extends HTMLElement {
   }
 
   /**
-   * Setup event listeners
+   * Setup event listeners using stored bound references
    */
   private setupEventListeners(): void {
     if (this.menuButton) {
-      this.menuButton.addEventListener('click', this.handleMenuButtonClick.bind(this));
+      this.menuButton.addEventListener('click', this._boundMenuButtonClick);
     }
 
-    // Allow clicks to pass through to slotted content
     const contentWrapper = this.shadowRoot.querySelector('.content-wrapper');
     if (contentWrapper) {
-      contentWrapper.addEventListener('click', this.handleContentClick.bind(this));
+      contentWrapper.addEventListener('click', this._boundContentClick);
     }
   }
 
   /**
-   * Cleanup event listeners
+   * Cleanup event listeners using the same stored bound references
    */
   private cleanupEventListeners(): void {
     if (this.menuButton) {
-      this.menuButton.removeEventListener('click', this.handleMenuButtonClick.bind(this));
+      this.menuButton.removeEventListener('click', this._boundMenuButtonClick);
     }
 
     const contentWrapper = this.shadowRoot.querySelector('.content-wrapper');
     if (contentWrapper) {
-      contentWrapper.removeEventListener('click', this.handleContentClick.bind(this));
+      contentWrapper.removeEventListener('click', this._boundContentClick);
     }
   }
 

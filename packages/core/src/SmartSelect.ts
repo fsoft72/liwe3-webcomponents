@@ -20,9 +20,33 @@ export class SmartSelectElement extends HTMLElement {
 	private keyboardNavigating : boolean = false;
 	private keyboardTimer? : number;
 
+	// Stored bound references for global listeners (needed for proper cleanup)
+	private _boundDocumentClick : ( e : MouseEvent ) => void;
+	private _boundWindowResize : () => void;
+	private _boundWindowScroll : () => void;
+	private _boundKeydown : ( e : KeyboardEvent ) => void;
+
 	constructor () {
 		super();
 		this.attachShadow( { mode: 'open' } );
+
+		// Create stable bound references for global listeners
+		this._boundDocumentClick = ( e : MouseEvent ) => {
+			if ( !this.contains( e.target as Node ) ) {
+				this.close();
+			}
+		};
+		this._boundWindowResize = () => {
+			if ( this.isOpen ) {
+				this._updateDropdownPosition();
+			}
+		};
+		this._boundWindowScroll = () => {
+			if ( this.isOpen ) {
+				this._updateDropdownPosition();
+			}
+		};
+		this._boundKeydown = this.handleKeydown.bind( this );
 
 		// Make component focusable
 		if ( !this.hasAttribute( 'tabindex' ) ) {
@@ -387,10 +411,6 @@ export class SmartSelectElement extends HTMLElement {
 	private handleKeydown ( event : KeyboardEvent ) : void {
 		if ( this.disabled ) return;
 
-		// Prevent double execution if event has already been handled
-		if ( ( event as any )._smartSelectHandled ) return;
-		( event as any )._smartSelectHandled = true;
-
 		switch ( event.key ) {
 			case 'ArrowDown':
 				event.preventDefault();
@@ -479,13 +499,21 @@ export class SmartSelectElement extends HTMLElement {
 	}
 
 	/**
+	 * Removes global event listeners when the element is disconnected from the DOM
+	 */
+	disconnectedCallback () : void {
+		document.removeEventListener( 'click', this._boundDocumentClick );
+		window.removeEventListener( 'resize', this._boundWindowResize );
+		window.removeEventListener( 'scroll', this._boundWindowScroll, true );
+		this.removeEventListener( 'keydown', this._boundKeydown );
+	}
+
+	/**
 	 * Binds all event listeners
 	 */
 	private bindEvents () : void {
-		// Listen for keydown events on both the component and shadow root
-		const keydownHandler = this.handleKeydown.bind( this );
-		this.addEventListener( 'keydown', keydownHandler );
-		this.shadowRoot.addEventListener( 'keydown', keydownHandler as EventListener );
+		// Listen for keydown on the component only (no duplicate shadow root listener)
+		this.addEventListener( 'keydown', this._boundKeydown );
 
 		// Use event delegation on the shadow root
 		this.shadowRoot.addEventListener( 'click', ( e ) => {
@@ -552,25 +580,12 @@ export class SmartSelectElement extends HTMLElement {
 			}
 		} );
 
-		// Close dropdown when clicking outside
-		document.addEventListener( 'click', ( e ) => {
-			if ( !this.contains( e.target as Node ) ) {
-				this.close();
-			}
-		} );
+		// Close dropdown when clicking outside (global, stored ref for cleanup)
+		document.addEventListener( 'click', this._boundDocumentClick );
 
-		// Update dropdown position on window resize or scroll
-		window.addEventListener( 'resize', () => {
-			if ( this.isOpen ) {
-				this._updateDropdownPosition();
-			}
-		} );
-
-		window.addEventListener( 'scroll', () => {
-			if ( this.isOpen ) {
-				this._updateDropdownPosition();
-			}
-		}, true ); // Use capture to catch all scroll events
+		// Update dropdown position on window resize or scroll (global, stored refs for cleanup)
+		window.addEventListener( 'resize', this._boundWindowResize );
+		window.addEventListener( 'scroll', this._boundWindowScroll, true );
 	}
 
 	/**

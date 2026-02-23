@@ -140,9 +140,12 @@ export class DialogElement extends HTMLElement {
 	}
 
 	/**
-	 * Sets up keyboard event listeners
+	 * Sets up keyboard event listeners.
+	 * Always removes existing handler first to prevent duplicates.
 	 */
 	private setupKeyboardListeners () : void {
+		this.removeKeyboardListeners();
+
 		if ( this.config.escToClose ) {
 			this.escKeyHandler = ( e : KeyboardEvent ) => {
 				if ( e.key === 'Escape' ) {
@@ -198,10 +201,52 @@ export class DialogElement extends HTMLElement {
 	}
 
 	/**
+	 * Escapes a plain-text string for safe insertion into HTML
+	 */
+	private escapeHtml ( unsafe : string ) : string {
+		if ( !unsafe ) return '';
+		return unsafe
+			.replace( /&/g, '&amp;' )
+			.replace( /</g, '&lt;' )
+			.replace( />/g, '&gt;' )
+			.replace( /"/g, '&quot;' )
+			.replace( /'/g, '&#039;' );
+	}
+
+	/**
+	 * Sanitizes HTML body content by stripping dangerous elements and attributes.
+	 * Removes script/iframe/object/embed tags and on* event handler attributes.
+	 */
+	private sanitizeHtml ( html : string ) : string {
+		if ( !html ) return '';
+		const doc = new DOMParser().parseFromString( html, 'text/html' );
+
+		// Remove dangerous elements
+		const dangerousTags = doc.querySelectorAll( 'script, iframe, object, embed, form' );
+		dangerousTags.forEach( ( el ) => el.remove() );
+
+		// Remove on* event handler attributes and javascript: URLs from all elements
+		const allElements = doc.body.querySelectorAll( '*' );
+		allElements.forEach( ( el ) => {
+			Array.from( el.attributes ).forEach( ( attr ) => {
+				if ( attr.name.startsWith( 'on' ) ) {
+					el.removeAttribute( attr.name );
+				}
+				if ( attr.value.trim().toLowerCase().startsWith( 'javascript:' ) ) {
+					el.removeAttribute( attr.name );
+				}
+			} );
+		} );
+
+		return doc.body.innerHTML;
+	}
+
+	/**
 	 * Renders the component
 	 */
 	private render () : void {
-		const title = this.config.title || 'Dialog';
+		const title = this.escapeHtml( this.config.title || 'Dialog' );
+		const sanitizedBody = this.sanitizeHtml( this.config.body );
 		const buttons = this.config.buttons || [];
 		const animationSpeed = this.config.fxSpeed || 1000;
 		const animationDuration = `${animationSpeed}ms`;
@@ -377,7 +422,7 @@ export class DialogElement extends HTMLElement {
         </div>
 
         <div class="dialog-body">
-          ${this.config.body}
+          ${sanitizedBody}
         </div>
 
         <div class="dialog-footer">
@@ -388,9 +433,9 @@ export class DialogElement extends HTMLElement {
               <button
                 class="dialog-button"
                 data-index="0"
-                style="${firstButton.backgroundColor ? `background-color: ${firstButton.backgroundColor}; color: white; border-color: ${firstButton.backgroundColor};` : ''}"
+                style="${firstButton.backgroundColor ? `background-color: ${this.escapeHtml( firstButton.backgroundColor )}; color: white; border-color: ${this.escapeHtml( firstButton.backgroundColor )};` : ''}"
               >
-                ${firstButton.label}
+                ${this.escapeHtml( firstButton.label )}
               </button>
             </div>
           `
@@ -403,9 +448,9 @@ export class DialogElement extends HTMLElement {
               <button
                 class="dialog-button"
                 data-index="${firstButton ? index + 1 : index}"
-                style="${button.backgroundColor ? `background-color: ${button.backgroundColor}; color: white; border-color: ${button.backgroundColor};` : ''}"
+                style="${button.backgroundColor ? `background-color: ${this.escapeHtml( button.backgroundColor )}; color: white; border-color: ${this.escapeHtml( button.backgroundColor )};` : ''}"
               >
-                ${button.label}
+                ${this.escapeHtml( button.label )}
               </button>
             ` ).join( '' )
 		}

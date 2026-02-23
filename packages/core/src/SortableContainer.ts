@@ -398,14 +398,20 @@ export class SortableContainerElement extends HTMLElement {
 	 * Setup drag event listeners
 	 */
 	private setupDragListeners () : void {
-		this.addEventListener( 'mousedown', this.handleMouseDown.bind( this ) );
-		this.addEventListener( 'touchstart', this.handleTouchStart.bind( this ), { passive: false } );
+		// Arrow function class properties are already bound — no .bind() needed
+		this.addEventListener( 'mousedown', this.handleMouseDown );
+		this.addEventListener( 'touchstart', this.handleTouchStart, { passive: false } );
 	}
 
 	/**
 	 * Cleanup drag event listeners
 	 */
 	private cleanupDragListeners () : void {
+		// Remove listeners from this element
+		this.removeEventListener( 'mousedown', this.handleMouseDown );
+		this.removeEventListener( 'touchstart', this.handleTouchStart );
+
+		// Remove global document listeners (added during active drag)
 		document.removeEventListener( 'mousemove', this.handleMouseMove );
 		document.removeEventListener( 'mouseup', this.handleMouseUp );
 		document.removeEventListener( 'touchmove', this.handleTouchMove );
