@@ -584,12 +584,9 @@ export class AITextEditorElement extends HTMLElement {
   /**
    * Escapes HTML special characters
    */
-  private escapeHtml(unsafe: any): string {
-    if (typeof unsafe !== 'string') {
-      if (unsafe === null || typeof unsafe === 'undefined') {
-        return '';
-      }
-      unsafe = String(unsafe);
+  private escapeHtml(unsafe: string | null | undefined): string {
+    if (unsafe === null || unsafe === undefined) {
+      return '';
     }
     return unsafe
       .replace(/&/g, "&amp;")

@@ -427,9 +427,9 @@ if ( !customElements.get( 'liwe3-drawer' ) ) {
   customElements.define( 'liwe3-drawer', DrawerElement );
 }
 
-// Export a function to manually register with a custom tag name
-export function defineDrawer ( tagName: string = 'liwe3-drawer' ): void {
+/** Manually register with a custom tag name */
+export const defineDrawer = ( tagName: string = 'liwe3-drawer' ): void => {
   if ( !customElements.get( tagName ) ) {
     customElements.define( tagName, DrawerElement );
   }
-}
+};
