@@ -784,19 +784,23 @@ export class SortableContainerElement extends HTMLElement {
 	}
 
 	/**
-	 * End the drag operation
+	 * End the drag operation.
+	 * Unwraps all children before firing the reorg event so that framework
+	 * re-renders (Svelte, React, etc.) operate on plain content elements
+	 * rather than the internal wrappers, preventing orphaned handle divs.
 	 */
 	private endDrag ( _clientX : number, _clientY : number ) : void {
 		if ( !this.draggedElement ) return;
 
-		// Move the dragged element to where the placeholder is
+		let shouldFireEvent = false;
+
+		// Move the dragged wrapper to where the placeholder is
 		if ( this.dropPlaceholder && this.dropPlaceholder.parentElement === this ) {
 			this.insertBefore( this.draggedElement, this.dropPlaceholder );
-			// Fire the reorg event
-			this.fireReorgEvent();
+			shouldFireEvent = true;
 		}
 
-		// Cleanup
+		// Cleanup drag visual state
 		this.draggedElement.classList.remove( 'dragging' );
 		this.draggedElement = null;
 		this.dragStartPosition = null;
@@ -807,6 +811,20 @@ export class SortableContainerElement extends HTMLElement {
 		}
 
 		this.removeDropPlaceholder();
+
+		// Unwrap children before firing the event so framework re-renders
+		// don't orphan wrappers, then re-wrap after the framework settles
+		if ( shouldFireEvent ) {
+			if ( this.slotObserver ) {
+				this.slotObserver.disconnect();
+			}
+			this.unwrapAllChildren();
+			this.fireReorgEvent();
+			this.wrapAllChildren();
+			if ( this.slotObserver ) {
+				this.slotObserver.observe( this, { childList: true } );
+			}
+		}
 	}
 
 	/**
