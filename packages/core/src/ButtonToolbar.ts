@@ -23,6 +23,7 @@ export type ButtonToolbarGroup = {
 export class ButtonToolbarElement extends HTMLElement {
   declare shadowRoot: ShadowRoot;
   private _groups: ButtonToolbarGroup[] = [];
+  private _parsedGroups: ButtonToolbarGroup[] | null = null;
 
   constructor() {
     super();
@@ -33,8 +34,11 @@ export class ButtonToolbarElement extends HTMLElement {
     return ['orientation', 'groups'];
   }
 
-  attributeChangedCallback(_name: string, oldValue: string | null, newValue: string | null): void {
+  attributeChangedCallback(name: string, oldValue: string | null, newValue: string | null): void {
     if (oldValue !== newValue) {
+      if (name === 'groups') {
+        this._parsedGroups = null; // Invalidate cache
+      }
       this.render();
     }
   }
@@ -48,10 +52,12 @@ export class ButtonToolbarElement extends HTMLElement {
   }
 
   get groups(): ButtonToolbarGroup[] {
+    if (this._parsedGroups !== null) return this._parsedGroups;
     const groupsAttr = this.getAttribute('groups');
     if (groupsAttr) {
       try {
-        return JSON.parse(groupsAttr);
+        this._parsedGroups = JSON.parse(groupsAttr);
+        return this._parsedGroups!;
       } catch (e) {
         console.error('Invalid groups format:', e);
         return [];
@@ -62,17 +68,7 @@ export class ButtonToolbarElement extends HTMLElement {
 
   set groups(value: ButtonToolbarGroup[]) {
     this._groups = value;
-    // Also update attribute for consistency, but be careful with large data
-    // For now, let's just render. If we want to sync property to attribute:
-    // this.setAttribute('groups', JSON.stringify(value));
-    // But usually for complex data, property is preferred source of truth if set directly.
-    
-    // SmartSelect implementation:
-    // set options ( opts: SelectOption[] ) {
-    //   this.setAttribute( 'options', JSON.stringify( opts ) );
-    // }
-    
-    // I'll follow SmartSelect pattern for consistency
+    this._parsedGroups = null; // Invalidate cache before setting attribute
     this.setAttribute('groups', JSON.stringify(value));
   }
 

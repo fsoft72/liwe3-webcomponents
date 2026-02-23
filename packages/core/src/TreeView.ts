@@ -20,6 +20,7 @@ export class TreeViewElement extends HTMLElement {
   private expandedIds: Set<string> = new Set();
   private indentWidth: number = 20;
   private showBorder = true;
+  private _parsedData: TreeNode[] | null = null;
 
   constructor () {
     super();
@@ -34,6 +35,9 @@ export class TreeViewElement extends HTMLElement {
 
   attributeChangedCallback ( name: string, oldValue: string | null, newValue: string | null ): void {
     if ( oldValue !== newValue ) {
+      if ( name === 'data' ) {
+        this._parsedData = null; // Invalidate cache
+      }
       if ( name === 'indent-width' ) {
         this.indentWidth = parseInt( newValue || '20', 10 );
       }
@@ -46,10 +50,12 @@ export class TreeViewElement extends HTMLElement {
   }
 
   get data (): TreeNode[] {
+    if ( this._parsedData !== null ) return this._parsedData;
     const dataAttr = this.getAttribute( 'data' );
     if ( dataAttr ) {
       try {
-        return JSON.parse( dataAttr );
+        this._parsedData = JSON.parse( dataAttr );
+        return this._parsedData!;
       } catch ( e ) {
         console.error( 'Invalid data format:', e );
         return [];
@@ -60,6 +66,7 @@ export class TreeViewElement extends HTMLElement {
 
   set data ( value: TreeNode[] ) {
     this.treeData = value;
+    this._parsedData = null; // Invalidate cache before setting attribute
     this.initializeExpandedState( value );
     this.setAttribute( 'data', JSON.stringify( value ) );
   }

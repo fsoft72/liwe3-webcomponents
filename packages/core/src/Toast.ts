@@ -349,7 +349,8 @@ export class ToastElement extends HTMLElement {
   }
 
   /**
-   * Resumes the progress bar animation
+   * Resumes the progress bar animation.
+   * Cleans up previously injected dynamic @keyframes rules before adding a new one.
    */
   private resumeProgressBarAnimation (): void {
     if ( !this.progressBar || this.remainingTime <= 0 ) return;
@@ -367,19 +368,22 @@ export class ToastElement extends HTMLElement {
     // Create a new keyframe animation from current position to 0
     const animationName = `shrinkProgress-${ Date.now() }`;
     const styleSheet = this.shadowRoot.styleSheets[ 0 ];
-    const keyframes = `
-      @keyframes ${ animationName } {
-        from {
-          width: ${ currentPercent }%;
-        }
-        to {
-          width: 0%;
+
+    if ( styleSheet ) {
+      // Remove old dynamically-added keyframe rules to prevent accumulation
+      for ( let i = styleSheet.cssRules.length - 1; i >= 0; i-- ) {
+        const rule = styleSheet.cssRules[ i ];
+        if ( rule instanceof CSSKeyframesRule && rule.name.startsWith( 'shrinkProgress-' ) ) {
+          styleSheet.deleteRule( i );
         }
       }
-    `;
 
-    // Add the new keyframe rule
-    if ( styleSheet ) {
+      const keyframes = `
+        @keyframes ${ animationName } {
+          from { width: ${ currentPercent }%; }
+          to { width: 0%; }
+        }
+      `;
       styleSheet.insertRule( keyframes, styleSheet.cssRules.length );
     }
 

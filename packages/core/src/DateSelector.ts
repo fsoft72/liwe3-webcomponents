@@ -369,19 +369,19 @@ export class DateSelectorElement extends HTMLElement {
 			}
 		} );
 
-		// Add hover effects for range selection
-		if ( this.rangeMode ) {
-			this.shadowRoot.addEventListener( 'mouseover', ( e ) => {
-				const target = e.target as HTMLElement;
-				if ( target.classList.contains( 'day-cell' ) && this.selectedRange.start && !this.selectedRange.end ) {
-					this.updateRangeHover( target.dataset.date! );
-				}
-			} );
+		// Add hover effects for range selection (always attached, checked at runtime)
+		this.shadowRoot.addEventListener( 'mouseover', ( e ) => {
+			if ( !this.rangeMode ) return;
+			const target = e.target as HTMLElement;
+			if ( target.classList.contains( 'day-cell' ) && this.selectedRange.start && !this.selectedRange.end ) {
+				this.updateRangeHover( target.dataset.date! );
+			}
+		} );
 
-			this.shadowRoot.addEventListener( 'mouseleave', () => {
-				this.clearRangeHover();
-			} );
-		}
+		this.shadowRoot.addEventListener( 'mouseleave', () => {
+			if ( !this.rangeMode ) return;
+			this.clearRangeHover();
+		} );
 	}
 
 	/**

@@ -19,6 +19,7 @@ export class SmartSelectElement extends HTMLElement {
 	private searchValue : string = '';
 	private keyboardNavigating : boolean = false;
 	private keyboardTimer? : number;
+	private _parsedOptions : SelectOption[] | null = null;
 
 	// Stored bound references for global listeners (needed for proper cleanup)
 	private _boundDocumentClick : ( e : MouseEvent ) => void;
@@ -64,6 +65,7 @@ export class SmartSelectElement extends HTMLElement {
 	attributeChangedCallback ( name : string, oldValue : string | null, newValue : string | null ) : void {
 		if ( oldValue !== newValue ) {
 			if ( name === 'options' ) {
+				this._parsedOptions = null; // Invalidate cache
 				this.filteredOptions = [ ...this.options ];
 			}
 			this.render();
@@ -132,10 +134,12 @@ export class SmartSelectElement extends HTMLElement {
 	}
 
 	get options () : SelectOption[] {
+		if ( this._parsedOptions !== null ) return this._parsedOptions;
 		const optionsAttr = this.getAttribute( 'options' );
 		if ( optionsAttr ) {
 			try {
-				return JSON.parse( optionsAttr );
+				this._parsedOptions = JSON.parse( optionsAttr );
+				return this._parsedOptions!;
 			} catch ( e ) {
 				console.error( 'Invalid options format:', e );
 				return [];
@@ -145,6 +149,7 @@ export class SmartSelectElement extends HTMLElement {
 	}
 
 	set options ( opts : SelectOption[] ) {
+		this._parsedOptions = null; // Invalidate cache before setting attribute
 		this.setAttribute( 'options', JSON.stringify( opts ) );
 	}
 

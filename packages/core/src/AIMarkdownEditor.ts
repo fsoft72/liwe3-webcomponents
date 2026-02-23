@@ -440,7 +440,7 @@ export class AIMarkdownEditorElement extends HTMLElement {
 			return;
 		}
 
-		const textarea = this.aiEditor.shadowRoot?.getElementById( 'editor' ) as HTMLTextAreaElement;
+		const textarea = this.aiEditor.getEditorTextarea();
 		if ( !textarea ) return;
 
 		const start = textarea.selectionStart;

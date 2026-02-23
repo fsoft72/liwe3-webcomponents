@@ -617,6 +617,14 @@ export class AITextEditorElement extends HTMLElement {
   }
 
   /**
+   * Returns a reference to the internal textarea element.
+   * Use this instead of piercing the shadow DOM directly.
+   */
+  getEditorTextarea(): HTMLTextAreaElement {
+    return this.editor;
+  }
+
+  /**
    * Sets the API key
    */
   setApiKey(key: string): void {

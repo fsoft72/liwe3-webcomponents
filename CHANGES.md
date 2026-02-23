@@ -11,6 +11,17 @@
 ### Changed
 - Updated core package version to 1.1.13
 
+## 2026-02-23 - Bug Fixes: Keyframe Leak, Encapsulation, Range Hover, JSON.parse Cache
+
+### Fixed
+- **Toast**: `resumeProgressBarAnimation` now removes previously injected `@keyframes shrinkProgress-*` rules before inserting new ones, preventing indefinite stylesheet growth on repeated hover.
+- **AIMarkdownEditor**: Replaced shadow DOM piercing (`this.aiEditor.shadowRoot?.getElementById('editor')`) with new public `AITextEditor.getEditorTextarea()` method, preserving encapsulation.
+- **DateSelector**: Range hover listeners are now always attached but check `this.rangeMode` at runtime. Previously they were only attached if `rangeMode` was true at construction time, meaning range hover never worked when set via attribute after creation.
+- **SmartSelect, TreeView, ButtonToolbar**: Added `_parsedOptions`/`_parsedData`/`_parsedGroups` caches to avoid `JSON.parse` on every getter access. Cache is invalidated in `attributeChangedCallback` and in the property setter.
+
+### Changed
+- Updated core package version to 1.1.14
+
 ## 2025-11-22 - ChunkUploader folder Reactivity Fix
 
 ### Fixed
