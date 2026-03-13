@@ -8,487 +8,491 @@ export type ToastType = 'info' | 'warning' | 'error' | 'success';
 export type ToastPosition = 'TL' | 'T' | 'TR' | 'BL' | 'B' | 'BR';
 
 export type ToastButton = {
-  label: string;
-  onclick: () => void;
+	label : string;
+	onclick : () => void;
 };
 
 export type ToastConfig = {
-  title: string;
-  text: string;
-  type?: ToastType;
-  icon?: string; // URL to icon/image
-  buttons?: ToastButton[];
-  closable?: boolean; // Show close X button
-  duration?: number; // Auto-dismiss after x milliseconds (0 = no auto-dismiss, default: 5000ms)
-  position?: ToastPosition; // Toast container position (default: 'TR')
-  onclose?: () => void;
+	title : string;
+	text : string;
+	type? : ToastType;
+	icon? : string; // URL to icon/image
+	buttons? : ToastButton[];
+	closable? : boolean; // Show close X button
+	duration? : number; // Auto-dismiss after x milliseconds (0 = no auto-dismiss, default: 5000ms)
+	position? : ToastPosition; // Toast container position (default: 'TR')
+	onclose? : () => void;
 };
 
 export class ToastElement extends HTMLElement {
-  declare shadowRoot: ShadowRoot;
-  private config: ToastConfig = {
-    title: '',
-    text: '',
-    type: 'info',
-    closable: true,
-    duration: 5000
-  };
-  private autoCloseTimer?: number;
-  private remainingTime: number = 0;
-  private pauseTime: number = 0;
-  private progressBar?: HTMLElement;
+	declare shadowRoot : ShadowRoot;
+	private config : ToastConfig = {
+		title: '',
+		text: '',
+		type: 'info',
+		closable: true,
+		duration: 5000,
+	};
+	private autoCloseTimer? : number;
+	private remainingTime : number = 0;
+	private pauseTime : number = 0;
+	private progressBar? : HTMLElement;
 
-  constructor () {
-    super();
-    this.attachShadow( { mode: 'open' } );
-  }
+	constructor () {
+		super();
+		this.attachShadow( { mode: 'open' } );
+	}
 
-  static get observedAttributes (): string[] {
-    return [ 'title', 'text', 'type', 'icon', 'closable', 'duration', 'buttons' ];
-  }
+	static get observedAttributes () : string[] {
+		return [ 'title', 'text', 'type', 'icon', 'closable', 'duration', 'buttons' ];
+	}
 
-  attributeChangedCallback ( _name: string, oldValue: string | null, newValue: string | null ): void {
-    if ( oldValue !== newValue ) {
-      this.render();
-    }
-  }
+	attributeChangedCallback ( _name : string, oldValue : string | null, newValue : string | null ) : void {
+		if ( oldValue !== newValue ) {
+			this.render();
+		}
+	}
 
-  connectedCallback (): void {
-    this.render();
-    this.startAutoCloseTimer();
-  }
+	connectedCallback () : void {
+		this.render();
+		this.startAutoCloseTimer();
+	}
 
-  disconnectedCallback (): void {
-    this.clearAutoCloseTimer();
-  }
+	disconnectedCallback () : void {
+		this.clearAutoCloseTimer();
+	}
 
-  get title (): string {
-    const attrTitle = this.getAttribute( 'title' );
-    const configTitle = this.config.title;
+	get title () : string {
+		const attrTitle = this.getAttribute( 'title' );
+		const configTitle = this.config.title;
 
-    // If no title is provided or empty, use capitalized type
-    if ( ( !attrTitle || attrTitle.trim() === '' ) && ( !configTitle || configTitle.trim() === '' ) ) {
-      const type = this.type;
-      return type.charAt( 0 ).toUpperCase() + type.slice( 1 );
-    }
+		// If no title is provided or empty, use capitalized type
+		if ( ( !attrTitle || attrTitle.trim() === '' ) && ( !configTitle || configTitle.trim() === '' ) ) {
+			const type = this.type;
+			return type.charAt( 0 ).toUpperCase() + type.slice( 1 );
+		}
 
-    return attrTitle || configTitle;
-  }
+		return attrTitle || configTitle;
+	}
 
-  set title ( value: string ) {
-    if ( value && value.trim() !== '' ) {
-      this.setAttribute( 'title', value );
-      this.config.title = value;
-    } else {
-      this.removeAttribute( 'title' );
-      this.config.title = '';
-    }
-  }
+	set title ( value : string ) {
+		if ( value && value.trim() !== '' ) {
+			this.setAttribute( 'title', value );
+			this.config.title = value;
+		} else {
+			this.removeAttribute( 'title' );
+			this.config.title = '';
+		}
+	}
 
-  get text (): string {
-    return this.getAttribute( 'text' ) || this.config.text;
-  }
+	get text () : string {
+		return this.getAttribute( 'text' ) || this.config.text;
+	}
 
-  set text ( value: string ) {
-    this.setAttribute( 'text', value );
-    this.config.text = value;
-  }
+	set text ( value : string ) {
+		this.setAttribute( 'text', value );
+		this.config.text = value;
+	}
 
-  get type (): ToastType {
-    const attr = this.getAttribute( 'type' );
-    return ( attr as ToastType ) || this.config.type || 'info';
-  }
+	get type () : ToastType {
+		const attr = this.getAttribute( 'type' );
+		return ( attr as ToastType ) || this.config.type || 'info';
+	}
 
-  set type ( value: ToastType ) {
-    this.setAttribute( 'type', value );
-    this.config.type = value;
-  }
+	set type ( value : ToastType ) {
+		this.setAttribute( 'type', value );
+		this.config.type = value;
+	}
 
-  get icon (): string | undefined {
-    return this.getAttribute( 'icon' ) || this.config.icon;
-  }
+	get icon () : string | undefined {
+		return this.getAttribute( 'icon' ) || this.config.icon;
+	}
 
-  set icon ( value: string | undefined ) {
-    if ( value ) {
-      this.setAttribute( 'icon', value );
-      this.config.icon = value;
-    } else {
-      this.removeAttribute( 'icon' );
-      this.config.icon = undefined;
-    }
-  }
+	set icon ( value : string | undefined ) {
+		if ( value ) {
+			this.setAttribute( 'icon', value );
+			this.config.icon = value;
+		} else {
+			this.removeAttribute( 'icon' );
+			this.config.icon = undefined;
+		}
+	}
 
-  get closable (): boolean {
-    if ( this.hasAttribute( 'closable' ) ) {
-      return this.getAttribute( 'closable' ) !== 'false';
-    }
-    return this.config.closable !== false;
-  }
+	get closable () : boolean {
+		if ( this.hasAttribute( 'closable' ) ) {
+			return this.getAttribute( 'closable' ) !== 'false';
+		}
+		return this.config.closable !== false;
+	}
 
-  set closable ( value: boolean ) {
-    if ( value ) {
-      this.setAttribute( 'closable', 'true' );
-    } else {
-      this.setAttribute( 'closable', 'false' );
-    }
-    this.config.closable = value;
-  }
+	set closable ( value : boolean ) {
+		if ( value ) {
+			this.setAttribute( 'closable', 'true' );
+		} else {
+			this.setAttribute( 'closable', 'false' );
+		}
+		this.config.closable = value;
+	}
 
-  get duration (): number {
-    const attr = this.getAttribute( 'duration' );
-    if ( attr ) {
-      return parseInt( attr, 10 );
-    }
-    return this.config.duration ?? 5000;
-  }
+	get duration () : number {
+		const attr = this.getAttribute( 'duration' );
+		if ( attr ) {
+			return parseInt( attr, 10 );
+		}
+		return this.config.duration ?? 5000;
+	}
 
-  set duration ( value: number ) {
-    this.setAttribute( 'duration', value.toString() );
-    this.config.duration = value;
-  }
+	set duration ( value : number ) {
+		this.setAttribute( 'duration', value.toString() );
+		this.config.duration = value;
+	}
 
-  get buttons (): ToastButton[] {
-    const attr = this.getAttribute( 'buttons' );
-    if ( attr ) {
-      try {
-        return JSON.parse( attr );
-      } catch ( e ) {
-        console.error( 'Invalid buttons format:', e );
-        return [];
-      }
-    }
-    return this.config.buttons || [];
-  }
+	get buttons () : ToastButton[] {
+		// Prefer config.buttons since functions can't survive JSON serialization via attributes
+		if ( this.config.buttons && this.config.buttons.length > 0 ) return this.config.buttons;
 
-  set buttons ( value: ToastButton[] ) {
-    this.setAttribute( 'buttons', JSON.stringify( value ) );
-    this.config.buttons = value;
-  }
+		const attr = this.getAttribute( 'buttons' );
+		if ( attr ) {
+			try {
+				return JSON.parse( attr );
+			} catch ( e ) {
+				console.error( 'Invalid buttons format:', e );
+				return [];
+			}
+		}
+		return [];
+	}
 
-  /**
-   * Shows the toast with the given configuration
-   */
-  show ( config: ToastConfig ): void {
-    this.config = { ...this.config, ...config };
+	set buttons ( value : ToastButton[] ) {
+		this.setAttribute( 'buttons', JSON.stringify( value ) );
+		this.config.buttons = value;
+	}
 
-    // If buttons are present, force duration to 0 (user must interact to close)
-    if ( config.buttons && config.buttons.length > 0 ) {
-      this.config.duration = 0;
-    }
+	/**
+	 * Shows the toast with the given configuration
+	 */
+	show ( config : ToastConfig ) : void {
+		this.config = { ...this.config, ...config };
 
-    // Sync config to attributes
-    if ( config.title && config.title.trim() !== '' ) {
-      this.title = config.title;
-    } else {
-      // Clear title if not provided or empty
-      this.removeAttribute( 'title' );
-      this.config.title = '';
-    }
-    this.text = config.text;
-    if ( config.type ) this.type = config.type;
-    if ( config.icon !== undefined ) this.icon = config.icon;
-    if ( config.closable !== undefined ) this.closable = config.closable;
-    if ( config.buttons && config.buttons.length > 0 ) {
-      // Force duration to 0 when buttons are present
-      this.duration = 0;
-    } else if ( config.duration !== undefined ) {
-      this.duration = config.duration;
-    }
-    if ( config.buttons ) this.buttons = config.buttons;
+		// If buttons are present, force duration to 0 (user must interact to close)
+		if ( config.buttons && config.buttons.length > 0 ) {
+			this.config.duration = 0;
+		}
 
-    this.render();
-    this.startAutoCloseTimer();
-  }
+		// Sync config to attributes
+		if ( config.title && config.title.trim() !== '' ) {
+			this.title = config.title;
+		} else {
+			// Clear title if not provided or empty
+			this.removeAttribute( 'title' );
+			this.config.title = '';
+		}
+		this.text = config.text;
+		if ( config.type ) this.type = config.type;
+		if ( config.icon !== undefined ) this.icon = config.icon;
+		if ( config.closable !== undefined ) this.closable = config.closable;
+		if ( config.buttons && config.buttons.length > 0 ) {
+			// Force duration to 0 when buttons are present
+			this.duration = 0;
+		} else if ( config.duration !== undefined ) {
+			this.duration = config.duration;
+		}
+		if ( config.buttons ) this.buttons = config.buttons;
 
-  /**
-   * Closes the toast
-   */
-  close (): void {
-    this.clearAutoCloseTimer();
+		this.render();
+		this.startAutoCloseTimer();
+	}
 
-    // Add closing animation
-    const container = this.shadowRoot.querySelector( '.toast-container' ) as HTMLElement;
-    if ( container ) {
-      // Use requestAnimationFrame to ensure smooth animation
-      requestAnimationFrame( () => {
-        container.classList.add( 'closing' );
-      } );
+	/**
+	 * Closes the toast
+	 */
+	close () : void {
+		this.clearAutoCloseTimer();
 
-      // Listen for animation end event for smoother transition
-      const handleAnimationEnd = () => {
-        container.removeEventListener( 'animationend', handleAnimationEnd );
+		// Add closing animation
+		const container = this.shadowRoot.querySelector( '.toast-container' ) as HTMLElement;
+		if ( container ) {
+			// Use requestAnimationFrame to ensure smooth animation
+			requestAnimationFrame( () => {
+				container.classList.add( 'closing' );
+			} );
 
-        // Animate the host element collapsing (height and margin to 0)
-        const hostElement = this as unknown as HTMLElement;
-        const currentHeight = hostElement.offsetHeight;
+			// Listen for animation end event for smoother transition
+			const handleAnimationEnd = () => {
+				container.removeEventListener( 'animationend', handleAnimationEnd );
 
-        // Set explicit height for animation
-        hostElement.style.height = `${ currentHeight }px`;
-        hostElement.style.marginBottom = '12px';
+				// Animate the host element collapsing (height and margin to 0)
+				const hostElement = this as unknown as HTMLElement;
+				const currentHeight = hostElement.offsetHeight;
 
-        // Force reflow
-        void hostElement.offsetHeight;
+				// Set explicit height for animation
+				hostElement.style.height = `${currentHeight}px`;
+				hostElement.style.marginBottom = '12px';
 
-        // Animate to 0
-        hostElement.style.height = '0px';
-        hostElement.style.marginBottom = '0px';
-        hostElement.style.opacity = '0';
+				// Force reflow
+				void hostElement.offsetHeight;
 
-        // Wait for transition to complete, then remove
-        setTimeout( () => {
-          this.dispatchEvent( new CustomEvent( 'close' ) );
-          if ( this.config.onclose ) {
-            this.config.onclose();
-          }
-          this.remove();
-        }, 300 );
-      };
+				// Animate to 0
+				hostElement.style.height = '0px';
+				hostElement.style.marginBottom = '0px';
+				hostElement.style.opacity = '0';
 
-      container.addEventListener( 'animationend', handleAnimationEnd );
+				// Wait for transition to complete, then remove
+				setTimeout( () => {
+					this.dispatchEvent( new CustomEvent( 'close' ) );
+					if ( this.config.onclose ) {
+						this.config.onclose();
+					}
+					this.remove();
+				}, 300 );
+			};
 
-      // Fallback timeout in case animationend doesn't fire
-      setTimeout( () => {
-        if ( this.isConnected ) {
-          handleAnimationEnd();
-        }
-      }, 350 );
-    } else {
-      this.dispatchEvent( new CustomEvent( 'close' ) );
-      if ( this.config.onclose ) {
-        this.config.onclose();
-      }
-      this.remove();
-    }
-  }
+			container.addEventListener( 'animationend', handleAnimationEnd );
 
-  /**
-   * Starts the auto-close timer if duration is set
-   */
-  private startAutoCloseTimer (): void {
-    this.clearAutoCloseTimer();
+			// Fallback timeout in case animationend doesn't fire
+			setTimeout( () => {
+				if ( this.isConnected ) {
+					handleAnimationEnd();
+				}
+			}, 350 );
+		} else {
+			this.dispatchEvent( new CustomEvent( 'close' ) );
+			if ( this.config.onclose ) {
+				this.config.onclose();
+			}
+			this.remove();
+		}
+	}
 
-    if ( this.duration > 0 ) {
-      this.remainingTime = this.duration;
-      this.pauseTime = Date.now();
-      this.autoCloseTimer = window.setTimeout( () => {
-        this.close();
-      }, this.duration );
+	/**
+	 * Starts the auto-close timer if duration is set
+	 */
+	private startAutoCloseTimer () : void {
+		this.clearAutoCloseTimer();
 
-      // Start progress bar animation
-      this.startProgressBarAnimation();
-    }
-  }
+		if ( this.duration > 0 ) {
+			this.remainingTime = this.duration;
+			this.pauseTime = Date.now();
+			this.autoCloseTimer = window.setTimeout( () => {
+				this.close();
+			}, this.duration );
 
-  /**
-   * Pauses the auto-close timer
-   */
-  private pauseAutoCloseTimer (): void {
-    if ( this.autoCloseTimer && this.duration > 0 ) {
-      clearTimeout( this.autoCloseTimer );
-      this.autoCloseTimer = undefined;
-      this.remainingTime -= Date.now() - this.pauseTime;
+			// Start progress bar animation
+			this.startProgressBarAnimation();
+		}
+	}
 
-      // Pause progress bar animation
-      this.pauseProgressBarAnimation();
-    }
-  }
+	/**
+	 * Pauses the auto-close timer
+	 */
+	private pauseAutoCloseTimer () : void {
+		if ( this.autoCloseTimer && this.duration > 0 ) {
+			clearTimeout( this.autoCloseTimer );
+			this.autoCloseTimer = undefined;
+			this.remainingTime -= Date.now() - this.pauseTime;
 
-  /**
-   * Resumes the auto-close timer
-   */
-  private resumeAutoCloseTimer (): void {
-    if ( !this.autoCloseTimer && this.remainingTime > 0 ) {
-      this.pauseTime = Date.now();
-      this.autoCloseTimer = window.setTimeout( () => {
-        this.close();
-      }, this.remainingTime );
+			// Pause progress bar animation
+			this.pauseProgressBarAnimation();
+		}
+	}
 
-      // Resume progress bar animation
-      this.resumeProgressBarAnimation();
-    }
-  }
+	/**
+	 * Resumes the auto-close timer
+	 */
+	private resumeAutoCloseTimer () : void {
+		if ( !this.autoCloseTimer && this.remainingTime > 0 ) {
+			this.pauseTime = Date.now();
+			this.autoCloseTimer = window.setTimeout( () => {
+				this.close();
+			}, this.remainingTime );
 
-  /**
-   * Clears the auto-close timer
-   */
-  private clearAutoCloseTimer (): void {
-    if ( this.autoCloseTimer ) {
-      clearTimeout( this.autoCloseTimer );
-      this.autoCloseTimer = undefined;
-    }
-  }
+			// Resume progress bar animation
+			this.resumeProgressBarAnimation();
+		}
+	}
 
-  /**
-   * Starts the progress bar animation
-   */
-  private startProgressBarAnimation (): void {
-    if ( !this.progressBar || this.duration <= 0 ) return;
+	/**
+	 * Clears the auto-close timer
+	 */
+	private clearAutoCloseTimer () : void {
+		if ( this.autoCloseTimer ) {
+			clearTimeout( this.autoCloseTimer );
+			this.autoCloseTimer = undefined;
+		}
+	}
 
-    // Reset and start the animation
-    this.progressBar.style.animation = 'none';
-    // Force a reflow to reset the animation
-    void this.progressBar.offsetWidth;
-    this.progressBar.style.animation = `shrinkProgress ${ this.duration }ms linear forwards`;
-  }
+	/**
+	 * Starts the progress bar animation
+	 */
+	private startProgressBarAnimation () : void {
+		if ( !this.progressBar || this.duration <= 0 ) return;
 
-  /**
-   * Pauses the progress bar animation
-   */
-  private pauseProgressBarAnimation (): void {
-    if ( !this.progressBar ) return;
+		// Reset and start the animation
+		this.progressBar.style.animation = 'none';
+		// Force a reflow to reset the animation
+		void this.progressBar.offsetWidth;
+		this.progressBar.style.animation = `shrinkProgress ${this.duration}ms linear forwards`;
+	}
 
-    // Get the current computed width as a percentage of the container
-    const computedStyle = window.getComputedStyle( this.progressBar );
-    const currentWidth = computedStyle.width;
-    const containerWidth = this.progressBar.parentElement?.offsetWidth || 1;
-    const widthPercent = ( parseFloat( currentWidth ) / containerWidth ) * 100;
+	/**
+	 * Pauses the progress bar animation
+	 */
+	private pauseProgressBarAnimation () : void {
+		if ( !this.progressBar ) return;
 
-    // Stop the animation and set the width directly
-    this.progressBar.style.animation = 'none';
-    this.progressBar.style.width = `${ widthPercent }%`;
-  }
+		// Get the current computed width as a percentage of the container
+		const computedStyle = window.getComputedStyle( this.progressBar );
+		const currentWidth = computedStyle.width;
+		const containerWidth = this.progressBar.parentElement?.offsetWidth || 1;
+		const widthPercent = ( parseFloat( currentWidth ) / containerWidth ) * 100;
 
-  /**
-   * Resumes the progress bar animation.
-   * Cleans up previously injected dynamic @keyframes rules before adding a new one.
-   */
-  private resumeProgressBarAnimation (): void {
-    if ( !this.progressBar || this.remainingTime <= 0 ) return;
+		// Stop the animation and set the width directly
+		this.progressBar.style.animation = 'none';
+		this.progressBar.style.width = `${widthPercent}%`;
+	}
 
-    // Get current width as starting point
-    const computedStyle = window.getComputedStyle( this.progressBar );
-    const currentWidth = computedStyle.width;
-    const containerWidth = this.progressBar.parentElement?.offsetWidth || 1;
-    const currentPercent = ( parseFloat( currentWidth ) / containerWidth ) * 100;
+	/**
+	 * Resumes the progress bar animation.
+	 * Cleans up previously injected dynamic @keyframes rules before adding a new one.
+	 */
+	private resumeProgressBarAnimation () : void {
+		if ( !this.progressBar || this.remainingTime <= 0 ) return;
 
-    // Calculate the duration based on the remaining percentage and remaining time
-    // The animation should take exactly remainingTime to go from currentPercent to 0
-    const adjustedDuration = this.remainingTime;
+		// Get current width as starting point
+		const computedStyle = window.getComputedStyle( this.progressBar );
+		const currentWidth = computedStyle.width;
+		const containerWidth = this.progressBar.parentElement?.offsetWidth || 1;
+		const currentPercent = ( parseFloat( currentWidth ) / containerWidth ) * 100;
 
-    // Create a new keyframe animation from current position to 0
-    const animationName = `shrinkProgress-${ Date.now() }`;
-    const styleSheet = this.shadowRoot.styleSheets[ 0 ];
+		// Calculate the duration based on the remaining percentage and remaining time
+		// The animation should take exactly remainingTime to go from currentPercent to 0
+		const adjustedDuration = this.remainingTime;
 
-    if ( styleSheet ) {
-      // Remove old dynamically-added keyframe rules to prevent accumulation
-      for ( let i = styleSheet.cssRules.length - 1; i >= 0; i-- ) {
-        const rule = styleSheet.cssRules[ i ];
-        if ( rule instanceof CSSKeyframesRule && rule.name.startsWith( 'shrinkProgress-' ) ) {
-          styleSheet.deleteRule( i );
-        }
-      }
+		// Create a new keyframe animation from current position to 0
+		const animationName = `shrinkProgress-${Date.now()}`;
+		const styleSheet = this.shadowRoot.styleSheets[0];
 
-      const keyframes = `
-        @keyframes ${ animationName } {
-          from { width: ${ currentPercent }%; }
+		if ( styleSheet ) {
+			// Remove old dynamically-added keyframe rules to prevent accumulation
+			for ( let i = styleSheet.cssRules.length - 1; i >= 0; i-- ) {
+				const rule = styleSheet.cssRules[i];
+				if ( rule instanceof CSSKeyframesRule && rule.name.startsWith( 'shrinkProgress-' ) ) {
+					styleSheet.deleteRule( i );
+				}
+			}
+
+			const keyframes = `
+        @keyframes ${animationName} {
+          from { width: ${currentPercent}%; }
           to { width: 0%; }
         }
       `;
-      styleSheet.insertRule( keyframes, styleSheet.cssRules.length );
-    }
+			styleSheet.insertRule( keyframes, styleSheet.cssRules.length );
+		}
 
-    // Apply the animation
-    this.progressBar.style.animation = `${ animationName } ${ adjustedDuration }ms linear forwards`;
-  }
+		// Apply the animation
+		this.progressBar.style.animation = `${animationName} ${adjustedDuration}ms linear forwards`;
+	}
 
-  /**
-   * Gets the color scheme for the toast type
-   */
-  private getTypeColors (): { background: string; border: string; icon: string } {
-    const type = this.type;
+	/**
+	 * Gets the color scheme for the toast type
+	 */
+	private getTypeColors () : { background : string; border : string; icon : string } {
+		const type = this.type;
 
-    switch ( type ) {
-      case 'success':
-        return {
-          background: 'var(--toast-success-background, #d4edda)',
-          border: 'var(--toast-success-border, #c3e6cb)',
-          icon: 'var(--toast-success-icon, #155724)'
-        };
-      case 'error':
-        return {
-          background: 'var(--toast-error-background, #f8d7da)',
-          border: 'var(--toast-error-border, #f5c6cb)',
-          icon: 'var(--toast-error-icon, #721c24)'
-        };
-      case 'warning':
-        return {
-          background: 'var(--toast-warning-background, #fff3cd)',
-          border: 'var(--toast-warning-border, #ffeaa7)',
-          icon: 'var(--toast-warning-icon, #856404)'
-        };
-      case 'info':
-      default:
-        return {
-          background: 'var(--toast-info-background, #d1ecf1)',
-          border: 'var(--toast-info-border, #bee5eb)',
-          icon: 'var(--toast-info-icon, #0c5460)'
-        };
-    }
-  }
+		switch ( type ) {
+			case 'success':
+				return {
+					background: 'var(--toast-success-background, #d4edda)',
+					border: 'var(--toast-success-border, #c3e6cb)',
+					icon: 'var(--toast-success-icon, #155724)',
+				};
+			case 'error':
+				return {
+					background: 'var(--toast-error-background, #f8d7da)',
+					border: 'var(--toast-error-border, #f5c6cb)',
+					icon: 'var(--toast-error-icon, #721c24)',
+				};
+			case 'warning':
+				return {
+					background: 'var(--toast-warning-background, #fff3cd)',
+					border: 'var(--toast-warning-border, #ffeaa7)',
+					icon: 'var(--toast-warning-icon, #856404)',
+				};
+			case 'info':
+			default:
+				return {
+					background: 'var(--toast-info-background, #d1ecf1)',
+					border: 'var(--toast-info-border, #bee5eb)',
+					icon: 'var(--toast-info-icon, #0c5460)',
+				};
+		}
+	}
 
-  /**
-   * Gets the default icon for the toast type
-   */
-  private getDefaultIcon (): string {
-    const type = this.type;
+	/**
+	 * Gets the default icon for the toast type
+	 */
+	private getDefaultIcon () : string {
+		const type = this.type;
 
-    switch ( type ) {
-      case 'success':
-        return '✓';
-      case 'error':
-        return '✕';
-      case 'warning':
-        return '⚠';
-      case 'info':
-      default:
-        return 'ℹ';
-    }
-  }
+		switch ( type ) {
+			case 'success':
+				return '✓';
+			case 'error':
+				return '✕';
+			case 'warning':
+				return '⚠';
+			case 'info':
+			default:
+				return 'ℹ';
+		}
+	}
 
-  /**
-   * Binds all event listeners
-   */
-  private bindEvents (): void {
-    // Handle close button click and button clicks
-    this.shadowRoot.addEventListener( 'click', ( e ) => {
-      const target = e.target as HTMLElement;
+	/**
+	 * Binds all event listeners
+	 */
+	private bindEvents () : void {
+		// Handle close button click and button clicks
+		this.shadowRoot.addEventListener( 'click', ( e ) => {
+			const target = e.target as HTMLElement;
 
-      if ( target.closest( '.close-button' ) ) {
-        this.close();
-      } else if ( target.closest( '.toast-button' ) ) {
-        const buttonIndex = ( target.closest( '.toast-button' ) as HTMLElement ).dataset.index;
-        if ( buttonIndex !== undefined ) {
-          const button = this.buttons[ parseInt( buttonIndex, 10 ) ];
-          if ( button && button.onclick ) {
-            button.onclick();
-          }
-        }
-      }
-    } );
+			if ( target.closest( '.close-button' ) ) {
+				this.close();
+			} else if ( target.closest( '.toast-button' ) ) {
+				const buttonIndex = ( target.closest( '.toast-button' ) as HTMLElement ).dataset.index;
+				if ( buttonIndex !== undefined ) {
+					const button = this.buttons[parseInt( buttonIndex, 10 )];
+					if ( button && button.onclick ) {
+						button.onclick();
+					}
+					this.close();
+				}
+			}
+		} );
 
-    // Handle mouse enter/leave to pause/resume timer
-    const container = this.shadowRoot.querySelector( '.toast-container' );
-    if ( container ) {
-      container.addEventListener( 'mouseenter', () => {
-        this.pauseAutoCloseTimer();
-      } );
+		// Handle mouse enter/leave to pause/resume timer
+		const container = this.shadowRoot.querySelector( '.toast-container' );
+		if ( container ) {
+			container.addEventListener( 'mouseenter', () => {
+				this.pauseAutoCloseTimer();
+			} );
 
-      container.addEventListener( 'mouseleave', () => {
-        this.resumeAutoCloseTimer();
-      } );
-    }
-  }
+			container.addEventListener( 'mouseleave', () => {
+				this.resumeAutoCloseTimer();
+			} );
+		}
+	}
 
-  /**
-   * Renders the component
-   */
-  private render (): void {
-    const colors = this.getTypeColors();
-    const iconContent = this.icon
-      ? `<img src="${ this.icon }" alt="Toast icon" class="toast-icon-img" />`
-      : `<span class="toast-icon-default">${ this.getDefaultIcon() }</span>`;
+	/**
+	 * Renders the component
+	 */
+	private render () : void {
+		const colors = this.getTypeColors();
+		const iconContent = this.icon
+			? `<img src="${this.icon}" alt="Toast icon" class="toast-icon-img" />`
+			: `<span class="toast-icon-default">${this.getDefaultIcon()}</span>`;
 
-    this.shadowRoot.innerHTML = `
+		this.shadowRoot.innerHTML = `
       <style>
         :host {
           display: block;
@@ -503,8 +507,8 @@ export class ToastElement extends HTMLElement {
           min-width: 300px;
           max-width: 500px;
           padding: 16px;
-          background: ${ colors.background };
-          border: 1px solid ${ colors.border };
+          background: ${colors.background};
+          border: 1px solid ${colors.border};
           border-radius: var(--toast-border-radius, 8px);
           box-shadow: var(--toast-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
           animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
@@ -552,7 +556,7 @@ export class ToastElement extends HTMLElement {
           display: flex;
           align-items: center;
           justify-content: center;
-          color: ${ colors.icon };
+          color: ${colors.icon};
         }
 
         .toast-icon-img {
@@ -662,46 +666,52 @@ export class ToastElement extends HTMLElement {
       </style>
 
       <div class="toast-container">
-        ${ this.closable ? '<button class="close-button" aria-label="Close">×</button>' : '' }
+        ${this.closable ? '<button class="close-button" aria-label="Close">×</button>' : ''}
 
         <div class="toast-header">
           <div class="toast-icon">
-            ${ iconContent }
+            ${iconContent}
           </div>
           <div class="toast-content">
-            <h4 class="toast-title">${ this.title }</h4>
-            <p class="toast-text">${ this.text }</p>
+            <h4 class="toast-title">${this.title}</h4>
+            <p class="toast-text">${this.text}</p>
           </div>
         </div>
 
-        ${ this.buttons.length > 0 ? `
+        ${
+			this.buttons.length > 0
+				? `
           <div class="toast-buttons">
-            ${ this.buttons.map( ( button, index ) => `
-              <button class="toast-button" data-index="${ index }">
-                ${ button.label }
+            ${
+					this.buttons.map( ( button, index ) => `
+              <button class="toast-button" data-index="${index}">
+                ${button.label}
               </button>
-            `).join( '' ) }
+            ` ).join( '' )
+				}
           </div>
-        ` : '' }
+        `
+				: ''
+		}
 
-        ${ this.duration > 0 ? '<div class="toast-progress-bar"></div>' : '' }
+        ${this.duration > 0 ? '<div class="toast-progress-bar"></div>' : ''}
       </div>
     `;
 
-    // Store reference to progress bar
-    this.progressBar = this.shadowRoot.querySelector( '.toast-progress-bar' ) as HTMLElement;
+		// Store reference to progress bar
+		this.progressBar = this.shadowRoot.querySelector( '.toast-progress-bar' ) as HTMLElement;
 
-    this.bindEvents();
-  }
+		this.bindEvents();
+	}
 }
 
 /**
  * Conditionally defines the custom element if in a browser environment.
  */
-const defineToast = ( tagName: string = 'liwe3-toast' ): void => {
-  if ( typeof window !== 'undefined' && !window.customElements.get( tagName ) ) {
-    customElements.define( tagName, ToastElement );
-  }
+const defineToast = ( tagName : string = 'liwe3-toast' ) : void => {
+	if ( typeof window !== 'undefined' && !window.customElements.get( tagName ) ) {
+		customElements.define( tagName, ToastElement );
+	}
 };
 
 // Auto-register with default tag name
@@ -715,73 +725,73 @@ const CONTAINER_ID_PREFIX = 'liwe3-toast-container';
 /**
  * Gets the container positioning styles based on position
  */
-const getContainerStyles = ( position: ToastPosition ): { top?: string; bottom?: string; left?: string; right?: string; alignItems: string } => {
-  switch ( position ) {
-    case 'TL':
-      return { top: '20px', left: '20px', alignItems: 'flex-start' };
-    case 'T':
-      return { top: '20px', left: '50%', alignItems: 'center' };
-    case 'TR':
-      return { top: '20px', right: '20px', alignItems: 'flex-end' };
-    case 'BL':
-      return { bottom: '20px', left: '20px', alignItems: 'flex-start' };
-    case 'B':
-      return { bottom: '20px', left: '50%', alignItems: 'center' };
-    case 'BR':
-      return { bottom: '20px', right: '20px', alignItems: 'flex-end' };
-    default:
-      return { top: '20px', right: '20px', alignItems: 'flex-end' };
-  }
+const getContainerStyles = ( position : ToastPosition ) : { top? : string; bottom? : string; left? : string; right? : string; alignItems : string } => {
+	switch ( position ) {
+		case 'TL':
+			return { top: '20px', left: '20px', alignItems: 'flex-start' };
+		case 'T':
+			return { top: '20px', left: '50%', alignItems: 'center' };
+		case 'TR':
+			return { top: '20px', right: '20px', alignItems: 'flex-end' };
+		case 'BL':
+			return { bottom: '20px', left: '20px', alignItems: 'flex-start' };
+		case 'B':
+			return { bottom: '20px', left: '50%', alignItems: 'center' };
+		case 'BR':
+			return { bottom: '20px', right: '20px', alignItems: 'flex-end' };
+		default:
+			return { top: '20px', right: '20px', alignItems: 'flex-end' };
+	}
 };
 
 /**
  * Creates or gets the toast container element for the specified position
  */
-const getToastContainer = ( position: ToastPosition = 'TR' ): HTMLElement => {
-  const containerId = `${ CONTAINER_ID_PREFIX }-${ position.toLowerCase() }`;
-  let container = document.getElementById( containerId );
+const getToastContainer = ( position : ToastPosition = 'TR' ) : HTMLElement => {
+	const containerId = `${CONTAINER_ID_PREFIX}-${position.toLowerCase()}`;
+	let container = document.getElementById( containerId );
 
-  if ( !container ) {
-    container = document.createElement( 'div' );
-    container.id = containerId;
-    container.style.position = 'fixed';
-    container.style.zIndex = '99999';
-    container.style.display = 'flex';
-    container.style.flexDirection = 'column';
-    container.style.maxWidth = '400px';
-    container.style.pointerEvents = 'none';
+	if ( !container ) {
+		container = document.createElement( 'div' );
+		container.id = containerId;
+		container.style.position = 'fixed';
+		container.style.zIndex = '99999';
+		container.style.display = 'flex';
+		container.style.flexDirection = 'column';
+		container.style.maxWidth = '400px';
+		container.style.pointerEvents = 'none';
 
-    // Apply position-specific styles
-    const styles = getContainerStyles( position );
-    if ( styles.top ) container.style.top = styles.top;
-    if ( styles.bottom ) container.style.bottom = styles.bottom;
-    if ( styles.left ) container.style.left = styles.left;
-    if ( styles.right ) container.style.right = styles.right;
-    container.style.alignItems = styles.alignItems;
+		// Apply position-specific styles
+		const styles = getContainerStyles( position );
+		if ( styles.top ) container.style.top = styles.top;
+		if ( styles.bottom ) container.style.bottom = styles.bottom;
+		if ( styles.left ) container.style.left = styles.left;
+		if ( styles.right ) container.style.right = styles.right;
+		container.style.alignItems = styles.alignItems;
 
-    // For centered positions, apply transform to center horizontally
-    if ( position === 'T' || position === 'B' ) {
-      container.style.transform = 'translateX(-50%)';
-    }
+		// For centered positions, apply transform to center horizontally
+		if ( position === 'T' || position === 'B' ) {
+			container.style.transform = 'translateX(-50%)';
+		}
 
-    // Add media query styles for mobile and smooth transitions
-    const styleId = `${ containerId }-styles`;
-    if ( !document.getElementById( styleId ) ) {
-      const style = document.createElement( 'style' );
-      style.id = styleId;
-      style.textContent = `
-        #${ containerId } > * {
+		// Add media query styles for mobile and smooth transitions
+		const styleId = `${containerId}-styles`;
+		if ( !document.getElementById( styleId ) ) {
+			const style = document.createElement( 'style' );
+			style.id = styleId;
+			style.textContent = `
+        #${containerId} > * {
           margin-bottom: 12px;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           overflow: hidden;
         }
 
-        #${ containerId } > *:last-child {
+        #${containerId} > *:last-child {
           margin-bottom: 0;
         }
 
         @media (max-width: 768px) {
-          #${ containerId } {
+          #${containerId} {
             left: 20px !important;
             right: 20px !important;
             max-width: none !important;
@@ -789,13 +799,13 @@ const getToastContainer = ( position: ToastPosition = 'TR' ): HTMLElement => {
           }
         }
       `;
-      document.head.appendChild( style );
-    }
+			document.head.appendChild( style );
+		}
 
-    document.body.appendChild( container );
-  }
+		document.body.appendChild( container );
+	}
 
-  return container;
+	return container;
 };
 
 /**
@@ -818,21 +828,21 @@ const getToastContainer = ( position: ToastPosition = 'TR' ): HTMLElement => {
  * });
  * ```
  */
-const toastAdd = ( config: ToastConfig ): ToastElement => {
-  const position = config.position || 'TR';
-  const container = getToastContainer( position );
-  const toast = document.createElement( 'liwe3-toast' ) as ToastElement;
+const toastAdd = ( config : ToastConfig ) : ToastElement => {
+	const position = config.position || 'TR';
+	const container = getToastContainer( position );
+	const toast = document.createElement( 'liwe3-toast' ) as ToastElement;
 
-  // Allow pointer events on individual toasts
-  toast.style.pointerEvents = 'auto';
+	// Allow pointer events on individual toasts
+	toast.style.pointerEvents = 'auto';
 
-  // Show the toast with the provided config
-  toast.show( config );
+	// Show the toast with the provided config
+	toast.show( config );
 
-  // Add to container
-  container.appendChild( toast );
+	// Add to container
+	container.appendChild( toast );
 
-  return toast;
+	return toast;
 };
 
 export { defineToast, toastAdd };
