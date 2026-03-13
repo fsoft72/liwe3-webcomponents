@@ -262,11 +262,11 @@ toastAdd({
   buttons: [
     {
       label: 'Undo',
-      onClick: () => console.log('Undo clicked')
+      onclick: () => console.log('Undo clicked')
     },
     {
       label: 'View',
-      onClick: () => console.log('View clicked')
+      onclick: () => console.log('View clicked')
     }
   ]
 });</pre>
@@ -347,11 +347,11 @@ toastAdd({
         buttons: [
           {
             label: 'Dismiss',
-            onClick: () => console.log('Dismissed')
+            onclick: () => console.log('Dismissed')
           },
           {
             label: 'View',
-            onClick: () => {
+            onclick: () => {
               console.log('View clicked');
               alert('Opening message...');
             }
@@ -370,11 +370,11 @@ toastAdd({
         buttons: [
           {
             label: 'Cancel',
-            onClick: () => console.log('Cancelled')
+            onclick: () => console.log('Cancelled')
           },
           {
             label: 'Delete',
-            onClick: () => {
+            onclick: () => {
               console.log('Deleted');
               alert('Item deleted!');
             }

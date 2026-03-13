@@ -95,14 +95,14 @@ class l extends HTMLElement {
         t.removeEventListener("animationend", e);
         const o = this, i = o.offsetHeight;
         o.style.height = `${i}px`, o.style.marginBottom = "12px", o.offsetHeight, o.style.height = "0px", o.style.marginBottom = "0px", o.style.opacity = "0", setTimeout(() => {
-          this.dispatchEvent(new CustomEvent("close")), this.config.onClose && this.config.onClose(), this.remove();
+          this.dispatchEvent(new CustomEvent("close")), this.config.onclose && this.config.onclose(), this.remove();
         }, 300);
       };
       t.addEventListener("animationend", e), setTimeout(() => {
         this.isConnected && e();
       }, 350);
     } else
-      this.dispatchEvent(new CustomEvent("close")), this.config.onClose && this.config.onClose(), this.remove();
+      this.dispatchEvent(new CustomEvent("close")), this.config.onclose && this.config.onclose(), this.remove();
   }
   /**
    * Starts the auto-close timer if duration is set
@@ -223,7 +223,7 @@ class l extends HTMLElement {
         const i = o.closest(".toast-button").dataset.index;
         if (i !== void 0) {
           const r = this.buttons[parseInt(i, 10)];
-          r && r.onClick && r.onClick();
+          r && r.onclick && r.onclick();
         }
       }
     });

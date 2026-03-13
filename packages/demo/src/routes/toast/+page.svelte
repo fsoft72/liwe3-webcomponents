@@ -67,11 +67,11 @@
       buttons: [
         {
           label: "Dismiss",
-          onClick: () => console.log("Dismissed"),
+          onclick: () => console.log("Dismissed"),
         },
         {
           label: "View",
-          onClick: () => {
+          onclick: () => {
             console.log("View clicked");
             alert("Opening message...");
           },
@@ -89,11 +89,11 @@
       buttons: [
         {
           label: "Cancel",
-          onClick: () => console.log("Cancelled"),
+          onclick: () => console.log("Cancelled"),
         },
         {
           label: "Delete",
-          onClick: () => {
+          onclick: () => {
             console.log("Deleted");
             toastAdd({
               title: "Deleted",
@@ -267,11 +267,11 @@
       buttons: [
         &#123;
           label: 'Undo',
-          onClick: () => console.log('Undo clicked')
+          onclick: () => console.log('Undo clicked')
         &#125;,
         &#123;
           label: 'View',
-          onClick: () => console.log('View clicked')
+          onclick: () => console.log('View clicked')
         &#125;
       ]
     &#125;);

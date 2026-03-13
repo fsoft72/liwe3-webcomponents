@@ -9,7 +9,7 @@ export type ToastPosition = 'TL' | 'T' | 'TR' | 'BL' | 'B' | 'BR';
 
 export type ToastButton = {
   label: string;
-  onClick: () => void;
+  onclick: () => void;
 };
 
 export type ToastConfig = {
@@ -21,7 +21,7 @@ export type ToastConfig = {
   closable?: boolean; // Show close X button
   duration?: number; // Auto-dismiss after x milliseconds (0 = no auto-dismiss, default: 5000ms)
   position?: ToastPosition; // Toast container position (default: 'TR')
-  onClose?: () => void;
+  onclose?: () => void;
 };
 
 export class ToastElement extends HTMLElement {
@@ -237,8 +237,8 @@ export class ToastElement extends HTMLElement {
         // Wait for transition to complete, then remove
         setTimeout( () => {
           this.dispatchEvent( new CustomEvent( 'close' ) );
-          if ( this.config.onClose ) {
-            this.config.onClose();
+          if ( this.config.onclose ) {
+            this.config.onclose();
           }
           this.remove();
         }, 300 );
@@ -254,8 +254,8 @@ export class ToastElement extends HTMLElement {
       }, 350 );
     } else {
       this.dispatchEvent( new CustomEvent( 'close' ) );
-      if ( this.config.onClose ) {
-        this.config.onClose();
+      if ( this.config.onclose ) {
+        this.config.onclose();
       }
       this.remove();
     }
@@ -459,8 +459,8 @@ export class ToastElement extends HTMLElement {
         const buttonIndex = ( target.closest( '.toast-button' ) as HTMLElement ).dataset.index;
         if ( buttonIndex !== undefined ) {
           const button = this.buttons[ parseInt( buttonIndex, 10 ) ];
-          if ( button && button.onClick ) {
-            button.onClick();
+          if ( button && button.onclick ) {
+            button.onclick();
           }
         }
       }

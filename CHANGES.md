@@ -1,5 +1,14 @@
 # CHANGES.md
 
+## 2026-03-13 - Toast: Rename event callbacks to lowercase
+
+### Changed
+- **Toast**: Renamed `onClick` to `onclick` in `ToastButton` type
+- **Toast**: Renamed `onClose` to `onclose` in `ToastConfig` type
+- Updated all references in demos, documentation, and Svelte demo page
+- Updated core package version to 1.1.16
+- Updated svelte package version to 1.1.13
+
 ## 2026-02-23 - SortableContainer: Fix incomplete unwrap, drag clone leak, dead CSS, style mutation
 
 ### Fixed
