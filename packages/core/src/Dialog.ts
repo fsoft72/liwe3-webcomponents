@@ -122,7 +122,7 @@ export class DialogElement extends HTMLElement {
 		this.backdrop.style.left = '0';
 		this.backdrop.style.width = '100%';
 		this.backdrop.style.height = '100%';
-		this.backdrop.style.backgroundColor = 'rgba(0, 0, 0, 0.6)';
+		this.backdrop.style.backgroundColor = 'var(--liwe3-surface-overlay)';
 		this.backdrop.style.backdropFilter = 'blur(4px)';
 		( this.backdrop.style as any ).webkitBackdropFilter = 'blur(4px)'; // Safari support
 		this.backdrop.style.zIndex = '99998';
@@ -280,7 +280,7 @@ export class DialogElement extends HTMLElement {
           max-height: 80vh;
           background: var(--liwe3-surface-raised);
           border-radius: var(--liwe3-border-radius);
-          box-shadow: var(--dialog-shadow, 0 10px 40px rgba(0, 0, 0, 0.2));
+          box-shadow: var(--liwe3-shadow-lg);
           z-index: 99999;
           display: flex;
           flex-direction: column;
@@ -331,10 +331,10 @@ export class DialogElement extends HTMLElement {
           font-size: 20px;
           font-weight: 600;
           color: var(--liwe3-text-inverse);
-          background: var(--dialog-title-background, linear-gradient(135deg,
-            var(--liwe3-mode1-500, #667eea),
-            var(--liwe3-mode4-500, #9f7aea)
-          ));
+          background: linear-gradient(135deg,
+            var(--liwe3-mode1-500),
+            var(--liwe3-mode4-500)
+          );
           border-bottom: 1px solid var(--liwe3-border-default);
         }
 
