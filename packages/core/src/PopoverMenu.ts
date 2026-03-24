@@ -131,17 +131,17 @@ export class PopoverMenuElement extends HTMLElement {
       <style>
         :host {
           display: block;
-          font-family: var(--font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
+          font-family: var(--liwe3-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
         }
 
         /* PopoverMenu Component Styles */
         .popover-menu-bar {
           display: flex;
-          background: var(--popover-menu-bar-background, #fff);
-          border: 1px solid var(--popover-menu-bar-border, #ddd);
+          background: var(--liwe3-surface-raised);
+          border: 1px solid var(--liwe3-border-default);
           border-radius: var(--popover-menu-bar-radius, 6px);
           padding: var(--popover-menu-bar-padding, 4px);
-          box-shadow: var(--popover-menu-bar-shadow, 0 1px 3px rgba(0,0,0,0.1));
+          box-shadow: var(--liwe3-shadow);
         }
 
         .popover-menu-trigger {
@@ -153,25 +153,25 @@ export class PopoverMenuElement extends HTMLElement {
           font-size: 14px;
           transition: background-color 0.2s;
           font-family: inherit;
-          color: var(--popover-menu-trigger-color, #333);
+          color: var(--liwe3-text-mode1);
         }
 
         .popover-menu-trigger:hover {
-          background: var(--popover-menu-trigger-hover-bg, #f0f0f0);
+          background: var(--liwe3-surface-mode1);
         }
 
         .popover-menu-trigger.active {
-          background: var(--popover-menu-trigger-active-bg, #e3f2fd);
-          color: var(--popover-menu-trigger-active-color, #1976d2);
+          background: var(--liwe3-mode1-300);
+          color: var(--liwe3-color-mode4);
         }
 
         .popover-menu-popover {
           margin: 0;
           padding: 4px;
-          border: 1px solid var(--popover-menu-border, #ccc);
+          border: 1px solid var(--liwe3-border-default);
           border-radius: var(--popover-menu-radius, 6px);
-          background: var(--popover-menu-background, white);
-          box-shadow: var(--popover-menu-shadow, 0 4px 12px rgba(0,0,0,0.15));
+          background: var(--liwe3-surface-raised);
+          box-shadow: var(--liwe3-shadow-lg);
           min-width: 180px;
           z-index: 1000;
           font-family: inherit;
@@ -189,15 +189,15 @@ export class PopoverMenuElement extends HTMLElement {
           font-size: 14px;
           transition: background-color 0.2s;
           position: relative;
-          color: var(--popover-menu-item-color, #333);
+          color: var(--liwe3-text-mode1);
         }
 
         .popover-menu-item:hover {
-          background: var(--popover-menu-item-hover-bg, #f5f5f5);
+          background: var(--liwe3-surface-mode1);
         }
 
         .popover-menu-item.disabled {
-          color: var(--popover-menu-item-disabled-color, #999);
+          color: var(--liwe3-text-disabled);
           cursor: not-allowed;
         }
 
@@ -208,22 +208,22 @@ export class PopoverMenuElement extends HTMLElement {
         .popover-menu-item.has-submenu::after {
           content: '▶';
           font-size: 10px;
-          color: var(--popover-menu-submenu-arrow-color, #666);
+          color: var(--liwe3-text-mode3);
         }
 
         .popover-menu-separator {
           height: 1px;
-          background: var(--popover-menu-separator-color, #e0e0e0);
+          background: var(--liwe3-border-default);
           margin: 4px 0;
         }
 
         .popover-submenu-popover {
           margin: 0;
           padding: 4px;
-          border: 1px solid var(--popover-menu-border, #ccc);
+          border: 1px solid var(--liwe3-border-default);
           border-radius: var(--popover-menu-radius, 6px);
-          background: var(--popover-menu-background, white);
-          box-shadow: var(--popover-menu-shadow, 0 4px 12px rgba(0,0,0,0.15));
+          background: var(--liwe3-surface-raised);
+          box-shadow: var(--liwe3-shadow-lg);
           min-width: 160px;
           z-index: 1001;
           font-family: inherit;
