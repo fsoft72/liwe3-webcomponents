@@ -214,7 +214,7 @@ export class SortableContainerElement extends HTMLElement {
 		handle.style.alignItems = 'center';
 		handle.style.justifyContent = 'center';
 		handle.style.cursor = 'grab';
-		handle.style.backgroundColor = 'var(--sortable-handle-bg, rgba(0, 0, 0, 0.05))';
+		handle.style.backgroundColor = 'var(--liwe3-surface-mode1)';
 		handle.style.borderRadius = 'var(--sortable-handle-radius, 4px)';
 		handle.style.color = 'var(--liwe3-text-mode3)';
 		handle.style.transition = 'background-color 0.15s ease, color 0.15s ease';
@@ -233,11 +233,11 @@ export class SortableContainerElement extends HTMLElement {
 
 		// Add hover effect via event listeners
 		handle.addEventListener( 'mouseenter', () => {
-			handle.style.backgroundColor = 'var(--sortable-handle-hover-bg, rgba(0, 0, 0, 0.1))';
+			handle.style.backgroundColor = 'var(--liwe3-surface-mode2)';
 			handle.style.color = 'var(--liwe3-text-mode1)';
 		} );
 		handle.addEventListener( 'mouseleave', () => {
-			handle.style.backgroundColor = 'var(--sortable-handle-bg, rgba(0, 0, 0, 0.05))';
+			handle.style.backgroundColor = 'var(--liwe3-surface-mode1)';
 			handle.style.color = 'var(--liwe3-text-mode3)';
 		} );
 		handle.addEventListener( 'mousedown', () => {

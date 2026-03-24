@@ -228,19 +228,19 @@ export class ComicBalloonElement extends HTMLElement implements IComicBalloon {
 				cursor: move;
 				z-index: 3;
 				user-select: none;
-				background: rgba(0, 0, 0, 0.1);
+				background: var(--liwe3-shadow);
 				border-radius: 50%;
-				border: 2px solid rgba(0, 0, 0, 0.3);
+				border: 2px solid var(--liwe3-shadow-lg);
 			}
 
 			.handler:hover {
-				background: rgba(0, 0, 0, 0.2);
-				border-color: rgba(0, 0, 0, 0.5);
+				background: var(--liwe3-shadow-lg);
+				border-color: var(--liwe3-surface-overlay);
 			}
 
 			.handler.dragging {
 				cursor: grabbing;
-				background: rgba(0, 0, 0, 0.3);
+				background: var(--liwe3-surface-overlay);
 			}
 
 			.resize-handle {
