@@ -874,12 +874,12 @@ export class ChunkUploaderElement extends HTMLElement {
           border-radius: 8px;
           padding: 12px;
           background: white;
-          box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+          box-shadow: 0 2px 4px var(--liwe3-shadow);
           transition: box-shadow 0.3s ease;
         }
 
         .file-card:hover {
-          box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+          box-shadow: 0 4px 8px var(--liwe3-shadow-lg);
         }
 
         .remove-btn {
@@ -890,7 +890,7 @@ export class ChunkUploaderElement extends HTMLElement {
           height: 24px;
           border: none;
           border-radius: 50%;
-          background: rgba(239, 68, 68, 0.9);
+          background: var(--liwe3-error);
           color: white;
           font-size: 18px;
           line-height: 1;
@@ -963,7 +963,7 @@ export class ChunkUploaderElement extends HTMLElement {
 
         .progress-bar {
           height: 100%;
-          background: var(--liwe3-color-mode4, #4CAF50);
+          background: var(--liwe3-success);
           transition: width 0.3s ease, background-color 0.3s ease;
         }
 
