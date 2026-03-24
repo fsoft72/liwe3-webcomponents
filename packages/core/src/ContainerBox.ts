@@ -109,12 +109,12 @@ export class ContainerBoxElement extends HTMLElement {
 
         .menu-button {
           position: absolute;
-          background: var(--liwe3-surface-raised);
-          border: 1px solid var(--liwe3-border-default);
+          background: var(--liwe3-surface-raised, #ffffff);
+          border: 1px solid var(--liwe3-border-default, #e0e0e0);
           border-radius: var(--container-box-menu-radius, 4px);
           padding: var(--container-box-menu-padding, 6px 10px);
           cursor: pointer;
-          box-shadow: var(--liwe3-shadow);
+          box-shadow: var(--liwe3-shadow, 0 1px 3px rgba(0,0,0,0.1));
           z-index: 10;
           opacity: 0;
           transition: opacity 0.2s;
@@ -122,11 +122,11 @@ export class ContainerBoxElement extends HTMLElement {
           align-items: center;
           gap: 4px;
           font-size: 14px;
-          color: var(--liwe3-text-mode1);
+          color: var(--liwe3-text-mode1, #333333);
         }
 
         .menu-button:hover {
-          background: var(--liwe3-surface-mode1);
+          background: var(--liwe3-surface-mode1, #f0f0f0);
         }
 
         .container-box:hover .menu-button {
@@ -240,10 +240,10 @@ export class ContainerBoxElement extends HTMLElement {
       <style>
         .custom-popover-menu {
           position: fixed;
-          background: var(--liwe3-surface-raised);
-          border: 1px solid var(--liwe3-border-default);
+          background: var(--liwe3-surface-raised, #ffffff);
+          border: 1px solid var(--liwe3-border-default, #e0e0e0);
           border-radius: 6px;
-          box-shadow: var(--liwe3-shadow-lg);
+          box-shadow: var(--liwe3-shadow-lg, 0 4px 16px rgba(0,0,0,0.15));
           min-width: 180px;
           z-index: 10000;
         }
@@ -257,11 +257,11 @@ export class ContainerBoxElement extends HTMLElement {
           transition: background-color 0.2s;
           position: relative;
           font-size: 14px;
-          color: var(--liwe3-text-mode1);
+          color: var(--liwe3-text-mode1, #333333);
         }
 
         .menu-item:hover {
-          background: var(--liwe3-surface-mode1);
+          background: var(--liwe3-surface-mode1, #f0f0f0);
         }
 
         .menu-item.disabled {
@@ -281,22 +281,22 @@ export class ContainerBoxElement extends HTMLElement {
         .menu-item-arrow {
           margin-left: 12px;
           font-size: 10px;
-          color: var(--liwe3-text-mode3);
+          color: var(--liwe3-text-mode3, #666666);
         }
 
         .menu-separator {
           height: 1px;
-          background: var(--liwe3-border-default);
+          background: var(--liwe3-border-default, #e0e0e0);
           margin: 4px 8px;
         }
 
         .submenu {
           display: none;
           position: fixed;
-          background: var(--liwe3-surface-raised);
-          border: 1px solid var(--liwe3-border-default);
+          background: var(--liwe3-surface-raised, #ffffff);
+          border: 1px solid var(--liwe3-border-default, #e0e0e0);
           border-radius: 6px;
-          box-shadow: var(--liwe3-shadow-lg);
+          box-shadow: var(--liwe3-shadow-lg, 0 4px 16px rgba(0,0,0,0.15));
           min-width: 180px;
           z-index: 10001;
         }

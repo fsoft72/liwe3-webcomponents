@@ -1,5 +1,12 @@
 # CHANGES.md
 
+## 2026-03-24 - ContainerBox: Add CSS fallback values for theme variables
+
+### Fixed
+
+- **ContainerBox**: Added fallback values to all `--liwe3-*` CSS variables (menu button, popover, submenu, separator) so the component renders correctly without WoxGUI theme bridge
+- Updated core package version to 1.1.22
+
 ## 2026-03-24 - TreeView: Add CSS fallback values for theme variables
 
 ### Fixed
