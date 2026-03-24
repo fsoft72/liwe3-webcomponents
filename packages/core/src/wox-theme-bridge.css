@@ -1,0 +1,75 @@
+/*
+ * WoxGUI Theme Bridge
+ *
+ * Maps --liwe3-* CSS custom properties to --wox-* equivalents.
+ * Import this file INSTEAD of variables.css when using WoxGUI theming.
+ *
+ * Known limitations:
+ * - WoxGUI has no --wox-warning or --wox-info; hardcoded fallbacks used.
+ * - text-mode2, text-mode3, text-disabled all map to --wox-text-secondary.
+ * - Palette steps (mode1-300, mode4-500) are approximated via oklch.
+ */
+
+:root {
+  /* Backgrounds */
+  --liwe3-background:      var(--wox-bg-app);
+  --liwe3-surface-raised:  var(--wox-bg-panel);
+  --liwe3-surface-mode1:   var(--wox-bg-input);
+  --liwe3-surface-mode2:   var(--wox-bg-hover);
+  --liwe3-surface-mode3:   var(--wox-bg-toolbar);
+  --liwe3-surface-overlay:  rgba(0, 0, 0, 0.6);
+
+  /* Text */
+  --liwe3-text-mode1:      var(--wox-text-primary);
+  --liwe3-text-mode2:      var(--wox-text-secondary);
+  --liwe3-text-mode3:      var(--wox-text-secondary);
+  --liwe3-text-inverse:    var(--wox-text-hi);
+  --liwe3-text-disabled:   var(--wox-text-secondary);
+  --liwe3-color:           var(--wox-text-primary);
+
+  /* Accent / Semantic */
+  --liwe3-color-mode1:     var(--wox-accent);
+  --liwe3-color-mode4:     var(--wox-accent);
+  --liwe3-success:         var(--wox-success);
+  --liwe3-error:           var(--wox-danger);
+  --liwe3-warning:         #f59e0b;
+  --liwe3-info:            var(--wox-accent);
+
+  /* Tinted status backgrounds */
+  --liwe3-success-light:   oklch(from var(--wox-success) calc(l + 0.2) calc(c * 0.7) h);
+  --liwe3-error-light:     oklch(from var(--wox-danger) calc(l + 0.2) calc(c * 0.7) h);
+  --liwe3-warning-light:   oklch(from #f59e0b calc(l + 0.15) calc(c * 0.7) h);
+  --liwe3-info-light:      oklch(from var(--wox-accent) calc(l + 0.2) calc(c * 0.3) h);
+
+  /* Borders */
+  --liwe3-border-default:  var(--wox-border);
+  --liwe3-border-subtle:   var(--wox-border);
+  --liwe3-border-strong:   var(--wox-border-light);
+  --liwe3-border-width:    1px;
+
+  /* Shadows */
+  --liwe3-shadow:          var(--wox-shadow-sm);
+  --liwe3-shadow-lg:       var(--wox-shadow-md);
+
+  /* Typography */
+  --liwe3-font-family:     var(--wox-font);
+  --liwe3-font-size:       var(--wox-font-size-base);
+
+  /* Spacing / Radius */
+  --liwe3-border-radius:   var(--wox-radius-md);
+
+  /* Palette step approximations */
+  --liwe3-mode1-300:       oklch(from var(--wox-accent) calc(l + 0.2) calc(c * 0.7) h);
+  --liwe3-mode4-200:       oklch(from var(--wox-accent) calc(l + 0.25) calc(c * 0.6) h);
+  --liwe3-mode4-500:       var(--wox-accent);
+  --liwe3-mode1-500:       var(--wox-accent);
+
+  /* Interactive overlays */
+  --liwe3-hover-overlay:   oklch(from var(--wox-accent) l c h / 0.08);
+  --liwe3-active-overlay:  oklch(from var(--wox-accent) l c h / 0.12);
+  --liwe3-focus-ring:      oklch(from var(--wox-accent) l c h / 0.5);
+
+  /* Scrollbar */
+  --liwe3-scrollbar-track: var(--wox-bg-input);
+  --liwe3-scrollbar-thumb: var(--wox-border-light);
+}
