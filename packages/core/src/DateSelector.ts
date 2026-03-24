@@ -77,7 +77,7 @@ export class DateSelectorElement extends HTMLElement {
           font-size: clamp( 14px, var(--liwe3-font-size, 18px), 30px);
           font-family: var(--liwe3-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
           background: var(--liwe3-background, white);
-          border: var(--liwe3-border-width, 1px) solid var(--liwe3-border-default, #e0e0e0);
+          border: var(--liwe3-border-width, 1px) solid var(--liwe3-border-default);
           border-radius: var(--liwe3-border-radius, 8px);
           padding: 16px;
           box-shadow: var(--liwe3-shadow, 0 2px 8px rgba(0,0,0,0.1));
@@ -94,7 +94,7 @@ export class DateSelectorElement extends HTMLElement {
         .month-year {
           font-size: 0.875em;
           font-weight: 600;
-          color: var(--liwe3-color, #333);
+          color: var(--liwe3-color);
           padding-left: 4px;
         }
 
@@ -104,7 +104,7 @@ export class DateSelectorElement extends HTMLElement {
         }
 
         .nav-btn {
-          background: var(--liwe3-surface-mode1, #f5f5f5);
+          background: var(--liwe3-surface-mode1);
           border: none;
           width: 32px;
           height: 32px;
@@ -114,12 +114,12 @@ export class DateSelectorElement extends HTMLElement {
           align-items: center;
           justify-content: center;
           font-size: 0.7em;
-          color: var(--liwe3-color, #333);
+          color: var(--liwe3-color);
           transition: background-color 0.2s;
         }
 
         .nav-btn:hover {
-          background: var(--liwe3-surface-mode2, #e0e0e0);
+          background: var(--liwe3-surface-mode2);
         }
 
         .year-selector {
@@ -127,14 +127,14 @@ export class DateSelectorElement extends HTMLElement {
           border: none;
           font-size: 0.875em;
           font-weight: 600;
-          color: var(--liwe3-color, #333);
+          color: var(--liwe3-color);
           cursor: pointer;
           padding: 4px;
           border-radius: var(--liwe3-border-radius, 4px);
         }
 
         .year-selector:hover {
-          background: var(--liwe3-surface-mode1, #f5f5f5);
+          background: var(--liwe3-surface-mode1);
         }
 
         .calendar-grid {
@@ -147,7 +147,7 @@ export class DateSelectorElement extends HTMLElement {
           text-align: center;
           font-size: 0.6em;
           font-weight: 600;
-          color: var(--liwe3-text-mode2, #666);
+          color: var(--liwe3-text-mode2);
           padding: 8px 4px;
         }
 
@@ -161,50 +161,50 @@ export class DateSelectorElement extends HTMLElement {
           border-radius: var(--liwe3-border-radius, 4px);
           transition: all 0.2s;
           position: relative;
-          color: var(--liwe3-color, #333);
+          color: var(--liwe3-color);
         }
 
         .day-cell:hover {
-          background: var(--liwe3-surface-mode1, #f0f0f0);
+          background: var(--liwe3-surface-mode1);
         }
 
         .day-cell.other-month {
-          color: var(--liwe3-text-disabled, #ccc);
+          color: var(--liwe3-text-disabled);
         }
 
         .day-cell.today {
-          background: var(--liwe3-mode1-300, #e3f2fd);
+          background: var(--liwe3-mode1-300);
           font-weight: 600;
-          color: var(--liwe3-color-mode4, #1976d2);
+          color: var(--liwe3-color-mode4);
         }
 
         .day-cell.selected {
-          background: var(--liwe3-mode4-500, #2196f3);
-          color: var(--liwe3-text-inverse, white);
+          background: var(--liwe3-mode4-500);
+          color: var(--liwe3-text-inverse);
         }
 
         .day-cell.range-start {
-          background: var(--liwe3-mode4-500, #2196f3);
-          color: var(--liwe3-text-inverse, white);
+          background: var(--liwe3-mode4-500);
+          color: var(--liwe3-text-inverse);
         }
 
         .day-cell.range-end {
-          background: var(--liwe3-mode4-500, #2196f3);
-          color: var(--liwe3-text-inverse, white);
+          background: var(--liwe3-mode4-500);
+          color: var(--liwe3-text-inverse);
         }
 
         .day-cell.in-range {
-          background: var(--liwe3-mode4-200, #bbdefb);
-          color: var(--liwe3-color-mode4, #1976d2);
+          background: var(--liwe3-mode4-200);
+          color: var(--liwe3-color-mode4);
         }
 
         .day-cell.range-hover {
-          background: var(--liwe3-mode1-300, #e3f2fd);
+          background: var(--liwe3-mode1-300);
         }
 
         .mode-indicator {
           font-size: 0.6em;
-          color: var(--liwe3-text-mode2, #666);
+          color: var(--liwe3-text-mode2);
           margin-bottom: 8px;
           text-align: center;
         }
