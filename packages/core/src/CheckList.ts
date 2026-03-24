@@ -126,81 +126,81 @@ export class CheckListElement extends HTMLElement {
           :host {
             display: block;
             font-family: var(--font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
-            background: var(--background, #fff);
+            background: var(--liwe3-surface-raised);
             border-radius: var(--border-radius, 8px);
             padding: var(--padding, 16px);
-            box-shadow: var(--box-shadow, 0 2px 4px rgba(0,0,0,0.1));
+            box-shadow: var(--liwe3-shadow);
             max-width: var(--max-width, 100%);
           }
-  
+
           .header {
             display: flex;
             align-items: center;
             justify-content: space-between;
             margin-bottom: 16px;
           }
-  
+
           .title {
             font-size: 1.1rem;
             font-weight: 600;
             display: flex;
             align-items: center;
             gap: 8px;
-            color: var(--text-color, #333);
+            color: var(--liwe3-text-mode1);
           }
-  
+
           .title-icon {
             width: 20px;
             height: 20px;
             fill: currentColor;
           }
-  
+
           .progress-container {
             display: flex;
             align-items: center;
             gap: 12px;
             margin-bottom: 20px;
           }
-  
+
           .progress-text {
             font-size: 0.9rem;
             font-weight: 600;
-            color: var(--text-color, #333);
+            color: var(--liwe3-text-mode1);
             min-width: 40px;
           }
-  
+
           .progress-bar-bg {
             flex: 1;
             height: 6px;
-            background: #e0e0e0;
+            background: var(--liwe3-border-default);
             border-radius: 3px;
             overflow: hidden;
           }
-  
+
           .progress-bar-fill {
             height: 100%;
-            background: var(--primary-color, #1976d2);
+            background: var(--liwe3-color-mode4);
             width: 0%;
             transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
           }
-  
+
           .list {
             display: flex;
             flex-direction: column;
             gap: 8px;
           }
-  
+
           .list-item {
             display: flex;
             align-items: center;
             gap: 12px;
             padding: 4px 0;
           }
-  
+
           .checkbox {
             width: 20px;
             height: 20px;
-            border: 2px solid #757575;
+            border: 2px solid var(--liwe3-border-strong);
             border-radius: 4px;
             cursor: pointer;
             display: flex;
@@ -209,70 +209,70 @@ export class CheckListElement extends HTMLElement {
             transition: all 0.2s;
             flex-shrink: 0;
           }
-  
+
           .checkbox.checked {
-            background: var(--primary-color, #1976d2);
-            border-color: var(--primary-color, #1976d2);
+            background: var(--liwe3-color-mode4);
+            border-color: var(--liwe3-color-mode4);
           }
-  
+
           .checkbox svg {
             width: 14px;
             height: 14px;
             fill: white;
             display: none;
           }
-  
+
           .checkbox.checked svg {
             display: block;
           }
-  
+
           .item-input {
             flex: 1;
             padding: 8px 12px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--liwe3-border-default);
             border-radius: 4px;
             font-size: 0.95rem;
             outline: none;
             transition: border-color 0.2s;
-            color: var(--text-color, #333);
+            color: var(--liwe3-text-mode1);
           }
-  
+
           .item-input:focus {
-            border-color: var(--primary-color, #1976d2);
+            border-color: var(--liwe3-color-mode4);
           }
-  
+
           .item-input.add-item-input {
-            color: #666;
+            color: var(--liwe3-text-mode3);
           }
-          
+
           .item-input.add-item-input::placeholder {
-            color: #999;
+            color: var(--liwe3-text-disabled);
           }
-  
+
           .delete-btn {
             background: none;
             border: none;
             cursor: pointer;
             padding: 4px;
-            color: #9e9e9e;
+            color: var(--liwe3-text-mode3);
             transition: color 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
           }
-  
+
           .delete-btn:hover {
-            color: #f44336;
+            color: var(--liwe3-error);
           }
-  
+
           .delete-btn svg {
             width: 18px;
             height: 18px;
             fill: currentColor;
           }
-  
+
           .add-btn {
-            background: #f5f5f5;
+            background: var(--liwe3-surface-mode1);
             border: none;
             border-radius: 50%;
             width: 32px;
@@ -281,12 +281,12 @@ export class CheckListElement extends HTMLElement {
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            color: #757575;
+            color: var(--liwe3-text-disabled);
             transition: background 0.2s;
           }
-  
+
           .add-btn:hover {
-            background: #e0e0e0;
+            background: var(--liwe3-border-default);
           }
         </style>
   

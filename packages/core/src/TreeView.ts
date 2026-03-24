@@ -430,8 +430,8 @@ export class TreeViewElement extends HTMLElement {
           display: block;
           font-family: var(--tree-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
           font-size: var(--tree-font-size, 14px);
-          color: var(--tree-text-color, #333);
-          background: var(--tree-background, transparent);
+          color: var(--liwe3-text-mode1);
+          background: var(--liwe3-surface-raised);
           user-select: none;
         }
 
@@ -439,13 +439,13 @@ export class TreeViewElement extends HTMLElement {
           overflow: auto;
           padding: var(--tree-padding, 8px);
           border-radius: var(--tree-border-radius, 10px);
-          background: var(--tree-container-background, transparent);
+          background: var(--liwe3-surface-mode1);
           border: none;
         }
 
         .tree-container.bordered {
-          border: var(--tree-border, 1px solid rgba(15, 23, 42, 0.12));
-          box-shadow: var(--tree-border-shadow, none);
+          border: var(--liwe3-border-default);
+          box-shadow: var(--liwe3-shadow);
         }
 
         .tree-container.borderless {
@@ -467,7 +467,7 @@ export class TreeViewElement extends HTMLElement {
         }
 
         .node-content:hover {
-          background-color: var(--tree-hover-background, rgba(0, 123, 255, 0.08));
+          background-color: var(--liwe3-surface-mode1);
         }
 
         .node-controls {
@@ -491,16 +491,16 @@ export class TreeViewElement extends HTMLElement {
         }
 
         .expand-toggle:hover {
-          background-color: var(--tree-expand-hover-background, rgba(0, 0, 0, 0.1));
+          background-color: var(--liwe3-surface-mode2);
         }
 
         .expand-toggle:focus {
-          outline: 2px solid var(--tree-focus-color, #007bff);
+          outline: 2px solid var(--liwe3-color-mode4);
           outline-offset: 2px;
         }
 
         .expand-icon {
-          fill: var(--tree-icon-color, #666);
+          fill: var(--liwe3-text-mode3);
           transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -532,9 +532,9 @@ export class TreeViewElement extends HTMLElement {
           position: relative;
           width: 18px;
           height: 18px;
-          border: 2px solid var(--tree-checkbox-border, #ccc);
+          border: 2px solid var(--liwe3-border-default);
           border-radius: var(--tree-checkbox-border-radius, 4px);
-          background: var(--tree-checkbox-background, white);
+          background: var(--liwe3-surface-raised);
           transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -552,8 +552,8 @@ export class TreeViewElement extends HTMLElement {
         }
 
         .node-checkbox:checked + .checkbox-custom {
-          background: var(--tree-checkbox-checked-background, #007bff);
-          border-color: var(--tree-checkbox-checked-border, #007bff);
+          background: var(--liwe3-color-mode4);
+          border-color: var(--liwe3-color-mode4);
         }
 
         .node-checkbox:checked + .checkbox-custom::after {
@@ -561,12 +561,12 @@ export class TreeViewElement extends HTMLElement {
         }
 
         .checkbox-wrapper:hover .checkbox-custom {
-          border-color: var(--tree-checkbox-hover-border, #999);
-          box-shadow: 0 0 0 3px var(--tree-checkbox-hover-shadow, rgba(0, 123, 255, 0.1));
+          border-color: var(--liwe3-border-strong);
+          box-shadow: 0 0 0 3px var(--liwe3-focus-ring);
         }
 
         .node-checkbox:focus + .checkbox-custom {
-          outline: 2px solid var(--tree-focus-color, #007bff);
+          outline: 2px solid var(--liwe3-color-mode4);
           outline-offset: 2px;
         }
 
@@ -585,7 +585,7 @@ export class TreeViewElement extends HTMLElement {
         .node-label {
           flex: 1;
           padding: 2px 4px;
-          color: var(--tree-label-color, #333);
+          color: var(--liwe3-text-mode1);
           font-weight: var(--tree-label-font-weight, 400);
           line-height: 1.4;
           cursor: pointer;
@@ -593,7 +593,7 @@ export class TreeViewElement extends HTMLElement {
         }
 
         .node-label:hover {
-          color: var(--tree-label-hover-color, #007bff);
+          color: var(--liwe3-color-mode4);
         }
 
         .node-children {
@@ -607,7 +607,7 @@ export class TreeViewElement extends HTMLElement {
           top: 0;
           bottom: 0;
           width: 1px;
-          background: var(--tree-guide-line-color, rgba(0, 0, 0, 0.1));
+          background: var(--liwe3-border-subtle);
         }
 
         /* Animations */
@@ -630,7 +630,7 @@ export class TreeViewElement extends HTMLElement {
         .tree-empty {
           padding: 32px;
           text-align: center;
-          color: var(--tree-empty-color, #999);
+          color: var(--liwe3-text-disabled);
           font-style: italic;
         }
 
@@ -641,17 +641,17 @@ export class TreeViewElement extends HTMLElement {
         }
 
         .tree-container::-webkit-scrollbar-track {
-          background: var(--tree-scrollbar-track, #f1f1f1);
+          background: var(--liwe3-scrollbar-track);
           border-radius: 4px;
         }
 
         .tree-container::-webkit-scrollbar-thumb {
-          background: var(--tree-scrollbar-thumb, #888);
+          background: var(--liwe3-scrollbar-thumb);
           border-radius: 4px;
         }
 
         .tree-container::-webkit-scrollbar-thumb:hover {
-          background: var(--tree-scrollbar-thumb-hover, #555);
+          background: var(--liwe3-border-strong);
         }
       </style>
 
