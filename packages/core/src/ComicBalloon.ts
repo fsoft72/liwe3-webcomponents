@@ -251,16 +251,16 @@ export class ComicBalloonElement extends HTMLElement implements IComicBalloon {
 				height: 20px;
 				cursor: nwse-resize;
 				z-index: 4;
-				background: linear-gradient(135deg, transparent 50%, rgba(102, 126, 234, 0.5) 50%);
+				background: linear-gradient(135deg, transparent 50%, color-mix(in srgb, var(--liwe3-color-mode4) 50%, transparent) 50%);
 				border-bottom-right-radius: inherit;
 			}
 
 			.resize-handle:hover {
-				background: linear-gradient(135deg, transparent 50%, rgba(102, 126, 234, 0.8) 50%);
+				background: linear-gradient(135deg, transparent 50%, color-mix(in srgb, var(--liwe3-color-mode4) 80%, transparent) 50%);
 			}
 
 			.resize-handle.resizing {
-				background: linear-gradient(135deg, transparent 50%, rgba(102, 126, 234, 1) 50%);
+				background: linear-gradient(135deg, transparent 50%, var(--liwe3-color-mode4) 50%);
 			}
 		`;
 	}
@@ -454,7 +454,7 @@ export class ComicBalloonElement extends HTMLElement implements IComicBalloon {
 			circle.setAttribute( 'cy', y.toString() );
 			circle.setAttribute( 'r', radius.toString() );
 			circle.setAttribute( 'fill', 'white' );
-			circle.setAttribute( 'stroke', '#000' );
+			circle.setAttribute( 'stroke', 'var(--liwe3-text-mode1)' );
 			circle.setAttribute( 'stroke-width', '2' );
 			
 			group.appendChild( circle );

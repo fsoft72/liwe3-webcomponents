@@ -697,7 +697,7 @@ export class ResizableCropperElement extends HTMLElement {
 					position: relative;
 					border: 2px solid var(--liwe3-color-mode4);
 					box-sizing: border-box;
-					background: rgba(0, 123, 255, 0.05);
+					background: var(--liwe3-hover-overlay);
 				}
 
 				#clipper {

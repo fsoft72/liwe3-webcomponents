@@ -647,7 +647,7 @@ export class SortableContainerElement extends HTMLElement {
 		clone.style.zIndex = '1000';
 		clone.style.opacity = '0.6';
 		clone.style.transform = 'scale(1.02)';
-		clone.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.2)';
+		clone.style.boxShadow = 'var(--liwe3-shadow-lg)';
 
 		document.body.appendChild( clone );
 		this.draggedClone = clone;
@@ -670,7 +670,7 @@ export class SortableContainerElement extends HTMLElement {
 		// Apply inline styles since placeholder is in light DOM
 		placeholder.style.border = '2px dashed var(--liwe3-color-mode4)';
 		placeholder.style.borderRadius = 'var(--sortable-indicator-radius, 8px)';
-		placeholder.style.backgroundColor = 'rgba(102, 126, 234, 0.15)';
+		placeholder.style.backgroundColor = 'var(--liwe3-hover-overlay)';
 		placeholder.style.boxSizing = 'border-box';
 		placeholder.style.flexShrink = '0';
 		placeholder.style.pointerEvents = 'none';
