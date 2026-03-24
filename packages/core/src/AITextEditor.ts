@@ -130,7 +130,7 @@ export class AITextEditorElement extends HTMLElement {
         .editor:focus {
           outline: none;
           border-color: var(--liwe3-color-mode4);
-          box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+          box-shadow: 0 0 0 3px var(--liwe3-focus-ring);
         }
         
         :host([embedded]) .editor:focus {

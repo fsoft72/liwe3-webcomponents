@@ -109,7 +109,7 @@ export class AIMarkdownEditorElement extends HTMLElement {
           background: white;
           padding: 20px;
           border-radius: 8px;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          box-shadow: 0 4px 12px var(--liwe3-shadow-lg);
           z-index: 100;
           width: 400px;
           max-width: 90%;
@@ -184,7 +184,7 @@ export class AIMarkdownEditorElement extends HTMLElement {
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(0,0,0,0.5);
+          background: var(--liwe3-surface-overlay);
           z-index: 99;
           display: none;
         }
