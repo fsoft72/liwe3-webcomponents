@@ -275,6 +275,10 @@
 	--liwe3-hover-overlay: oklch(from var(--liwe3-color-mode1) l c h / 0.08);
 	--liwe3-active-overlay: oklch(from var(--liwe3-color-mode1) l c h / 0.12);
 	--liwe3-focus-ring: oklch(from var(--liwe3-color-mode1) l c h / 0.5);
+	--liwe3-shadow: 0 2px 8px rgba(0,0,0,0.1);
+	--liwe3-shadow-lg: 0 4px 16px rgba(0,0,0,0.15);
+	--liwe3-scrollbar-track: var(--liwe3-gray-100);
+	--liwe3-scrollbar-thumb: var(--liwe3-gray-400);
 	--liwe3-info: var(--liwe3-mode1-500);
 	--liwe3-info-light: var(--liwe3-mode1-300);
 	--liwe3-info-dark: var(--liwe3-mode1-700);
@@ -378,6 +382,10 @@
 	--liwe3-button-border-mode2: var(--liwe3-dark-button-border-mode2);
 	--liwe3-button-border-mode3: var(--liwe3-dark-button-border-mode3);
 	--liwe3-button-border-mode4: var(--liwe3-dark-button-border-mode4);
+	--liwe3-shadow: 0 2px 8px rgba(0,0,0,0.4);
+	--liwe3-shadow-lg: 0 4px 16px rgba(0,0,0,0.5);
+	--liwe3-scrollbar-track: var(--liwe3-gray-800);
+	--liwe3-scrollbar-thumb: var(--liwe3-gray-600);
 
 	/* ===================================
 	    SEMANTIC COLORS
