@@ -256,21 +256,19 @@ export class DrawerElement extends HTMLElement {
         :host {
           display: block;
           --drawer-duration: ${ this.config.duration }ms;
-          --drawer-bg: #ffffff;
-          --drawer-border: #e5e7eb;
-          --drawer-text: #1f2937;
-          --drawer-icon-bg: #f3f4f6;
-          --drawer-icon-hover: #e5e7eb;
-          --drawer-button-hover: #f9fafb;
-          --drawer-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+          --drawer-horizontal-size: 300px;
+          --drawer-vertical-size: 300px;
+          --drawer-horizontal-shrunk-size: 48px;
+          --drawer-vertical-shrunk-size: 48px;
+          --drawer-content-padding: 16px;
         }
 
         /* Container when expanded */
         .drawer-container {
-          background: var(--drawer-bg);
-          border: 1px solid var(--drawer-border);
+          background: var(--liwe3-surface-raised);
+          border: 1px solid var(--liwe3-border-default);
           border-radius: 8px;
-          box-shadow: var(--drawer-shadow);
+          box-shadow: var(--liwe3-shadow);
           overflow: hidden;
           position: relative;
         }
@@ -305,7 +303,7 @@ export class DrawerElement extends HTMLElement {
           align-items: center;
           gap: 12px;
           padding: 12px;
-          border-bottom: 1px solid var(--drawer-border);
+          border-bottom: 1px solid var(--liwe3-border-default);
           transition: none;
         }
 
@@ -328,7 +326,7 @@ export class DrawerElement extends HTMLElement {
           justify-content: center;
           width: 28px;
           height: 28px;
-          background: var(--drawer-icon-bg);
+          background: var(--liwe3-surface-mode1);
           border: none;
           border-radius: 6px;
           cursor: pointer;
@@ -338,14 +336,14 @@ export class DrawerElement extends HTMLElement {
         }
 
         .drawer-toggle:hover {
-          background: var(--drawer-icon-hover);
+          background: var(--liwe3-surface-mode2);
         }
 
         .drawer-title {
           flex: 1;
           font-size: 16px;
           font-weight: 600;
-          color: var(--drawer-text);
+          color: var(--liwe3-text-mode1);
           transition: none;
           white-space: nowrap;
           overflow: hidden;
@@ -362,14 +360,14 @@ export class DrawerElement extends HTMLElement {
           border-radius: 4px;
           cursor: pointer;
           font-size: 18px;
-          color: #6b7280;
+          color: var(--liwe3-text-mode3);
           transition: none;
           flex-shrink: 0;
         }
 
         .drawer-close:hover {
-          background: var(--drawer-button-hover);
-          color: #ef4444;
+          background: var(--liwe3-surface-mode1);
+          color: var(--liwe3-error);
         }
 
         /* Content area */

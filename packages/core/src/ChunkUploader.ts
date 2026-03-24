@@ -661,13 +661,13 @@ export class ChunkUploaderElement extends HTMLElement {
 
 			// Color based on status
 			if ( file.status === 'completed' ) {
-				progressBar.style.backgroundColor = '#22c55e'; // green
+				progressBar.style.backgroundColor = 'var(--liwe3-success)'; // green
 			} else if ( file.status === 'error' ) {
-				progressBar.style.backgroundColor = '#ef4444'; // red
+				progressBar.style.backgroundColor = 'var(--liwe3-error)'; // red
 			} else if ( file.status === 'aborted' ) {
-				progressBar.style.backgroundColor = '#f59e0b'; // orange
+				progressBar.style.backgroundColor = 'var(--liwe3-warning)'; // orange
 			} else {
-				progressBar.style.backgroundColor = 'var(--color-primary)';
+				progressBar.style.backgroundColor = 'var(--liwe3-color-mode4)';
 			}
 		}
 
@@ -704,7 +704,7 @@ export class ChunkUploaderElement extends HTMLElement {
         <div class="progress-container">
           <div class="progress-bar-bg">
             <div class="progress-bar" style="width: ${file.progress}%; background-color: ${
-			file.status === 'completed' ? '#22c55e' : file.status === 'error' ? '#ef4444' : 'var(--color-primary)'
+			file.status === 'completed' ? 'var(--liwe3-success)' : file.status === 'error' ? 'var(--liwe3-error)' : 'var(--liwe3-color-mode4)'
 		}"></div>
           </div>
           <div class="progress-text">${Math.round( file.progress )}%</div>
@@ -799,23 +799,23 @@ export class ChunkUploaderElement extends HTMLElement {
         }
 
         .upload-zone {
-          border: 2px dashed #ccc;
+          border: 2px dashed var(--liwe3-border-default);
           border-radius: 8px;
           padding: 10px;
           text-align: center;
           cursor: pointer;
           transition: all 0.3s ease;
-          background: #fafafa;
+          background: var(--liwe3-surface-raised);
         }
 
         .upload-zone:hover {
-          border-color: #4CAF50;
-          background: #f0f9f0;
+          border-color: var(--liwe3-success);
+          background: var(--liwe3-success-light);
         }
 
         .upload-zone.drag-over {
-          border-color: #4CAF50;
-          background: #e8f5e9;
+          border-color: var(--liwe3-success);
+          background: var(--liwe3-success-light);
         }
 
         .upload-zone-content {
@@ -830,16 +830,16 @@ export class ChunkUploaderElement extends HTMLElement {
         .upload-text {
           font-size: 18px;
           margin-bottom: 8px;
-          color: #333;
+          color: var(--liwe3-text-mode1);
         }
 
         .upload-hint {
           font-size: 14px;
-          color: #666;
+          color: var(--liwe3-text-mode3);
         }
 
         .browse-btn {
-          background: #4CAF50;
+          background: var(--liwe3-success);
           color: white;
           border: none;
           padding: 12px 24px;
@@ -853,7 +853,7 @@ export class ChunkUploaderElement extends HTMLElement {
         }
 
         .browse-btn:hover {
-          background: #45a049;
+          background: var(--liwe3-success);
         }
 
         input[type="file"] {
@@ -870,7 +870,7 @@ export class ChunkUploaderElement extends HTMLElement {
         .file-card {
           position: relative;
           width: 200px;
-          border: 1px solid #e0e0e0;
+          border: 1px solid var(--liwe3-border-default);
           border-radius: 8px;
           padding: 12px;
           background: white;
@@ -904,7 +904,7 @@ export class ChunkUploaderElement extends HTMLElement {
         }
 
         .remove-btn:hover {
-          background: rgba(239, 68, 68, 1);
+          background: var(--liwe3-error);
         }
 
         .preview {
@@ -912,7 +912,7 @@ export class ChunkUploaderElement extends HTMLElement {
           height: 120px;
           border-radius: 4px;
           overflow: hidden;
-          background: #f5f5f5;
+          background: var(--liwe3-surface-mode1);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -936,7 +936,7 @@ export class ChunkUploaderElement extends HTMLElement {
         .file-name {
           font-size: 14px;
           font-weight: 500;
-          color: #333;
+          color: var(--liwe3-text-mode1);
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
@@ -945,7 +945,7 @@ export class ChunkUploaderElement extends HTMLElement {
 
         .file-size {
           font-size: 12px;
-          color: #666;
+          color: var(--liwe3-text-mode3);
         }
 
         .progress-container {
@@ -955,7 +955,7 @@ export class ChunkUploaderElement extends HTMLElement {
         .progress-bar-bg {
           width: 100%;
           height: 8px;
-          background: #e0e0e0;
+          background: var(--liwe3-border-default);
           border-radius: 4px;
           overflow: hidden;
           margin-bottom: 4px;
@@ -963,19 +963,19 @@ export class ChunkUploaderElement extends HTMLElement {
 
         .progress-bar {
           height: 100%;
-          background: var(--color-primary, #4CAF50);
+          background: var(--liwe3-color-mode4, #4CAF50);
           transition: width 0.3s ease, background-color 0.3s ease;
         }
 
         .progress-text {
           font-size: 12px;
-          color: #666;
+          color: var(--liwe3-text-mode3);
           text-align: center;
         }
 
         .status {
           font-size: 12px;
-          color: #ef4444;
+          color: var(--liwe3-error);
           margin-top: 4px;
           display: none;
         }
@@ -985,7 +985,7 @@ export class ChunkUploaderElement extends HTMLElement {
         }
 
         .upload-btn {
-          background: #4CAF50;
+          background: var(--liwe3-success);
           color: white;
           border: none;
           padding: 12px 32px;
@@ -999,7 +999,7 @@ export class ChunkUploaderElement extends HTMLElement {
         }
 
         .upload-btn:hover:not(:disabled) {
-          background: #45a049;
+          background: var(--liwe3-success);
         }
 
         .upload-btn:disabled {
@@ -1008,7 +1008,7 @@ export class ChunkUploaderElement extends HTMLElement {
         }
 
         .abort-btn {
-          background: #ef4444;
+          background: var(--liwe3-error);
           color: white;
           border: none;
           padding: 12px 32px;
@@ -1023,7 +1023,7 @@ export class ChunkUploaderElement extends HTMLElement {
         }
 
         .abort-btn:hover {
-          background: #dc2626;
+          background: var(--liwe3-error);
         }
 
         .buttons-container {
