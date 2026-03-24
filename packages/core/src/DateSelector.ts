@@ -76,11 +76,11 @@ export class DateSelectorElement extends HTMLElement {
           display: block;
           font-size: clamp( 14px, var(--liwe3-font-size, 18px), 30px);
           font-family: var(--liwe3-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
-          background: var(--liwe3-background, white);
+          background: var(--liwe3-background);
           border: var(--liwe3-border-width, 1px) solid var(--liwe3-border-default);
           border-radius: var(--liwe3-border-radius, 8px);
           padding: 16px;
-          box-shadow: var(--liwe3-shadow, 0 2px 8px rgba(0,0,0,0.1));
+          box-shadow: var(--liwe3-shadow);
           width: 320px;
         }
 
