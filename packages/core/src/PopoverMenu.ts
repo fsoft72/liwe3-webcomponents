@@ -137,11 +137,11 @@ export class PopoverMenuElement extends HTMLElement {
         /* PopoverMenu Component Styles */
         .popover-menu-bar {
           display: flex;
-          background: var(--liwe3-surface-raised);
-          border: 1px solid var(--liwe3-border-default);
+          background: var(--liwe3-surface-raised, #ffffff);
+          border: 1px solid var(--liwe3-border-default, #e0e0e0);
           border-radius: var(--popover-menu-bar-radius, 6px);
           padding: var(--popover-menu-bar-padding, 4px);
-          box-shadow: var(--liwe3-shadow);
+          box-shadow: var(--liwe3-shadow, 0 1px 3px rgba(0,0,0,0.1));
         }
 
         .popover-menu-trigger {
@@ -153,25 +153,25 @@ export class PopoverMenuElement extends HTMLElement {
           font-size: 14px;
           transition: background-color 0.2s;
           font-family: inherit;
-          color: var(--liwe3-text-mode1);
+          color: var(--liwe3-text-mode1, #333333);
         }
 
         .popover-menu-trigger:hover {
-          background: var(--liwe3-surface-mode1);
+          background: var(--liwe3-surface-mode1, #f0f0f0);
         }
 
         .popover-menu-trigger.active {
-          background: var(--liwe3-mode1-300);
-          color: var(--liwe3-color-mode4);
+          background: var(--liwe3-mode1-300, #e0e0e0);
+          color: var(--liwe3-color-mode4, #333333);
         }
 
         .popover-menu-popover {
           margin: 0;
           padding: 4px;
-          border: 1px solid var(--liwe3-border-default);
+          border: 1px solid var(--liwe3-border-default, #e0e0e0);
           border-radius: var(--popover-menu-radius, 6px);
-          background: var(--liwe3-surface-raised);
-          box-shadow: var(--liwe3-shadow-lg);
+          background: var(--liwe3-surface-raised, #ffffff);
+          box-shadow: var(--liwe3-shadow-lg, 0 4px 16px rgba(0,0,0,0.15));
           min-width: 180px;
           z-index: 1000;
           font-family: inherit;
@@ -189,15 +189,15 @@ export class PopoverMenuElement extends HTMLElement {
           font-size: 14px;
           transition: background-color 0.2s;
           position: relative;
-          color: var(--liwe3-text-mode1);
+          color: var(--liwe3-text-mode1, #333333);
         }
 
         .popover-menu-item:hover {
-          background: var(--liwe3-surface-mode1);
+          background: var(--liwe3-surface-mode1, #f0f0f0);
         }
 
         .popover-menu-item.disabled {
-          color: var(--liwe3-text-disabled);
+          color: var(--liwe3-text-disabled, #999999);
           cursor: not-allowed;
         }
 
@@ -208,22 +208,22 @@ export class PopoverMenuElement extends HTMLElement {
         .popover-menu-item.has-submenu::after {
           content: '▶';
           font-size: 10px;
-          color: var(--liwe3-text-mode3);
+          color: var(--liwe3-text-mode3, #666666);
         }
 
         .popover-menu-separator {
           height: 1px;
-          background: var(--liwe3-border-default);
+          background: var(--liwe3-border-default, #e0e0e0);
           margin: 4px 0;
         }
 
         .popover-submenu-popover {
           margin: 0;
           padding: 4px;
-          border: 1px solid var(--liwe3-border-default);
+          border: 1px solid var(--liwe3-border-default, #e0e0e0);
           border-radius: var(--popover-menu-radius, 6px);
-          background: var(--liwe3-surface-raised);
-          box-shadow: var(--liwe3-shadow-lg);
+          background: var(--liwe3-surface-raised, #ffffff);
+          box-shadow: var(--liwe3-shadow-lg, 0 4px 16px rgba(0,0,0,0.15));
           min-width: 160px;
           z-index: 1001;
           font-family: inherit;

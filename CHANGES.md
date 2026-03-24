@@ -1,5 +1,12 @@
 # CHANGES.md
 
+## 2026-03-24 - PopoverMenu: Add CSS fallback values for theme variables
+
+### Fixed
+
+- **PopoverMenu**: Added fallback values to all `--liwe3-*` CSS variables so the component renders correctly when WoxGUI theme bridge variables are not defined
+- Updated core package version to 1.1.19
+
 ## 2026-03-13 - Toast: Fix button onclick callbacks not firing
 
 ### Fixed
