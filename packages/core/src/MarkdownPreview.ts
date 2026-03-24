@@ -65,7 +65,7 @@ export class MarkdownPreviewElement extends HTMLElement {
           display: block;
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
           line-height: 1.6;
-          color: #333;
+          color: var(--liwe3-text-mode1);
         }
         .markdown-body {
           box-sizing: border-box;
@@ -78,7 +78,7 @@ export class MarkdownPreviewElement extends HTMLElement {
           max-width: 100%;
         }
         pre {
-          background-color: #f6f8fa;
+          background-color: var(--liwe3-surface-mode1);
           border-radius: 6px;
           padding: 16px;
           overflow: auto;
@@ -95,8 +95,8 @@ export class MarkdownPreviewElement extends HTMLElement {
           padding: 0;
         }
         blockquote {
-          border-left: 0.25em solid #d0d7de;
-          color: #656d76;
+          border-left: 0.25em solid var(--liwe3-border-default);
+          color: var(--liwe3-text-mode3);
           padding: 0 1em;
           margin: 0;
         }
@@ -111,14 +111,14 @@ export class MarkdownPreviewElement extends HTMLElement {
         table th,
         table td {
           padding: 6px 13px;
-          border: 1px solid #d0d7de;
+          border: 1px solid var(--liwe3-border-subtle);
         }
         table tr {
-          background-color: #ffffff;
-          border-top: 1px solid #d8dee4;
+          background-color: var(--liwe3-surface-raised);
+          border-top: 1px solid var(--liwe3-border-subtle);
         }
         table tr:nth-child(2n) {
-          background-color: #f6f8fa;
+          background-color: var(--liwe3-surface-mode1);
         }
       </style>
       <div class="markdown-body" id="content"></div>

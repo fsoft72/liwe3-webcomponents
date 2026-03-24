@@ -87,7 +87,7 @@ export class AITextEditorElement extends HTMLElement {
           width: 10px;
           height: 10px;
           border-radius: 100%;
-          background: #777;
+          background: var(--liwe3-text-disabled);
           z-index: 10;
         }
         
@@ -106,14 +106,14 @@ export class AITextEditorElement extends HTMLElement {
         .editor {
           width: 100%;
           height: 100%;
-          border: 2px solid #e1e5e9;
+          border: 2px solid var(--liwe3-border-default);
           border-radius: 12px;
           padding: 20px;
           font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
           font-size: 14px;
           line-height: 1.6;
           resize: none;
-          background: #fafbfc;
+          background: var(--liwe3-surface-raised);
           transition: all 0.3s ease;
           position: relative;
           z-index: 2;
@@ -129,7 +129,7 @@ export class AITextEditorElement extends HTMLElement {
 
         .editor:focus {
           outline: none;
-          border-color: #4facfe;
+          border-color: var(--liwe3-color-mode4);
           box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
         }
         
@@ -143,13 +143,13 @@ export class AITextEditorElement extends HTMLElement {
           left: 0;
           width: 100%;
           height: 100%;
-          border: 2px solid #e1e5e9;
+          border: 2px solid var(--liwe3-border-default);
           border-radius: 12px;
           padding: 20px;
           font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
           font-size: 14px;
           line-height: 1.6;
-          background: #fafbfc;
+          background: var(--liwe3-surface-raised);
           z-index: 1;
           pointer-events: none;
           white-space: pre-wrap;
@@ -166,7 +166,7 @@ export class AITextEditorElement extends HTMLElement {
 
         .editor-wrapper:focus-within .editor-background {
           background: white;
-          border-color: #4facfe;
+          border-color: var(--liwe3-color-mode4);
         }
         
         :host([embedded]) .editor-wrapper:focus-within .editor-background {
@@ -174,12 +174,12 @@ export class AITextEditorElement extends HTMLElement {
         }
 
         .suggestion-text {
-          color: #bbb;
+          color: var(--liwe3-text-disabled);
           position: relative;
         }
 
         .suggestion-text.accepted {
-          color: #ddd;
+          color: var(--liwe3-text-mode2);
           text-decoration: line-through;
         }
 
@@ -202,8 +202,8 @@ export class AITextEditorElement extends HTMLElement {
         .spinner {
           width: 10px;
           height: 10px;
-          border: 2px solid #e1e5e9;
-          border-top: 2px solid #4facfe;
+          border: 2px solid var(--liwe3-border-default);
+          border-top: 2px solid var(--liwe3-color-mode4);
           border-radius: 50%;
           animation: spin 1s linear infinite;
         }
@@ -627,7 +627,7 @@ export class AITextEditorElement extends HTMLElement {
   setApiKey(key: string): void {
     this.apiKey = key;
     this._saveApiKey();
-    this.editorStatus.style.backgroundColor = this.apiKey ? '#4caf50' : '#777';
+    this.editorStatus.style.backgroundColor = this.apiKey ? 'var(--liwe3-success)' : 'var(--liwe3-text-disabled)';
     if (this.onStatusChangeCallback) {
       this.onStatusChangeCallback(!!this.apiKey);
     }

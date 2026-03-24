@@ -49,13 +49,13 @@ export class AIMarkdownEditorElement extends HTMLElement {
           flex: 1;
           position: relative;
           min-height: 0; /* Important for flexbox scrolling */
-          border: 2px solid #e1e5e9;
+          border: 2px solid var(--liwe3-border-default);
           border-radius: 12px;
-          background: #fafbfc;
+          background: var(--liwe3-surface-raised);
         }
 
         .editor-container:focus-within {
-          border-color: #4facfe;
+          border-color: var(--liwe3-color-mode4);
           background: white;
         }
 
@@ -66,7 +66,7 @@ export class AIMarkdownEditorElement extends HTMLElement {
           width: 10px;
           height: 10px;
           border-radius: 100%;
-          background: #777;
+          background: var(--liwe3-text-disabled);
           z-index: 10;
         }
 
@@ -85,8 +85,8 @@ export class AIMarkdownEditorElement extends HTMLElement {
         .spinner {
           width: 10px;
           height: 10px;
-          border: 2px solid #e1e5e9;
-          border-top: 2px solid #4facfe;
+          border: 2px solid var(--liwe3-border-default);
+          border-top: 2px solid var(--liwe3-color-mode4);
           border-radius: 50%;
           animation: spin 1s linear infinite;
         }
@@ -114,7 +114,7 @@ export class AIMarkdownEditorElement extends HTMLElement {
           width: 400px;
           max-width: 90%;
           display: none;
-          border: 1px solid #e5e7eb;
+          border: 1px solid var(--liwe3-border-default);
         }
 
         .settings-modal.open {
@@ -125,7 +125,7 @@ export class AIMarkdownEditorElement extends HTMLElement {
           margin-top: 0;
           margin-bottom: 15px;
           font-size: 18px;
-          color: #1f2937;
+          color: var(--liwe3-text-mode1);
         }
 
         .form-group {
@@ -136,13 +136,13 @@ export class AIMarkdownEditorElement extends HTMLElement {
           display: block;
           margin-bottom: 5px;
           font-size: 14px;
-          color: #4b5563;
+          color: var(--liwe3-text-mode2);
         }
 
         .form-group input, .form-group textarea {
           width: 100%;
           padding: 8px;
-          border: 1px solid #d1d5db;
+          border: 1px solid var(--liwe3-border-default);
           border-radius: 4px;
           font-size: 14px;
           box-sizing: border-box;
@@ -169,13 +169,13 @@ export class AIMarkdownEditorElement extends HTMLElement {
         }
 
         .btn-primary {
-          background: #3b82f6;
+          background: var(--liwe3-color-mode4);
           color: white;
         }
 
         .btn-secondary {
-          background: #e5e7eb;
-          color: #374151;
+          background: var(--liwe3-surface-mode2);
+          color: var(--liwe3-text-mode1);
         }
 
         .overlay {
@@ -249,7 +249,7 @@ export class AIMarkdownEditorElement extends HTMLElement {
 		this.aiEditor.configure( {
 			embedded: true,
 			onStatusChange: ( hasApiKey : boolean ) => {
-				this.editorStatus.style.backgroundColor = hasApiKey ? '#4caf50' : '#777';
+				this.editorStatus.style.backgroundColor = hasApiKey ? 'var(--liwe3-success)' : 'var(--liwe3-text-disabled)';
 			},
 			onLoadingChange: ( isLoading : boolean ) => {
 				if ( isLoading ) {
