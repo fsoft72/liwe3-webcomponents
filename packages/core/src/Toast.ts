@@ -398,35 +398,29 @@ export class ToastElement extends HTMLElement {
 	 * Gets the color scheme for the toast type
 	 */
 	private getTypeColors () : { background : string; border : string; icon : string } {
-		const type = this.type;
-
-		switch ( type ) {
-			case 'success':
-				return {
-					background: 'var(--toast-success-background, #d4edda)',
-					border: 'var(--toast-success-border, #c3e6cb)',
-					icon: 'var(--toast-success-icon, #155724)',
-				};
-			case 'error':
-				return {
-					background: 'var(--toast-error-background, #f8d7da)',
-					border: 'var(--toast-error-border, #f5c6cb)',
-					icon: 'var(--toast-error-icon, #721c24)',
-				};
-			case 'warning':
-				return {
-					background: 'var(--toast-warning-background, #fff3cd)',
-					border: 'var(--toast-warning-border, #ffeaa7)',
-					icon: 'var(--toast-warning-icon, #856404)',
-				};
-			case 'info':
-			default:
-				return {
-					background: 'var(--toast-info-background, #d1ecf1)',
-					border: 'var(--toast-info-border, #bee5eb)',
-					icon: 'var(--toast-info-icon, #0c5460)',
-				};
-		}
+		const colors: Record<string, { background : string; border : string; icon : string }> = {
+			success: {
+				background: 'var(--liwe3-success-light)',
+				border: 'var(--liwe3-success)',
+				icon: 'var(--liwe3-success)',
+			},
+			error: {
+				background: 'var(--liwe3-error-light)',
+				border: 'var(--liwe3-error)',
+				icon: 'var(--liwe3-error)',
+			},
+			warning: {
+				background: 'var(--liwe3-warning-light)',
+				border: 'var(--liwe3-warning)',
+				icon: 'var(--liwe3-warning)',
+			},
+			info: {
+				background: 'var(--liwe3-info-light)',
+				border: 'var(--liwe3-info)',
+				icon: 'var(--liwe3-info)',
+			},
+		};
+		return colors[this.type] || colors.info;
 	}
 
 	/**
@@ -510,7 +504,7 @@ export class ToastElement extends HTMLElement {
           background: ${colors.background};
           border: 1px solid ${colors.border};
           border-radius: var(--toast-border-radius, 8px);
-          box-shadow: var(--toast-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+          box-shadow: var(--liwe3-shadow-lg);
           animation: slideIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
           position: relative;
           will-change: transform, opacity;
@@ -579,12 +573,12 @@ export class ToastElement extends HTMLElement {
           font-weight: 600;
           font-size: 16px;
           margin: 0 0 4px 0;
-          color: var(--toast-title-color, #333);
+          color: var(--liwe3-text-mode1);
         }
 
         .toast-text {
           margin: 0;
-          color: var(--toast-text-color, #555);
+          color: var(--liwe3-text-mode2);
           line-height: 1.5;
           word-wrap: break-word;
         }
@@ -602,15 +596,15 @@ export class ToastElement extends HTMLElement {
           border: none;
           cursor: pointer;
           font-size: 20px;
-          color: var(--toast-close-color, #666);
+          color: var(--liwe3-text-mode3);
           border-radius: 4px;
           transition: background-color 0.2s, color 0.2s;
           padding: 0;
         }
 
         .close-button:hover {
-          background-color: var(--toast-close-hover-background, rgba(0, 0, 0, 0.1));
-          color: var(--toast-close-hover-color, #333);
+          background-color: var(--liwe3-surface-mode1);
+          color: var(--liwe3-text-mode1);
         }
 
         .toast-buttons {
@@ -619,15 +613,15 @@ export class ToastElement extends HTMLElement {
           justify-content: flex-end;
           margin-top: 12px;
           padding-top: 12px;
-          border-top: 1px solid var(--toast-button-border, rgba(0, 0, 0, 0.1));
+          border-top: 1px solid var(--liwe3-border-default);
         }
 
         .toast-button {
           padding: 6px 16px;
-          border: 1px solid var(--toast-button-border-color, #ccc);
+          border: 1px solid var(--liwe3-border-default);
           border-radius: var(--toast-button-border-radius, 4px);
-          background: var(--toast-button-background, white);
-          color: var(--toast-button-color, #333);
+          background: var(--liwe3-surface-raised);
+          color: var(--liwe3-text-mode1);
           font-size: 14px;
           cursor: pointer;
           transition: background-color 0.2s, border-color 0.2s;
@@ -635,12 +629,12 @@ export class ToastElement extends HTMLElement {
         }
 
         .toast-button:hover {
-          background-color: var(--toast-button-hover-background, #f8f9fa);
-          border-color: var(--toast-button-hover-border-color, #999);
+          background-color: var(--liwe3-surface-mode1);
+          border-color: var(--liwe3-border-strong);
         }
 
         .toast-button:active {
-          background-color: var(--toast-button-active-background, #e9ecef);
+          background-color: var(--liwe3-active-overlay);
         }
 
         .toast-progress-bar {
