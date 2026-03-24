@@ -1,5 +1,12 @@
 # CHANGES.md
 
+## 2026-03-24 - Add theme variables CSS to all demo HTML files
+
+### Fixed
+
+- Fixed wrong `../demos/theme/variables.css` path in `demo-smart-select.html` and `demo-date-selector.html` (files are already inside `demos/`, so the correct relative path is `theme/variables.css`)
+- Added `<link rel="stylesheet" href="theme/variables.css">` after `<title>` in 16 demo HTML files that were missing it: `demo-toast`, `demo-sortable-container`, `demo-ai-markdown-editor`, `markdown-preview-demo`, `demo-tree-view`, `demo-resizable-cropper`, `demo-container-box`, `demo-popover-menu`, `demo-comic-balloon`, `demo-media-manager`, `demo-checklist`, `demo-image-view`, `demo-button-toolbar`, `demo-drawer`, `demo-ai-text-editor`, `chunk-uploader-demo`
+
 ## 2026-03-24 - Drawer: Add CSS fallback values for theme variables
 
 ### Fixed
