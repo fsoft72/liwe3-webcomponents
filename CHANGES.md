@@ -1,5 +1,12 @@
 # CHANGES.md
 
+## 2026-03-24 - Drawer: Add CSS fallback values for theme variables
+
+### Fixed
+
+- **Drawer**: Added fallback values to all `--liwe3-*` CSS variables (container, header, toggle, title, close button) so the component renders correctly without WoxGUI theme bridge
+- Updated core package version to 1.1.23
+
 ## 2026-03-24 - ContainerBox: Add CSS fallback values for theme variables
 
 ### Fixed

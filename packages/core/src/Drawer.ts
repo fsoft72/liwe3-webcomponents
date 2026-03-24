@@ -265,10 +265,10 @@ export class DrawerElement extends HTMLElement {
 
         /* Container when expanded */
         .drawer-container {
-          background: var(--liwe3-surface-raised);
-          border: 1px solid var(--liwe3-border-default);
+          background: var(--liwe3-surface-raised, #ffffff);
+          border: 1px solid var(--liwe3-border-default, #e0e0e0);
           border-radius: 8px;
-          box-shadow: var(--liwe3-shadow);
+          box-shadow: var(--liwe3-shadow, 0 1px 3px rgba(0,0,0,0.1));
           overflow: hidden;
           position: relative;
         }
@@ -303,7 +303,7 @@ export class DrawerElement extends HTMLElement {
           align-items: center;
           gap: 12px;
           padding: 12px;
-          border-bottom: 1px solid var(--liwe3-border-default);
+          border-bottom: 1px solid var(--liwe3-border-default, #e0e0e0);
           transition: none;
         }
 
@@ -326,7 +326,7 @@ export class DrawerElement extends HTMLElement {
           justify-content: center;
           width: 28px;
           height: 28px;
-          background: var(--liwe3-surface-mode1);
+          background: var(--liwe3-surface-mode1, #f0f0f0);
           border: none;
           border-radius: 6px;
           cursor: pointer;
@@ -336,14 +336,14 @@ export class DrawerElement extends HTMLElement {
         }
 
         .drawer-toggle:hover {
-          background: var(--liwe3-surface-mode2);
+          background: var(--liwe3-surface-mode2, #e8e8e8);
         }
 
         .drawer-title {
           flex: 1;
           font-size: 16px;
           font-weight: 600;
-          color: var(--liwe3-text-mode1);
+          color: var(--liwe3-text-mode1, #333333);
           transition: none;
           white-space: nowrap;
           overflow: hidden;
@@ -360,14 +360,14 @@ export class DrawerElement extends HTMLElement {
           border-radius: 4px;
           cursor: pointer;
           font-size: 18px;
-          color: var(--liwe3-text-mode3);
+          color: var(--liwe3-text-mode3, #666666);
           transition: none;
           flex-shrink: 0;
         }
 
         .drawer-close:hover {
-          background: var(--liwe3-surface-mode1);
-          color: var(--liwe3-error);
+          background: var(--liwe3-surface-mode1, #f0f0f0);
+          color: var(--liwe3-error, #dc3545);
         }
 
         /* Content area */
