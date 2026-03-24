@@ -1,5 +1,12 @@
 # CHANGES.md
 
+## 2026-03-24 - Toast: Add CSS fallback values for theme variables
+
+### Fixed
+
+- **Toast**: Added fallback values to all `--liwe3-*` CSS variables (type colors, text, borders, shadows, buttons) so toasts render correctly without WoxGUI theme bridge
+- Updated core package version to 1.1.20
+
 ## 2026-03-24 - PopoverMenu: Add CSS fallback values for theme variables
 
 ### Fixed
