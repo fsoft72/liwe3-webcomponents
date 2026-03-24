@@ -1,5 +1,23 @@
 # CHANGES.md
 
+## 2026-03-24 - Create WoxGUI-themed demo copies
+
+### Added
+
+- Created `/packages/core/demos-woxgui/` with WoxGUI dark-themed copies of all 20 demo HTML files
+- Each file replaces liwe3 theme CSS with WoxGUI CDN theme CSS and bridge CSS
+- Adds WoxGUI CDN script (`wox-gui@0.1.7`)
+- All page-level styles adapted for dark theme using `--wox-*` CSS variables:
+  - Body backgrounds changed to `var(--wox-bg-app)`
+  - Panel/section backgrounds to `var(--wox-bg-panel)`
+  - Text colors to `var(--wox-text-primary)` / `var(--wox-text-secondary)`
+  - Borders to `var(--wox-border)`
+  - Accent colors to `var(--wox-accent)`
+  - Code/input backgrounds to `var(--wox-bg-input)`
+  - Font family to `var(--wox-font)`
+- Component JS logic and import paths (`../dist/`) preserved unchanged
+- `<pre>` code block content (CSS variable examples) left untouched
+
 ## 2026-03-24 - Add theme variables CSS to all demo HTML files
 
 ### Fixed
