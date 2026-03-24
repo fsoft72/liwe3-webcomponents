@@ -729,7 +729,7 @@ export class SmartSelectElement extends HTMLElement {
           width: 100%;
           padding: 8px 12px;
           border: none;
-          border-bottom: 1px solid var(--liwe3-border-light, #eee);
+          border-bottom: 1px solid var(--liwe3-border-default);
           font-size: 14px;
           outline: none;
           box-sizing: border-box;
