@@ -695,7 +695,7 @@ export class ResizableCropperElement extends HTMLElement {
 
 				#wrapper {
 					position: relative;
-					border: 2px solid #007bff;
+					border: 2px solid var(--liwe3-color-mode4);
 					box-sizing: border-box;
 					background: rgba(0, 123, 255, 0.05);
 				}
@@ -732,7 +732,7 @@ export class ResizableCropperElement extends HTMLElement {
 				.handle {
 					position: absolute;
 					background: white;
-					border: 2px solid #007bff;
+					border: 2px solid var(--liwe3-color-mode4);
 					pointer-events: auto;
 					touch-action: none;
 					z-index: 1000;
@@ -784,7 +784,7 @@ export class ResizableCropperElement extends HTMLElement {
 				}
 
 				.handle.crop {
-					background: #007bff;
+					background: var(--liwe3-color-mode4);
 					cursor: move;
 				}
 

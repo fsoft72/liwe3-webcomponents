@@ -170,7 +170,7 @@ export class ComicBalloonElement extends HTMLElement implements IComicBalloon {
 				position: relative;
 				padding: 20px;
 				background: white;
-				border: 3px solid #000;
+				border: 3px solid var(--liwe3-text-mode1);
 				min-height: 100px;
 				z-index: 2;
 				margin: 50px;
@@ -196,7 +196,7 @@ export class ComicBalloonElement extends HTMLElement implements IComicBalloon {
 
 			.balloon.whisper {
 				border-radius: 25px;
-				border: 3px dashed #000;
+				border: 3px dashed var(--liwe3-text-mode1);
 			}
 
 			.balloon.rectangle {
@@ -209,7 +209,7 @@ export class ComicBalloonElement extends HTMLElement implements IComicBalloon {
 				font-family: 'Comic Sans MS', cursive, sans-serif;
 				font-size: 16px;
 				line-height: 1.4;
-				color: #000;
+				color: var(--liwe3-text-mode1);
 				display: flex;
 				align-items: center;
 				justify-content: center;
@@ -218,7 +218,7 @@ export class ComicBalloonElement extends HTMLElement implements IComicBalloon {
 
 			.content:empty:before {
 				content: attr(aria-label);
-				color: #999;
+				color: var(--liwe3-text-disabled);
 			}
 
 			.handler {
@@ -350,7 +350,7 @@ export class ComicBalloonElement extends HTMLElement implements IComicBalloon {
 		const path = document.createElementNS( 'http://www.w3.org/2000/svg', 'path' );
 		path.setAttribute( 'd', pathData );
 		path.setAttribute( 'fill', 'white' );
-		path.setAttribute( 'stroke', '#000' );
+		path.setAttribute( 'stroke', 'var(--liwe3-text-mode1)' );
 		path.setAttribute( 'stroke-width', '3' );
 		path.setAttribute( 'stroke-linejoin', 'round' );
 		
@@ -431,7 +431,7 @@ export class ComicBalloonElement extends HTMLElement implements IComicBalloon {
 		const d = `M ${base1X} ${base1Y} L ${tipX} ${tipY} L ${base2X} ${base2Y} Z`;
 		path.setAttribute( 'd', d );
 		path.setAttribute( 'fill', 'white' );
-		path.setAttribute( 'stroke', '#000' );
+		path.setAttribute( 'stroke', 'var(--liwe3-text-mode1)' );
 		path.setAttribute( 'stroke-width', '3' );
 		path.setAttribute( 'stroke-linejoin', 'round' );
 		
@@ -478,7 +478,7 @@ export class ComicBalloonElement extends HTMLElement implements IComicBalloon {
 		const d = `M ${base1X} ${base1Y} L ${tipX} ${tipY} L ${base2X} ${base2Y}`;
 		path.setAttribute( 'd', d );
 		path.setAttribute( 'fill', 'none' );
-		path.setAttribute( 'stroke', '#000' );
+		path.setAttribute( 'stroke', 'var(--liwe3-text-mode1)' );
 		path.setAttribute( 'stroke-width', '3' );
 		path.setAttribute( 'stroke-dasharray', '10 5' );
 		path.setAttribute( 'stroke-linejoin', 'round' );

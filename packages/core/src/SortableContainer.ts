@@ -216,7 +216,7 @@ export class SortableContainerElement extends HTMLElement {
 		handle.style.cursor = 'grab';
 		handle.style.backgroundColor = 'var(--sortable-handle-bg, rgba(0, 0, 0, 0.05))';
 		handle.style.borderRadius = 'var(--sortable-handle-radius, 4px)';
-		handle.style.color = 'var(--sortable-handle-color, #666)';
+		handle.style.color = 'var(--liwe3-text-mode3)';
 		handle.style.transition = 'background-color 0.15s ease, color 0.15s ease';
 		handle.style.flexShrink = '0';
 
@@ -234,11 +234,11 @@ export class SortableContainerElement extends HTMLElement {
 		// Add hover effect via event listeners
 		handle.addEventListener( 'mouseenter', () => {
 			handle.style.backgroundColor = 'var(--sortable-handle-hover-bg, rgba(0, 0, 0, 0.1))';
-			handle.style.color = 'var(--sortable-handle-hover-color, #333)';
+			handle.style.color = 'var(--liwe3-text-mode1)';
 		} );
 		handle.addEventListener( 'mouseleave', () => {
 			handle.style.backgroundColor = 'var(--sortable-handle-bg, rgba(0, 0, 0, 0.05))';
-			handle.style.color = 'var(--sortable-handle-color, #666)';
+			handle.style.color = 'var(--liwe3-text-mode3)';
 		} );
 		handle.addEventListener( 'mousedown', () => {
 			handle.style.cursor = 'grabbing';
@@ -668,7 +668,7 @@ export class SortableContainerElement extends HTMLElement {
 		placeholder.className = 'drop-placeholder';
 
 		// Apply inline styles since placeholder is in light DOM
-		placeholder.style.border = '2px dashed var(--sortable-indicator-color, #667eea)';
+		placeholder.style.border = '2px dashed var(--liwe3-color-mode4)';
 		placeholder.style.borderRadius = 'var(--sortable-indicator-radius, 8px)';
 		placeholder.style.backgroundColor = 'rgba(102, 126, 234, 0.15)';
 		placeholder.style.boxSizing = 'border-box';
