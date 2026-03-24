@@ -1,5 +1,12 @@
 # CHANGES.md
 
+## 2026-03-24 - TreeView: Add CSS fallback values for theme variables
+
+### Fixed
+
+- **TreeView**: Added fallback values to all `--liwe3-*` CSS variables (checkboxes, borders, text, backgrounds, scrollbar, focus ring) so the component renders correctly without WoxGUI theme bridge
+- Updated core package version to 1.1.21
+
 ## 2026-03-24 - Toast: Add CSS fallback values for theme variables
 
 ### Fixed
