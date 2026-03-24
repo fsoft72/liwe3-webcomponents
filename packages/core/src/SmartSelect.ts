@@ -618,13 +618,13 @@ export class SmartSelectElement extends HTMLElement {
           position: relative;
           min-width: 200px;
           font-family: var(--liwe3-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif);
-          font-size: var(--liwe3-font-size, 14px);
+          font-size: var(--liwe3-font-size);
           outline: none;
         }
 
         :host(:focus) .select-trigger {
-          border-color: var(--liwe3-color-mode4, #007bff);
-          box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+          border-color: var(--liwe3-color-mode4);
+          box-shadow: 0 0 0 2px var(--liwe3-focus-ring);
         }
 
         :host([disabled]) {
@@ -648,20 +648,20 @@ export class SmartSelectElement extends HTMLElement {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          border: var(--liwe3-border-width, 1px) solid var(--liwe3-background, #ccc);
+          border: var(--liwe3-border-width, 1px) solid var(--liwe3-border-default);
           border-radius: var(--liwe3-border-radius, 4px);
           background: var(--liwe3-surface-raised, white);
           cursor: pointer;
           min-height: 1.2rem;
           box-sizing: border-box;
-          color: var(--liwe3-color, #ccc);
+          color: var(--liwe3-color);
           user-select: none;
         }
 
         .select-trigger:focus {
           outline: none;
-          border-color: var(--liwe3-color-mode4, #007bff);
-          box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+          border-color: var(--liwe3-color-mode4);
+          box-shadow: 0 0 0 2px var(--liwe3-focus-ring);
         }
 
         .select-trigger[disabled] {
@@ -681,22 +681,22 @@ export class SmartSelectElement extends HTMLElement {
           align-items: center;
           gap: 4px;
           padding: 2px 8px;
-          background: var(--liwe3-surface-mode3, #e9ecef);
+          background: var(--liwe3-surface-mode3);
           border-radius: var(--tag-border-radius, 12px);
           font-size: 0.875em;
-          color: var(--liwe3-text-mode3, #495057);
+          color: var(--liwe3-text-mode3);
           user-select: none;
         }
 
         .remove-tag {
           cursor: pointer;
-          color: var(--liwe3-error, #6c757d);
+          color: var(--liwe3-error);
           font-weight: bold;
           font-size: 1em;
         }
 
         .remove-tag:hover {
-          color: var(--liwe3-error, #dc3545);
+          color: var(--liwe3-error);
         }
 
         .arrow {
@@ -704,7 +704,7 @@ export class SmartSelectElement extends HTMLElement {
           height: 0;
           border-left: 5px solid transparent;
           border-right: 5px solid transparent;
-          border-top: 5px solid var(--liwe3-color, #666);
+          border-top: 5px solid var(--liwe3-color);
           transition: transform 0.2s;
         }
 
@@ -716,20 +716,20 @@ export class SmartSelectElement extends HTMLElement {
           position: fixed;
           z-index: 99999;
           background: var(--liwe3-background, white);
-          border: var(--liwe3-border-width, 1px) solid #ccc;
+          border: var(--liwe3-border-width, 1px) solid var(--liwe3-border-default);
           border-radius: var(--liwe3-border-radius, 4px);
           box-shadow: var(--dropdown-shadow, 0 2px 8px rgba(0, 0, 0, 0.1));
           max-height: 200px;
           overflow-y: auto;
           scroll-behavior: smooth;
-          color: var(--liwe3-color, #333);
+          color: var(--liwe3-color);
         }
 
         .search-input {
           width: 100%;
           padding: 8px 12px;
           border: none;
-          border-bottom: 1px solid #eee;
+          border-bottom: 1px solid var(--liwe3-border-light, #eee);
           font-size: 14px;
           outline: none;
           box-sizing: border-box;
@@ -738,24 +738,24 @@ export class SmartSelectElement extends HTMLElement {
         .option {
           padding: 8px 12px;
           cursor: pointer;
-          color: var(--liwe3-color, #333);
+          color: var(--liwe3-color);
           background: var(--liwe3-surface-raised, white);
           transition: background-color 0.2s;
           user-select: none;
         }
 
         .option:hover {
-          background-color: var(--liwe3-surface-mode3, #f8f9fa);
+          background-color: var(--liwe3-surface-mode3);
         }
 
         .option.focused {
-          background-color: var(--liwe3-mode4-500, #007bff);
+          background-color: var(--liwe3-mode4-500);
           color: var(--liwe3-text-inverted, white);
         }
 
         .option.selected {
-          background-color: var(--liwe3-surface-mode3, #e3f2fd);
-          color: var(--liwe3-text-mode3, #1976d2);
+          background-color: var(--liwe3-surface-mode3);
+          color: var(--liwe3-text-mode3);
         }
 
         .option-content {
@@ -796,7 +796,7 @@ export class SmartSelectElement extends HTMLElement {
 
         .no-options {
           padding: 8px 12px;
-          color: var(--liwe3-color-mode3, #6c757d);
+          color: var(--liwe3-color-mode3);
           font-style: italic;
         }
       </style>
